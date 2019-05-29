@@ -138,7 +138,7 @@
 
 - (NSArray<ZAOperationCallback *> *)allRunningOperationCallback {
     ZA_LOCK(self.runningOperationsLock);
-    NSArray<ZAOperationCallback *> *runningOperations = self.runningOperations.allValues;
+    NSArray<ZAOperationCallback *> *runningOperations = self.runningOperations.allValues.copy;
     ZA_UNLOCK(self.runningOperationsLock);
     return runningOperations;
 }

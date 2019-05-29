@@ -11,7 +11,7 @@
 		A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998096229E736200FA5F38 /* ZAOperationModel.m */; };
 		A199809A229E771600FA5F38 /* ZAOperationCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998099229E771600FA5F38 /* ZAOperationCallback.m */; };
 		A199809E229E8BB900FA5F38 /* ZADownloadOperationCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A199809D229E8BB800FA5F38 /* ZADownloadOperationCallback.m */; };
-		A19980A1229E8BD900FA5F38 /* ZADownloadQueueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A19980A0229E8BD900FA5F38 /* ZADownloadQueueModel.m */; };
+		A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */; };
 		A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E0229E28840085FB3D /* AppDelegate.m */; };
 		A1B7C7E4229E28840085FB3D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E3229E28840085FB3D /* ViewController.m */; };
 		A1B7C7E7229E28840085FB3D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7E5229E28840085FB3D /* Main.storyboard */; };
@@ -41,8 +41,8 @@
 		A1998099229E771600FA5F38 /* ZAOperationCallback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAOperationCallback.m; sourceTree = "<group>"; };
 		A199809C229E8BB800FA5F38 /* ZADownloadOperationCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADownloadOperationCallback.h; sourceTree = "<group>"; };
 		A199809D229E8BB800FA5F38 /* ZADownloadOperationCallback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZADownloadOperationCallback.m; sourceTree = "<group>"; };
-		A199809F229E8BD900FA5F38 /* ZADownloadQueueModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADownloadQueueModel.h; sourceTree = "<group>"; };
-		A19980A0229E8BD900FA5F38 /* ZADownloadQueueModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZADownloadQueueModel.m; sourceTree = "<group>"; };
+		A19980A3229EA76F00FA5F38 /* ZADownloadOperationModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADownloadOperationModel.h; sourceTree = "<group>"; };
+		A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZADownloadOperationModel.m; sourceTree = "<group>"; };
 		A1B7C7DC229E28840085FB3D /* ZNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B7C7DF229E28840085FB3D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A1B7C7E0229E28840085FB3D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -92,8 +92,8 @@
 		A199809B229E8B1600FA5F38 /* ZADownloader */ = {
 			isa = PBXGroup;
 			children = (
-				A199809F229E8BD900FA5F38 /* ZADownloadQueueModel.h */,
-				A19980A0229E8BD900FA5F38 /* ZADownloadQueueModel.m */,
+				A19980A3229EA76F00FA5F38 /* ZADownloadOperationModel.h */,
+				A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */,
 				A199809C229E8BB800FA5F38 /* ZADownloadOperationCallback.h */,
 				A199809D229E8BB800FA5F38 /* ZADownloadOperationCallback.m */,
 			);
@@ -288,9 +288,9 @@
 			files = (
 				A1B7C7E4229E28840085FB3D /* ViewController.m in Sources */,
 				A199809A229E771600FA5F38 /* ZAOperationCallback.m in Sources */,
-				A19980A1229E8BD900FA5F38 /* ZADownloadQueueModel.m in Sources */,
 				A199809E229E8BB900FA5F38 /* ZADownloadOperationCallback.m in Sources */,
 				A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */,
+				A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */,
 				A1B7C7EF229E28850085FB3D /* main.m in Sources */,
 				A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */,
 				A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */,
