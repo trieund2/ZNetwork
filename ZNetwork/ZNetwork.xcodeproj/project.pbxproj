@@ -20,6 +20,7 @@
 		A1B7C7EC229E28850085FB3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7EA229E28850085FB3D /* LaunchScreen.storyboard */; };
 		A1B7C7EF229E28850085FB3D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7EE229E28850085FB3D /* main.m */; };
 		A1B7C7F9229E28850085FB3D /* ZNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */; };
+		C572577F229EE065009C3E66 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C572577E229EE065009C3E66 /* NSString+Extension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,8 @@
 		A1B7C7F4229E28850085FB3D /* ZNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZNetworkTests.m; sourceTree = "<group>"; };
 		A1B7C7FA229E28850085FB3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C572577D229EE065009C3E66 /* NSString+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
+		C572577E229EE065009C3E66 /* NSString+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,8 +129,8 @@
 		A1B7C7DE229E28840085FB3D /* ZNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				C5725779229EE038009C3E66 /* Extensions */,
 				A1B7C805229E28A40085FB3D /* Supports */,
-				A1B7C804229E289B0085FB3D /* ZAHTTP */,
 				A199809B229E8B1600FA5F38 /* ZADownloader */,
 				A1B7C803229E288F0085FB3D /* ZACore */,
 				A1B7C807229E28C40085FB3D /* Features */,
@@ -151,13 +154,6 @@
 				A1998090229E6F3D00FA5F38 /* ZADefine.h */,
 			);
 			path = ZACore;
-			sourceTree = "<group>";
-		};
-		A1B7C804229E289B0085FB3D /* ZAHTTP */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ZAHTTP;
 			sourceTree = "<group>";
 		};
 		A1B7C805229E28A40085FB3D /* Supports */ = {
@@ -189,6 +185,15 @@
 				A1B7C7E3229E28840085FB3D /* ViewController.m */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		C5725779229EE038009C3E66 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C572577D229EE065009C3E66 /* NSString+Extension.h */,
+				C572577E229EE065009C3E66 /* NSString+Extension.m */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -296,6 +301,7 @@
 				A199809E229E8BB900FA5F38 /* ZADownloadOperationCallback.m in Sources */,
 				A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */,
 				A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */,
+				C572577F229EE065009C3E66 /* NSString+Extension.m in Sources */,
 				A1B7C7EF229E28850085FB3D /* main.m in Sources */,
 				A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */,
 				A19980A8229EB3C600FA5F38 /* ZADownloadSessionManager.m in Sources */,

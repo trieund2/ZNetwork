@@ -9,13 +9,16 @@
 #import "ZADownloadSessionManager.h"
 #import "ZADownloadOperationModel.h"
 #import "ZAQueueModel.h"
+#import "NSString+Extension.h"
 
 @interface ZADownloadSessionManager ()
 
 @property (nonatomic, readonly) NSURLSession *session;
-@property (readonly, nonatomic) dispatch_queue_t root_queue;
-@property (readonly, nonatomic) dispatch_queue_t delegate_queue;
-@property (readonly, nonatomic) ZAQueueModel *queueModel;
+@property (nonatomic, readonly) dispatch_queue_t root_queue;
+@property (nonatomic, readonly) dispatch_queue_t delegate_queue;
+@property (nonatomic, readonly) ZAQueueModel *queueModel;
+@property (nonatomic, readonly) NSMutableDictionary<NSURL *, ZADownloadOperationModel *> *runningRequestToDownloadOperation;
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, ZADownloadOperationModel *> *runningCallbackIdToDownloadOperation;
 
 @end
 
@@ -52,11 +55,28 @@
                        destinationBlock:(ZADestinationBlock)destinationBlock
                         completionBlock:(ZACompletionBlock)completionBloc {
     ZADownloadOperationCallback *downloadCallback = [[ZADownloadOperationCallback alloc] initWithProgressBlock:progressBlock destinationBlock:destinationBlock completionBlock:completionBloc];
-    ZADownloadOperationModel *downloadOperationModel = [[ZADownloadOperationModel alloc] initByURL:NULL
-                                                                                     requestPolicy:(NSURLRequestUseProtocolCachePolicy)
-                                                                                          priority:priority
-                                                                                 operationCallback:downloadCallback];
-    return NULL;
+    NSURL *url = [urlString toURL];
+    if (nil == url) { return NULL; }
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_sync(self.root_queue, ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        ZADownloadOperationModel *downloadOperationModel = [weakSelf.runningRequestToDownloadOperation objectForKey:url];
+        if (downloadOperationModel) {
+            [downloadOperationModel addOperationCallback:downloadCallback];
+        } else {
+            downloadOperationModel = [[ZADownloadOperationModel alloc] initByURL:url
+                                                                   requestPolicy:(NSURLRequestUseProtocolCachePolicy)
+                                                                        priority:priority
+                                                               operationCallback:downloadCallback];
+            [strongSelf.queueModel enqueueOperation:downloadOperationModel];
+            if ([strongSelf.queueModel canDequeueOperationModel]) {
+                [strongSelf triggerStartRequest];
+            }
+        }
+    });
+    
+    return downloadCallback.identifier;
 }
 
 - (void)pauseDownloadTaskByIdentifier:(NSString *)identifier {
@@ -73,7 +93,16 @@
 
 #pragma mark - Helper methods
 
-- (nullable NSURLRequest *)buildRequestFromURL:(NSString *)urlString headers:(nullable NSDictionary<NSString *, NSString *> *)headers {
+- (void)triggerStartRequest {
+    ZADownloadOperationModel *downloadOperationModel = (ZADownloadOperationModel *)[self.queueModel dequeueOperationModel];
+    if (nil == downloadOperationModel) { return; }
+    
+    NSURLRequest *downloadRequest = [self buildRequestFromURL:downloadOperationModel.url headers:NULL];
+    NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:downloadRequest];
+    [dataTask resume];
+}
+
+- (nullable NSURLRequest *)buildRequestFromURL:(NSURL *)url headers:(nullable NSDictionary<NSString *, NSString *> *)headers {
     return NULL;
 }
 
