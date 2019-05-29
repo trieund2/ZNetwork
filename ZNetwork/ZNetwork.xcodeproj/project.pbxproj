@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998093229E70D700FA5F38 /* ZAQueueModel.m */; };
+		A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998096229E736200FA5F38 /* ZAOperationModel.m */; };
+		A199809A229E771600FA5F38 /* ZAOperationCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998099229E771600FA5F38 /* ZAOperationCallback.m */; };
 		A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E0229E28840085FB3D /* AppDelegate.m */; };
 		A1B7C7E4229E28840085FB3D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E3229E28840085FB3D /* ViewController.m */; };
 		A1B7C7E7229E28840085FB3D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7E5229E28840085FB3D /* Main.storyboard */; };
@@ -28,6 +31,12 @@
 
 /* Begin PBXFileReference section */
 		A1998090229E6F3D00FA5F38 /* ZADefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADefine.h; sourceTree = "<group>"; };
+		A1998092229E70D700FA5F38 /* ZAQueueModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAQueueModel.h; sourceTree = "<group>"; };
+		A1998093229E70D700FA5F38 /* ZAQueueModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAQueueModel.m; sourceTree = "<group>"; };
+		A1998095229E736200FA5F38 /* ZAOperationModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAOperationModel.h; sourceTree = "<group>"; };
+		A1998096229E736200FA5F38 /* ZAOperationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAOperationModel.m; sourceTree = "<group>"; };
+		A1998098229E771600FA5F38 /* ZAOperationCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAOperationCallback.h; sourceTree = "<group>"; };
+		A1998099229E771600FA5F38 /* ZAOperationCallback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAOperationCallback.m; sourceTree = "<group>"; };
 		A1B7C7DC229E28840085FB3D /* ZNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B7C7DF229E28840085FB3D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A1B7C7E0229E28840085FB3D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -61,6 +70,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1998091229E70AF00FA5F38 /* CoreAbtract */ = {
+			isa = PBXGroup;
+			children = (
+				A1998092229E70D700FA5F38 /* ZAQueueModel.h */,
+				A1998093229E70D700FA5F38 /* ZAQueueModel.m */,
+				A1998095229E736200FA5F38 /* ZAOperationModel.h */,
+				A1998096229E736200FA5F38 /* ZAOperationModel.m */,
+				A1998098229E771600FA5F38 /* ZAOperationCallback.h */,
+				A1998099229E771600FA5F38 /* ZAOperationCallback.m */,
+			);
+			path = CoreAbtract;
+			sourceTree = "<group>";
+		};
 		A1B7C7D3229E28830085FB3D = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +124,7 @@
 		A1B7C803229E288F0085FB3D /* ZACore */ = {
 			isa = PBXGroup;
 			children = (
+				A1998091229E70AF00FA5F38 /* CoreAbtract */,
 				A1998090229E6F3D00FA5F38 /* ZADefine.h */,
 			);
 			path = ZACore;
@@ -246,7 +269,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1B7C7E4229E28840085FB3D /* ViewController.m in Sources */,
+				A199809A229E771600FA5F38 /* ZAOperationCallback.m in Sources */,
+				A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */,
 				A1B7C7EF229E28850085FB3D /* main.m in Sources */,
+				A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */,
 				A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
