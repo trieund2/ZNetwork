@@ -12,6 +12,7 @@
 		A199809A229E771600FA5F38 /* ZAOperationCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998099229E771600FA5F38 /* ZAOperationCallback.m */; };
 		A199809E229E8BB900FA5F38 /* ZADownloadOperationCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A199809D229E8BB800FA5F38 /* ZADownloadOperationCallback.m */; };
 		A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */; };
+		A19980A8229EB3C600FA5F38 /* ZADownloadSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A19980A7229EB3C600FA5F38 /* ZADownloadSessionManager.m */; };
 		A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E0229E28840085FB3D /* AppDelegate.m */; };
 		A1B7C7E4229E28840085FB3D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E3229E28840085FB3D /* ViewController.m */; };
 		A1B7C7E7229E28840085FB3D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7E5229E28840085FB3D /* Main.storyboard */; };
@@ -43,6 +44,8 @@
 		A199809D229E8BB800FA5F38 /* ZADownloadOperationCallback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZADownloadOperationCallback.m; sourceTree = "<group>"; };
 		A19980A3229EA76F00FA5F38 /* ZADownloadOperationModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADownloadOperationModel.h; sourceTree = "<group>"; };
 		A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZADownloadOperationModel.m; sourceTree = "<group>"; };
+		A19980A7229EB3C600FA5F38 /* ZADownloadSessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZADownloadSessionManager.m; sourceTree = "<group>"; };
+		A19980A9229EB47000FA5F38 /* ZADownloadSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADownloadSessionManager.h; sourceTree = "<group>"; };
 		A1B7C7DC229E28840085FB3D /* ZNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B7C7DF229E28840085FB3D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A1B7C7E0229E28840085FB3D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -144,6 +147,8 @@
 			children = (
 				A1998091229E70AF00FA5F38 /* CoreAbtract */,
 				A1998090229E6F3D00FA5F38 /* ZADefine.h */,
+				A19980A9229EB47000FA5F38 /* ZADownloadSessionManager.h */,
+				A19980A7229EB3C600FA5F38 /* ZADownloadSessionManager.m */,
 			);
 			path = ZACore;
 			sourceTree = "<group>";
@@ -293,6 +298,7 @@
 				A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */,
 				A1B7C7EF229E28850085FB3D /* main.m in Sources */,
 				A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */,
+				A19980A8229EB3C600FA5F38 /* ZADownloadSessionManager.m in Sources */,
 				A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
