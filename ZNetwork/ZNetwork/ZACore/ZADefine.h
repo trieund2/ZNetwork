@@ -17,10 +17,10 @@ typedef NS_ENUM(NSInteger, ZAPerformOperationType) {
 };
 
 typedef NS_ENUM(NSInteger, ZAOperationPriority) {
-    ZAOperationPriorityVeryHigh,
-    ZAOperationPriorityHigh,
-    ZAOperationPriorityMedium,
-    ZAOperationPriorityLow
+    ZAOperationPriorityVeryHigh     = 4,
+    ZAOperationPriorityHigh         = 3,
+    ZAOperationPriorityMedium       = 2,
+    ZAOperationPriorityLow          = 1
 };
 
 typedef NS_ENUM(NSUInteger, ZAOperationPerformType) {

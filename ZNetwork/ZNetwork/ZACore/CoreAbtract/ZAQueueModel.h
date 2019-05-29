@@ -18,16 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSUInteger maxOperationPerform;
 @property (nonatomic, readonly) ZAPerformOperationType queueType;
 @property (nonatomic, readonly) ZAOperationPerformType performType;
-@property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *veryHighQueue;
-@property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *highQueue;
-@property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *mediumQueue;
-@property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *lowQueue;
 
 - (instancetype)initByPerformOperationType:(ZAPerformOperationType) operationType
                            isMultiCallback:(BOOL)isMultiCallback
                                performType:(ZAOperationPerformType)performType;
 
-+ (void)addOperation;
+- (void)enqueueOperation:(ZAOperationModel *)operationModel;
+- (BOOL)canDequeueOperationModel;
+- (nullable ZAOperationModel *)dequeueOperationModel;
 
 @end
 

@@ -10,4 +10,18 @@
 
 @implementation ZAOperationCallback
 
+- (instancetype)init
+{
+    return [self initWithOperationPriority:ZAOperationPriorityMedium];
+}
+
+- (instancetype)initWithOperationPriority:(ZAOperationPriority)priority {
+    self = [super init];
+    if (self) {
+        _identifier = NSUUID.UUID.UUIDString;
+        _priority = priority;
+    }
+    return self;
+}
+
 @end

@@ -7,12 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ZADefine.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZAOperationCallback : NSObject
 
-@property (nonatomic, readonly) NSString *identifer;
+@property (nonatomic, readonly) NSString *identifier;
+@property (nonatomic, readonly) ZAOperationPriority priority;
+
+- (instancetype)init;
+- (instancetype)initWithOperationPriority:(ZAOperationPriority)priority;
 
 @end
 
