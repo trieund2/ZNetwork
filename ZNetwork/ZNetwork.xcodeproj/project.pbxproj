@@ -27,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1998090229E6F3D00FA5F38 /* ZADefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADefine.h; sourceTree = "<group>"; };
 		A1B7C7DC229E28840085FB3D /* ZNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B7C7DF229E28840085FB3D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A1B7C7E0229E28840085FB3D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -101,6 +102,7 @@
 		A1B7C803229E288F0085FB3D /* ZACore */ = {
 			isa = PBXGroup;
 			children = (
+				A1998090229E6F3D00FA5F38 /* ZADefine.h */,
 			);
 			path = ZACore;
 			sourceTree = "<group>";
