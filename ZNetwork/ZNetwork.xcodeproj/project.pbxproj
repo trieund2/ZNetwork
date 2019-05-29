@@ -95,6 +95,8 @@
 		A199809B229E8B1600FA5F38 /* ZADownloader */ = {
 			isa = PBXGroup;
 			children = (
+				A19980A9229EB47000FA5F38 /* ZADownloadSessionManager.h */,
+				A19980A7229EB3C600FA5F38 /* ZADownloadSessionManager.m */,
 				A19980A3229EA76F00FA5F38 /* ZADownloadOperationModel.h */,
 				A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */,
 				A199809C229E8BB800FA5F38 /* ZADownloadOperationCallback.h */,
@@ -147,8 +149,6 @@
 			children = (
 				A1998091229E70AF00FA5F38 /* CoreAbtract */,
 				A1998090229E6F3D00FA5F38 /* ZADefine.h */,
-				A19980A9229EB47000FA5F38 /* ZADownloadSessionManager.h */,
-				A19980A7229EB3C600FA5F38 /* ZADownloadSessionManager.m */,
 			);
 			path = ZACore;
 			sourceTree = "<group>";
