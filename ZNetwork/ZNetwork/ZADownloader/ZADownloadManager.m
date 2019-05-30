@@ -71,26 +71,13 @@
                                                                                        progressBlock:progressBlock
                                                                                     destinationBlock:destinationBlock
                                                                                      completionBlock:completionBlock
-                                                                                            priority:priority];
+                                                                                            priority:priority
+                                                                                        requestPlicy:requestPolicy];
     
     __weak typeof(self) weakSelf = self;
     dispatch_sync(self.root_queue, ^{
         __strong typeof(self) strongSelf = weakSelf;
-        ZA_LOCK(self.urlToDownloadOperationLock);
-        ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:url];
-        if (downloadOperationModel && self.queueModel.isMultiCallback) {
-            [downloadOperationModel addOperationCallback:downloadCallback];
-        } else {
-            downloadOperationModel = [[ZADownloadOperationModel alloc] initByURL:url
-                                                                   requestPolicy:requestPolicy
-                                                                        priority:priority
-                                                               operationCallback:downloadCallback];
-            [strongSelf.queueModel enqueueOperation:downloadOperationModel];
-            if ([strongSelf.queueModel canDequeueOperationModel]) {
-                [strongSelf _triggerStartRequest];
-            }
-        }
-        ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
+        [strongSelf _startRequestByDownloadOperationCallback:downloadCallback];
     });
     
     return downloadCallback;
@@ -121,21 +108,7 @@
     __weak typeof(self) weakSelf = self;
     dispatch_sync(self.root_queue, ^{
         __strong typeof(self) strongSelf = weakSelf;
-        ZA_LOCK(self.urlToDownloadOperationLock);
-        ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:downloadCallback.url];
-        if (downloadOperationModel && self.queueModel.isMultiCallback) {
-            [downloadOperationModel addOperationCallback:downloadCallback];
-        } else {
-            downloadOperationModel = [[ZADownloadOperationModel alloc] initByURL:downloadCallback.url
-                                                                   requestPolicy:NSURLRequestUseProtocolCachePolicy
-                                                                        priority:downloadCallback.priority
-                                                               operationCallback:downloadCallback];
-            [strongSelf.queueModel enqueueOperation:downloadOperationModel];
-            if ([strongSelf.queueModel canDequeueOperationModel]) {
-                [strongSelf _triggerStartRequest];
-            }
-        }
-        ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
+        [strongSelf _startRequestByDownloadOperationCallback:downloadCallback];
     });
 }
 
@@ -158,6 +131,24 @@
 }
 
 #pragma mark - Helper methods
+
+- (void)_startRequestByDownloadOperationCallback:(ZADownloadOperationCallback *)downloadCallback {
+    ZA_LOCK(self.urlToDownloadOperationLock);
+    ZADownloadOperationModel *downloadOperationModel = [self.urlToDownloadOperation objectForKey:downloadCallback.url];
+    if (downloadOperationModel && self.queueModel.isMultiCallback) {
+        [downloadOperationModel addOperationCallback:downloadCallback];
+    } else {
+        downloadOperationModel = [[ZADownloadOperationModel alloc] initByURL:downloadCallback.url
+                                                               requestPolicy:downloadCallback.requestPolicy
+                                                                    priority:downloadCallback.priority
+                                                           operationCallback:downloadCallback];
+        [self.queueModel enqueueOperation:downloadOperationModel];
+        if ([self.queueModel canDequeueOperationModel]) {
+            [self _triggerStartRequest];
+        }
+    }
+    ZA_UNLOCK(self.urlToDownloadOperationLock);
+}
 
 - (void)_triggerStartRequest {
     if (ZANetworkManager.sharedInstance.isConnectionAvailable == NO) { return; }

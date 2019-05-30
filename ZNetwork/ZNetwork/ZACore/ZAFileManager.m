@@ -10,8 +10,4 @@
 
 @implementation ZAFileManager
 
-- (void)test {
-    
-}
-
 @end
