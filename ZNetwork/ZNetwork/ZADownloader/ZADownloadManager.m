@@ -47,6 +47,11 @@
         _queueModel = [[ZAQueueModel alloc] init];
         _urlToDownloadOperation = [[NSMutableDictionary alloc] init];
         _urlToDownloadOperationLock = dispatch_semaphore_create(1);
+        
+        [NSNotificationCenter.defaultCenter addObserver:self
+                                               selector:@selector(_triggerStartRequest)
+                                                   name:NetworkStatusDidChangeNotification
+                                                 object:nil];
     }
     return self;
 }
@@ -82,7 +87,7 @@
                                                                operationCallback:downloadCallback];
             [strongSelf.queueModel enqueueOperation:downloadOperationModel];
             if ([strongSelf.queueModel canDequeueOperationModel]) {
-                [strongSelf triggerStartRequest];
+                [strongSelf _triggerStartRequest];
             }
         }
         ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
@@ -97,16 +102,16 @@
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.root_queue, ^{
         __strong typeof(self) strongSelf = weakSelf;
+        
         ZA_LOCK(strongSelf.urlToDownloadOperationLock);
         ZADownloadOperationModel *operationModel = [strongSelf.urlToDownloadOperation objectForKey:downloadCallback.url];
         
         if (operationModel) {
             [operationModel pauseOperationCallbackById:downloadCallback.identifier];
-            ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
         } else {
             [strongSelf.queueModel pauseOperationByCallback:downloadCallback];
-            ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
         }
+        ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
     });
 }
 
@@ -127,7 +132,7 @@
                                                                operationCallback:downloadCallback];
             [strongSelf.queueModel enqueueOperation:downloadOperationModel];
             if ([strongSelf.queueModel canDequeueOperationModel]) {
-                [strongSelf triggerStartRequest];
+                [strongSelf _triggerStartRequest];
             }
         }
         ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
@@ -140,11 +145,13 @@
 
 #pragma mark - Helper methods
 
-- (void)triggerStartRequest {
+- (void)_triggerStartRequest {
+    if (ZANetworkManager.sharedInstance.isConnectionAvailable == NO) { return; }
+    
     ZADownloadOperationModel *downloadOperationModel = (ZADownloadOperationModel *)[self.queueModel dequeueOperationModel];
     if (nil == downloadOperationModel) { return; }
     
-    NSURLRequest *request = [self buildRequestFromURL:downloadOperationModel.url headers:NULL];
+    NSURLRequest *request = [self _buildRequestFromURL:downloadOperationModel.url headers:NULL];
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request];
     [dataTask resume];
     downloadOperationModel.task = dataTask;
@@ -154,17 +161,18 @@
     ZA_UNLOCK(self.urlToDownloadOperationLock);
 }
 
-- (nullable NSURLRequest *)buildRequestFromURL:(NSURL *)url headers:(nullable NSDictionary<NSString *, NSString *> *)headers {
+- (nullable NSURLRequest *)_buildRequestFromURL:(NSURL *)url headers:(nullable NSDictionary<NSString *, NSString *> *)headers {
     if (nil == url) { return NULL; }
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    request.timeoutInterval = [self getTimeoutInterval];
+    request.timeoutInterval = [self _getTimeoutInterval];
     
+    // add resume header
     
     return request;
 }
 
-- (NSTimeInterval)getTimeoutInterval {
+- (NSTimeInterval)_getTimeoutInterval {
     NetworkStatus status = ZANetworkManager.sharedInstance.currentNetworkStatus;
     switch (status) {
         case ReachableViaWiFi:
