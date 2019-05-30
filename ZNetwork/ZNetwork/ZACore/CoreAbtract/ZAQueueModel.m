@@ -113,7 +113,7 @@
     if ([self canDequeueOperationModel]) {
         ZAOperationModel *operationModel = NULL;
         
-        if (self.veryHighQueue.count >= 0) {
+        if (self.veryHighQueue.count > 0) {
             switch (self.queueType) {
                 case ZAPerformOperationTypeFIFO:
                     operationModel = self.veryHighQueue.firstObject;
