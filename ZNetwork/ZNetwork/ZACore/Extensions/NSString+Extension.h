@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSString (Extension)
 
 - (nullable NSURL *)toURL;
+- (NSString *)MD5String;
 
 @end
 

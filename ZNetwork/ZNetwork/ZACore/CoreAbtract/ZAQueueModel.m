@@ -193,6 +193,10 @@
     }
 }
 
+- (void)removeAllOperations {
+    
+}
+
 #pragma mark - Private methods
 
 - (void)_addOperationToQueue:(ZAOperationModel *)operationModel {
