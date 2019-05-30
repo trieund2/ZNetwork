@@ -15,10 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZAOperationModel : NSObject {
     
 @protected
-    dispatch_semaphore_t runningOperationsLock;
-    dispatch_semaphore_t pausedOperationsLock;
-    NSMutableDictionary<NSString *, ZAOperationCallback *> *runningOperations;
-    NSMutableDictionary<NSString *, ZAOperationCallback *> *pausedOperations;
+    dispatch_semaphore_t runningOperationCallbacksLock;
+    dispatch_semaphore_t pausedOperationCallbacksLock;
+    NSMutableDictionary<NSString *, ZAOperationCallback *> *runningOperationCallbacks;
+    NSMutableDictionary<NSString *, ZAOperationCallback *> *pausedOperationCallbacks;
 }
 
 @property (nonatomic, readonly) NSURL *url;
@@ -42,6 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSUInteger)numberOfRunningOperation;
 - (NSUInteger)numberOfPausedOperation;
 - (void)addOperationCallback:(ZAOperationCallback *)callback;
+- (void)removeOperationCallback:(ZAOperationCallback *)callback;
 - (void)pauseOperationCallbackById:(NSString *)identifier;
 - (void)resumeOperationCallbackById:(NSString *)identifier;
 - (void)cancelOperationCallbackById:(NSString *)identifier;

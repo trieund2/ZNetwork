@@ -7,13 +7,14 @@
 //
 
 #import "ZAOperationModel.h"
+#import "ZADownloadOperationCallback.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZADownloadOperationModel : ZAOperationModel
 
 @property (nonatomic) NSUInteger contentLength;
-@property (nonatomic, readonly) NSUInteger alreadyDownloadLenght;
+@property (nonatomic, readonly) NSUInteger completedUnitCount;
 
 - (void)addCurrentDownloadLenght:(NSUInteger)lenght;
 - (void)forwardProgress;
