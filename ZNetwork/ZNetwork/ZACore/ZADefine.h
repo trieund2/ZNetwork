@@ -28,6 +28,21 @@ typedef NS_ENUM(NSUInteger, ZAOperationPerformType) {
     ZAOperationPerformTypeConcurrency
 };
 
+typedef NS_ENUM(NSInteger, ZASessionTaskStatus) {
+    // Status when task has just been initialized.
+    ZASessionTaskStatusInitialized  = 0,
+    // Status when task runs.
+    ZASessionTaskStatusRunning      = 1,
+    // Status when task is paused, might be resumed later.
+    ZASessionTaskStatusPaused       = 2,
+    // Status when task is cancelled, can not be resumed later.
+    ZASessionTaskStatusCancelled    = 3,
+    // Status when task successful
+    ZASessionTaskStatusSuccessed    = 4,
+    // Status when task Failed
+    ZASessionTaskStatusFailed       = 5
+};
+
 #pragma mark - Define Macro
 
 #ifndef ZA_LOCK

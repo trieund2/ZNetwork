@@ -15,9 +15,13 @@
 		A1AFF49F229F77630040B283 /* ZADownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF49E229F77630040B283 /* ZADownloadManager.m */; };
 		A1AFF4AD229FBB8F0040B283 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF4AB229FBB8F0040B283 /* Reachability.m */; };
 		A1AFF4B0229FBBAE0040B283 /* ZANetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF4AE229FBBAE0040B283 /* ZANetworkManager.m */; };
+		A1AFF516229FD2EA0040B283 /* DownloadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF510229FD2EA0040B283 /* DownloadTableViewCell.m */; };
+		A1AFF517229FD2EA0040B283 /* TrackDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF512229FD2EA0040B283 /* TrackDownload.m */; };
+		A1AFF518229FD2EA0040B283 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF514229FD2EA0040B283 /* ViewController.m */; };
+		A1AFF519229FD2EA0040B283 /* DownloadTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AFF515229FD2EA0040B283 /* DownloadTableViewCell.xib */; };
+		A1AFF51D229FD37F0040B283 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1AFF51B229FD37F0040B283 /* LaunchScreen.storyboard */; };
+		A1AFF51E229FD37F0040B283 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1AFF51C229FD37F0040B283 /* Main.storyboard */; };
 		A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E0229E28840085FB3D /* AppDelegate.m */; };
-		A1B7C7E4229E28840085FB3D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E3229E28840085FB3D /* ViewController.m */; };
-		A1B7C7E7229E28840085FB3D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7E5229E28840085FB3D /* Main.storyboard */; };
 		A1B7C7E9229E28850085FB3D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7E8229E28850085FB3D /* Assets.xcassets */; };
 		A1B7C7EC229E28850085FB3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7EA229E28850085FB3D /* LaunchScreen.storyboard */; };
 		A1B7C7EF229E28850085FB3D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7EE229E28850085FB3D /* main.m */; };
@@ -53,12 +57,19 @@
 		A1AFF4AC229FBB8F0040B283 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		A1AFF4AE229FBBAE0040B283 /* ZANetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZANetworkManager.m; sourceTree = "<group>"; };
 		A1AFF4AF229FBBAE0040B283 /* ZANetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZANetworkManager.h; sourceTree = "<group>"; };
+		A1AFF50F229FD2EA0040B283 /* TrackDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackDownload.h; sourceTree = "<group>"; };
+		A1AFF510229FD2EA0040B283 /* DownloadTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadTableViewCell.m; sourceTree = "<group>"; };
+		A1AFF511229FD2EA0040B283 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		A1AFF512229FD2EA0040B283 /* TrackDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackDownload.m; sourceTree = "<group>"; };
+		A1AFF513229FD2EA0040B283 /* DownloadTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadTableViewCell.h; sourceTree = "<group>"; };
+		A1AFF514229FD2EA0040B283 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A1AFF515229FD2EA0040B283 /* DownloadTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadTableViewCell.xib; sourceTree = "<group>"; };
+		A1AFF51A229FD30F0040B283 /* ZNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZNetwork.h; sourceTree = "<group>"; };
+		A1AFF51B229FD37F0040B283 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A1AFF51C229FD37F0040B283 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A1B7C7DC229E28840085FB3D /* ZNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B7C7DF229E28840085FB3D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A1B7C7E0229E28840085FB3D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		A1B7C7E2229E28840085FB3D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		A1B7C7E3229E28840085FB3D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		A1B7C7E6229E28840085FB3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A1B7C7E8229E28850085FB3D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1B7C7EB229E28850085FB3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A1B7C7ED229E28850085FB3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -152,6 +163,7 @@
 		A1B7C7DE229E28840085FB3D /* ZNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				A1AFF51A229FD30F0040B283 /* ZNetwork.h */,
 				A1B7C805229E28A40085FB3D /* Supports */,
 				A1AFF4A9229FBB8F0040B283 /* ThirdParties */,
 				A199809B229E8B1600FA5F38 /* ZADownloader */,
@@ -206,9 +218,15 @@
 		A1B7C807229E28C40085FB3D /* TestFeatures */ = {
 			isa = PBXGroup;
 			children = (
-				A1B7C7E5229E28840085FB3D /* Main.storyboard */,
-				A1B7C7E2229E28840085FB3D /* ViewController.h */,
-				A1B7C7E3229E28840085FB3D /* ViewController.m */,
+				A1AFF51B229FD37F0040B283 /* LaunchScreen.storyboard */,
+				A1AFF51C229FD37F0040B283 /* Main.storyboard */,
+				A1AFF513229FD2EA0040B283 /* DownloadTableViewCell.h */,
+				A1AFF510229FD2EA0040B283 /* DownloadTableViewCell.m */,
+				A1AFF515229FD2EA0040B283 /* DownloadTableViewCell.xib */,
+				A1AFF50F229FD2EA0040B283 /* TrackDownload.h */,
+				A1AFF512229FD2EA0040B283 /* TrackDownload.m */,
+				A1AFF511229FD2EA0040B283 /* ViewController.h */,
+				A1AFF514229FD2EA0040B283 /* ViewController.m */,
 			);
 			path = TestFeatures;
 			sourceTree = "<group>";
@@ -303,8 +321,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1B7C7EC229E28850085FB3D /* LaunchScreen.storyboard in Resources */,
+				A1AFF51E229FD37F0040B283 /* Main.storyboard in Resources */,
+				A1AFF51D229FD37F0040B283 /* LaunchScreen.storyboard in Resources */,
 				A1B7C7E9229E28850085FB3D /* Assets.xcassets in Resources */,
-				A1B7C7E7229E28840085FB3D /* Main.storyboard in Resources */,
+				A1AFF519229FD2EA0040B283 /* DownloadTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,16 +342,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1B7C7E4229E28840085FB3D /* ViewController.m in Sources */,
+				A1AFF518229FD2EA0040B283 /* ViewController.m in Sources */,
 				A199809A229E771600FA5F38 /* ZAOperationCallback.m in Sources */,
 				A1AFF49F229F77630040B283 /* ZADownloadManager.m in Sources */,
 				A1AFF4B0229FBBAE0040B283 /* ZANetworkManager.m in Sources */,
 				A199809E229E8BB900FA5F38 /* ZADownloadOperationCallback.m in Sources */,
 				A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */,
+				A1AFF516229FD2EA0040B283 /* DownloadTableViewCell.m in Sources */,
 				A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */,
 				C572577F229EE065009C3E66 /* NSString+Extension.m in Sources */,
 				A1B7C7EF229E28850085FB3D /* main.m in Sources */,
 				A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */,
+				A1AFF517229FD2EA0040B283 /* TrackDownload.m in Sources */,
 				A1AFF4AD229FBB8F0040B283 /* Reachability.m in Sources */,
 				A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */,
 			);
@@ -356,14 +378,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		A1B7C7E5229E28840085FB3D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A1B7C7E6229E28840085FB3D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		A1B7C7EA229E28850085FB3D /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
