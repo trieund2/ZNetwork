@@ -20,6 +20,8 @@
 @property (nonatomic, readonly) ZAQueueModel *queueModel;
 @property (nonatomic, readonly) NSMutableDictionary<NSURL *, ZADownloadOperationModel *> *urlToDownloadOperation;
 @property (nonatomic, readonly) dispatch_semaphore_t urlToDownloadOperationLock;
+@property (nonatomic, readonly) NSMutableDictionary <NSURL *, NSOutputStream *> *urlToOutputStream;
+@property (nonatomic, readonly) dispatch_semaphore_t urlToOutputStreamLock;
 
 @end
 
@@ -46,6 +48,8 @@
         _delegate_queue = dispatch_queue_create("com.za.znetwork.sessionmanager.delegatequeue", DISPATCH_QUEUE_CONCURRENT);
         _queueModel = [[ZAQueueModel alloc] init];
         _urlToDownloadOperation = [[NSMutableDictionary alloc] init];
+        _urlToDownloadOperationLock = dispatch_semaphore_create(1);
+        _urlToOutputStream = [[NSMutableDictionary alloc] init];
         _urlToDownloadOperationLock = dispatch_semaphore_create(1);
         
         [NSNotificationCenter.defaultCenter addObserver:self
@@ -130,6 +134,10 @@
     });
 }
 
+- (void)cancelAllRequests {
+    
+}
+
 #pragma mark - Helper methods
 
 - (void)_startRequestByDownloadOperationCallback:(ZADownloadOperationCallback *)downloadCallback {
@@ -156,14 +164,27 @@
     ZADownloadOperationModel *downloadOperationModel = (ZADownloadOperationModel *)[self.queueModel dequeueOperationModel];
     if (nil == downloadOperationModel) { return; }
     
-    NSURLRequest *request = [self _buildRequestFromURL:downloadOperationModel.url headers:NULL];
-    NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request];
-    [dataTask resume];
-    downloadOperationModel.task = dataTask;
-    
-    ZA_LOCK(self.urlToDownloadOperationLock);
-    self.urlToDownloadOperation[downloadOperationModel.url] = downloadOperationModel;
-    ZA_UNLOCK(self.urlToDownloadOperationLock);
+    NSString *filePath = [self _getFilePathFromURL:downloadOperationModel.url];
+    if (filePath) {
+        NSURLRequest *request = [self _buildRequestFromURL:downloadOperationModel.url headers:NULL];
+        NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request];
+        downloadOperationModel.task = dataTask;
+        [dataTask resume];
+        
+        ZA_LOCK(self.urlToDownloadOperationLock);
+        self.urlToDownloadOperation[downloadOperationModel.url] = downloadOperationModel;
+        ZA_UNLOCK(self.urlToDownloadOperationLock);
+        
+        NSOutputStream *stream = [NSOutputStream outputStreamToFileAtPath:[self _getFilePathFromURL:downloadOperationModel.url] append:YES];
+        [stream open];
+        
+        ZA_LOCK(self.urlToDownloadOperationLock);
+        self.urlToOutputStream[downloadOperationModel.url] = stream;
+        ZA_UNLOCK(self.urlToDownloadOperationLock);
+    } else {
+        [self.queueModel enqueueOperation:downloadOperationModel];
+        [self.queueModel operationDidFinish];
+    }
 }
 
 - (nullable NSURLRequest *)_buildRequestFromURL:(NSURL *)url headers:(nullable NSDictionary<NSString *, NSString *> *)headers {
@@ -186,6 +207,24 @@
             return 90;
         case NotReachable:
             return 0;
+    }
+}
+
+- (void)_writeDataToFileByURL:(NSURL *)url data:(NSData *)data {
+    ZA_LOCK(self.urlToDownloadOperationLock);
+    NSOutputStream *stream = [self.urlToOutputStream objectForKey:url];
+    [stream write:data.bytes maxLength:data.length];
+    ZA_UNLOCK(self.urlToDownloadOperationLock);
+}
+
+- (nullable NSString *)_getFilePathFromURL:(NSURL *)url {
+    NSArray<NSString *> *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = paths.firstObject;
+    if (path) {
+        NSString *fileName = [url.absoluteString MD5String];
+        return [path stringByAppendingPathComponent:fileName];
+    } else {
+        return NULL;
     }
 }
 
@@ -224,6 +263,7 @@ didReceiveResponse:(NSURLResponse *)response
         NSURL *url = dataTask.currentRequest.URL;
         if (nil == url) { return; }
         
+        [strongSelf _writeDataToFileByURL:url data:data];
         ZA_LOCK(strongSelf.urlToDownloadOperationLock);
         ZADownloadOperationModel *downloadOperationModel = [strongSelf.urlToDownloadOperation objectForKey:url];
         [downloadOperationModel addCurrentDownloadLenght:data.length];
@@ -243,6 +283,19 @@ didReceiveResponse:(NSURLResponse *)response
         ZA_LOCK(strongSelf.urlToDownloadOperationLock);
         ZADownloadOperationModel *downloadOperationModel = [strongSelf.urlToDownloadOperation objectForKey:url];
         [downloadOperationModel forwardCompletion];
+        
+        if (nil == error) {
+            NSString *filePath = [self _getFilePathFromURL:url];
+            NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+            [downloadOperationModel forwarFileFromLocation:fileURL];
+            
+            if ([downloadOperationModel numberOfPausedOperation] == 0) {
+                [NSFileManager.defaultManager removeItemAtURL:fileURL error:NULL];
+                [strongSelf.urlToDownloadOperation removeObjectForKey:task.currentRequest.URL];
+                [strongSelf.urlToOutputStream removeObjectForKey:task.currentRequest.URL];
+            }
+        }
+        
         ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
     });
 }

@@ -13,7 +13,6 @@
 		A199809E229E8BB900FA5F38 /* ZADownloadOperationCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A199809D229E8BB800FA5F38 /* ZADownloadOperationCallback.m */; };
 		A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */; };
 		A1AFF49F229F77630040B283 /* ZADownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF49E229F77630040B283 /* ZADownloadManager.m */; };
-		A1AFF4A8229F8B540040B283 /* ZAFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF4A7229F8B540040B283 /* ZAFileManager.m */; };
 		A1AFF4AD229FBB8F0040B283 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF4AB229FBB8F0040B283 /* Reachability.m */; };
 		A1AFF4B0229FBBAE0040B283 /* ZANetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF4AE229FBBAE0040B283 /* ZANetworkManager.m */; };
 		A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E0229E28840085FB3D /* AppDelegate.m */; };
@@ -50,8 +49,6 @@
 		A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZADownloadOperationModel.m; sourceTree = "<group>"; };
 		A19980A9229EB47000FA5F38 /* ZADownloadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADownloadManager.h; sourceTree = "<group>"; };
 		A1AFF49E229F77630040B283 /* ZADownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZADownloadManager.m; sourceTree = "<group>"; };
-		A1AFF4A6229F8B540040B283 /* ZAFileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAFileManager.h; sourceTree = "<group>"; };
-		A1AFF4A7229F8B540040B283 /* ZAFileManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAFileManager.m; sourceTree = "<group>"; };
 		A1AFF4AB229FBB8F0040B283 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		A1AFF4AC229FBB8F0040B283 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		A1AFF4AE229FBBAE0040B283 /* ZANetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZANetworkManager.m; sourceTree = "<group>"; };
@@ -181,8 +178,6 @@
 				A1998090229E6F3D00FA5F38 /* ZADefine.h */,
 				A1AFF4AF229FBBAE0040B283 /* ZANetworkManager.h */,
 				A1AFF4AE229FBBAE0040B283 /* ZANetworkManager.m */,
-				A1AFF4A6229F8B540040B283 /* ZAFileManager.h */,
-				A1AFF4A7229F8B540040B283 /* ZAFileManager.m */,
 			);
 			path = ZACore;
 			sourceTree = "<group>";
@@ -334,7 +329,6 @@
 				A199809E229E8BB900FA5F38 /* ZADownloadOperationCallback.m in Sources */,
 				A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */,
 				A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */,
-				A1AFF4A8229F8B540040B283 /* ZAFileManager.m in Sources */,
 				C572577F229EE065009C3E66 /* NSString+Extension.m in Sources */,
 				A1B7C7EF229E28850085FB3D /* main.m in Sources */,
 				A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */,

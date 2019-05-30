@@ -33,7 +33,25 @@
 }
 
 - (void)forwardCompletion {
-    
+    ZA_LOCK(runningOperationCallbacksLock);
+    for (NSString *callbackId in runningOperationCallbacks.allKeys) {
+        ZADownloadOperationCallback *callback = (ZADownloadOperationCallback *)[runningOperationCallbacks objectForKey:callbackId];
+        if (callback) {
+            callback.completionBlock(self.task.response, self.task.error, callbackId);
+        }
+    }
+    ZA_UNLOCK(runningOperationCallbacksLock);
+}
+- (void)forwarFileFromLocation:(NSURL *)url {
+    ZA_LOCK(runningOperationCallbacksLock);
+    for (NSString *callbackId in runningOperationCallbacks.allKeys) {
+        ZADownloadOperationCallback *callback = (ZADownloadOperationCallback *)[runningOperationCallbacks objectForKey:callbackId];
+        NSURL *destinationURL = callback.destinationBlock(url, callbackId);
+        if (destinationURL) {
+            [NSFileManager.defaultManager copyItemAtURL:url toURL:destinationURL error:NULL];
+        }
+    }
+    ZA_UNLOCK(runningOperationCallbacksLock);
 }
 
 #pragma mark - Override methods
