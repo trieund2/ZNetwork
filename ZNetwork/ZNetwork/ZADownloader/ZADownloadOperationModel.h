@@ -19,7 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addCurrentDownloadLenght:(NSUInteger)lenght;
 - (void)forwardProgress;
 - (void)forwardCompletion;
-- (void)forwardDestination;
 
 @end
 

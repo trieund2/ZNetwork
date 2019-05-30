@@ -117,12 +117,12 @@
 			path = ZADownloader;
 			sourceTree = "<group>";
 		};
-		A1AFF4A9229FBB8F0040B283 /* ThirdParty */ = {
+		A1AFF4A9229FBB8F0040B283 /* ThirdParties */ = {
 			isa = PBXGroup;
 			children = (
 				A1AFF4AA229FBB8F0040B283 /* Reachability */,
 			);
-			path = ThirdParty;
+			path = ThirdParties;
 			sourceTree = "<group>";
 		};
 		A1AFF4AA229FBB8F0040B283 /* Reachability */ = {
@@ -156,10 +156,10 @@
 			isa = PBXGroup;
 			children = (
 				A1B7C805229E28A40085FB3D /* Supports */,
-				A1AFF4A9229FBB8F0040B283 /* ThirdParty */,
+				A1AFF4A9229FBB8F0040B283 /* ThirdParties */,
 				A199809B229E8B1600FA5F38 /* ZADownloader */,
 				A1B7C803229E288F0085FB3D /* ZACore */,
-				A1B7C807229E28C40085FB3D /* Features */,
+				A1B7C807229E28C40085FB3D /* TestFeatures */,
 			);
 			path = ZNetwork;
 			sourceTree = "<group>";
@@ -208,14 +208,14 @@
 			path = AppDelegate;
 			sourceTree = "<group>";
 		};
-		A1B7C807229E28C40085FB3D /* Features */ = {
+		A1B7C807229E28C40085FB3D /* TestFeatures */ = {
 			isa = PBXGroup;
 			children = (
 				A1B7C7E5229E28840085FB3D /* Main.storyboard */,
 				A1B7C7E2229E28840085FB3D /* ViewController.h */,
 				A1B7C7E3229E28840085FB3D /* ViewController.m */,
 			);
-			path = Features;
+			path = TestFeatures;
 			sourceTree = "<group>";
 		};
 		C5725779229EE038009C3E66 /* Extensions */ = {
