@@ -165,6 +165,10 @@
         }
         
         _currentOperationRunning += 1;
+        if (nil != operationModel && nil != operationModel.url) {
+             [self.urlToOperationModel removeObjectForKey:operationModel.url];
+        }
+       
         return operationModel;
     } else {
         return NULL;
@@ -192,7 +196,10 @@
 }
 
 - (void)removeAllOperations {
-    
+    [self.urlToOperationModel removeAllObjects];
+    [self.highQueue removeAllObjects];
+    [self.mediumQueue removeAllObjects];
+    [self.lowQueue removeAllObjects];
 }
 
 #pragma mark - Private methods
