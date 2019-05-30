@@ -53,7 +53,6 @@
 #pragma mark - Interface methods
 
 - (nullable ZADownloadOperationCallback *)downloadTaskFromURLString:(NSString *)urlString
-                                                            headers:(NSDictionary<NSString *,NSString *> *)header
                                                       requestPolicy:(NSURLRequestCachePolicy)requestPolicy
                                                            priority:(ZAOperationPriority)priority
                                                       progressBlock:(ZAProgressBlock)progressBlock
@@ -67,7 +66,6 @@
                                                                                     destinationBlock:destinationBlock
                                                                                      completionBlock:completionBlock
                                                                                             priority:priority];
-    
     
     __weak typeof(self) weakSelf = self;
     dispatch_sync(self.root_queue, ^{
@@ -108,25 +106,78 @@
     ZADownloadOperationModel *downloadOperationModel = (ZADownloadOperationModel *)[self.queueModel dequeueOperationModel];
     if (nil == downloadOperationModel) { return; }
     
-    NSURLRequest *downloadRequest = [self buildRequestFromURL:downloadOperationModel.url headers:NULL];
-    NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:downloadRequest];
+    NSURLRequest *request = [self buildRequestFromURL:downloadOperationModel.url headers:NULL];
+    NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request];
     [dataTask resume];
     downloadOperationModel.task = dataTask;
     
+    ZA_LOCK(self.urlToDownloadOperationLock);
+    self.urlToDownloadOperation[downloadOperationModel.url] = downloadOperationModel;
+    ZA_UNLOCK(self.urlToDownloadOperationLock);
 }
 
 - (nullable NSURLRequest *)buildRequestFromURL:(NSURL *)url headers:(nullable NSDictionary<NSString *, NSString *> *)headers {
+    // TODO: check in local cache and build request and attach resume headers ifneeded
     return NULL;
 }
 
 #pragma mark - NSURLSessionDataDelegate
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
+- (void)URLSession:(NSURLSession *)session
+          dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler {
+    __weak typeof(self) weakSelf = self;
     
+    dispatch_async(self.delegate_queue, ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
+        if (nil == HTTPResponse) { return; }
+        
+        NSUInteger contentLength = [HTTPResponse.allHeaderFields[@"Content-Length"] integerValue];
+        
+        NSURL *url = dataTask.currentRequest.URL;
+        if (url) {
+            ZA_LOCK(strongSelf.urlToDownloadOperationLock);
+            ZADownloadOperationModel *downloadOperationModel = [strongSelf.urlToDownloadOperation objectForKey:url];
+            downloadOperationModel.contentLength = contentLength;
+            ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
+        }
+        
+        completionHandler(NSURLSessionResponseAllow);
+    });
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
+    __weak typeof(self) weakSelf = self;
+    
+    dispatch_async(self.delegate_queue, ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        NSURL *url = dataTask.currentRequest.URL;
+        if (nil == url) { return; }
+        
+        ZA_LOCK(strongSelf.urlToDownloadOperationLock);
+        ZADownloadOperationModel *downloadOperationModel = [strongSelf.urlToDownloadOperation objectForKey:url];
+        [downloadOperationModel addCurrentDownloadLenght:data.length];
+        ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
+        
+        [downloadOperationModel forwardProgress];
+    });
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+    __weak typeof(self) weakSelf = self;
     
+    dispatch_async(self.delegate_queue, ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        NSURL *url = task.currentRequest.URL;
+        if (nil == url) { return; }
+        
+        ZA_LOCK(strongSelf.urlToDownloadOperationLock);
+        ZADownloadOperationModel *downloadOperationModel = [strongSelf.urlToDownloadOperation objectForKey:url];
+        ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
+        [downloadOperationModel forwardCompletion];
+    });
 }
 
 @end

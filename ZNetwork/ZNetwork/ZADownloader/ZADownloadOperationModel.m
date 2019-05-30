@@ -10,6 +10,24 @@
 
 @implementation ZADownloadOperationModel
 
+#pragma mark - Interface methods
+
+- (void)addCurrentDownloadLenght:(NSUInteger)lenght {
+    _alreadyDownloadLenght += lenght;
+}
+
+- (void)forwardProgress {
+    
+}
+
+- (void)forwardCompletion {
+    
+}
+
+- (void)forwardDestination {
+    
+}
+
 #pragma mark - Override methods
 
 - (void)pauseOperationCallbackById:(NSString *)identifier {
