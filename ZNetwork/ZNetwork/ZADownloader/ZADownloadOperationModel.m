@@ -36,10 +36,6 @@
     
 }
 
-- (void)forwardDestination {
-    
-}
-
 #pragma mark - Override methods
 
 - (void)pauseOperationCallbackById:(NSString *)identifier {
@@ -53,12 +49,9 @@
 - (void)cancelOperationCallbackById:(NSString *)identifier {
     [super cancelOperationCallbackById:identifier];
     
+    if (self.numberOfRunningOperation == 0) {
+        [self.task cancel];
+    }
 }
-
-- (void)resumeOperationCallbackById:(NSString *)identifier {
-    [super resumeOperationCallbackById:identifier];
-    
-}
-
 
 @end

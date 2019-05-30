@@ -140,7 +140,21 @@
 }
 
 - (void)cancelDownloadTaskByDownloadCallback:(ZADownloadOperationCallback *)downloadCallback {
+    if (nil == downloadCallback || nil == downloadCallback.url ) { return; }
     
+    __weak typeof(self) weakSelf = self;
+    
+    dispatch_async(self.root_queue, ^{
+        __strong typeof(self) strongSelf = weakSelf;
+        
+        ZA_LOCK(strongSelf.urlToDownloadOperationLock);
+        ZADownloadOperationModel *operationModel = [strongSelf.urlToDownloadOperation objectForKey:downloadCallback.url];
+        
+        if (operationModel) {
+            [operationModel cancelOperationCallbackById:downloadCallback.identifier];
+        }
+        ZA_UNLOCK(strongSelf.urlToDownloadOperationLock);
+    });
 }
 
 #pragma mark - Helper methods
