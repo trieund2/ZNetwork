@@ -68,8 +68,6 @@
         ZA_UNLOCK(self.urlToOperationModelLock);
         
         if (currentOperationModel) {
-            
-            if (operationModel.numberOfRunningOperation != 1) { return; }
             ZAOperationCallback *operationCallback = operationModel.allRunningOperationCallback.firstObject;
             if (nil == operationCallback) { return; }
             [currentOperationModel addOperationCallback:operationCallback];
@@ -109,7 +107,7 @@
     return (self.currentOperationRunning < self.maxOperationPerform);
 }
 
-- (ZAOperationModel *)dequeueOperationModel {
+- (nullable ZAOperationModel *)dequeueOperationModel {
     if ([self canDequeueOperationModel]) {
         ZAOperationModel *operationModel = NULL;
         
@@ -167,6 +165,10 @@
         }
         
         _currentOperationRunning += 1;
+        if (nil != operationModel && nil != operationModel.url) {
+             [self.urlToOperationModel removeObjectForKey:operationModel.url];
+        }
+       
         return operationModel;
     } else {
         return NULL;
@@ -194,7 +196,10 @@
 }
 
 - (void)removeAllOperations {
-    
+    [self.urlToOperationModel removeAllObjects];
+    [self.highQueue removeAllObjects];
+    [self.mediumQueue removeAllObjects];
+    [self.lowQueue removeAllObjects];
 }
 
 #pragma mark - Private methods
