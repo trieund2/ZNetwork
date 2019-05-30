@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZALocalTaskInfo : NSObject <NSSecureCoding>
 
+@property (strong, nonatomic) NSString *identifier;
 @property (strong, nonatomic) NSString *urlString;
 @property (strong, nonatomic) NSString *filePath;
 @property (strong, nonatomic) NSString *fileName;

@@ -12,6 +12,7 @@
 @interface ZAUserDefaultsManager ()
 
 @property (strong, nonatomic) NSUserDefaults *defaults;
+@property (strong, nonatomic) dispatch_semaphore_t userDefaultsLock;
 
 @end
 
@@ -29,40 +30,82 @@
 - (instancetype)initSingleton {
     if (self = [super init]) {
         self.defaults = [NSUserDefaults standardUserDefaults];
+        self.userDefaultsLock = dispatch_semaphore_create(1);
     }
     return self;
 }
 
-- (void)saveObject:(nullable id)object withKey:(NSString *)key completion:(nullable void (^)(NSError *))completion {
+- (void)saveObject:(nullable id)object withKey:(NSString *)key completion:(void (^)(NSError *))completion {
 #if DEBUG
     NSParameterAssert(key);
+    NSParameterAssert(completion);
 #endif
-    if (nil == key) { return; }
+    if (nil == key || nil == completion) { return; }
     
+    __block NSData *encodedObject = nil;
+    [self encodeObjectToData:object completion:^(NSData * _Nullable data, NSError * _Nullable error) {
+        if (error) {
+            completion(error);
+            return;
+        }
+        encodedObject = data;
+        ZA_LOCK(self.userDefaultsLock);
+        [self.defaults setObject:encodedObject forKey:key];
+        [self.defaults synchronize];
+        ZA_UNLOCK(self.userDefaultsLock);
+        completion(nil);
+    }];
+}
+
+- (void)encodeObjectToData:(nullable id)object completion:(void (^)(NSData * _Nullable, NSError * _Nullable))completion {
+#if DEBUG
+    NSParameterAssert(completion);
+#endif
+    if (nil == completion) { return; }
+    
+    if (nil == object) {
+        completion(nil, nil);
+    }
     NSError *error = nil;
     NSData *encodedObject = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:YES error:&error];
     if (error) {
-        completion(error);
-        return;
+        completion(nil, error);
+    } else {
+        completion(encodedObject, nil);
     }
-    [self.defaults setObject:encodedObject forKey:key];
-    [self.defaults synchronize];
 }
 
-- (nullable id)loadObjectOfClass:(Class)cls withKey:(NSString *)key; {
+- (void)loadObjectOfClass:(Class)cls withKey:(NSString *)key completion:(void (^)(id _Nullable, NSError * _Nullable))completion {
 #if DEBUG
+    NSParameterAssert(cls);
     NSParameterAssert(key);
+    NSParameterAssert(completion);
 #endif
-    if (nil == key) { return nil; }
+    if (nil == cls || nil == key || nil == completion) { return; }
     
+    ZA_LOCK(self.userDefaultsLock);
     NSData *encodedObject = [self.defaults objectForKey:key];
-    NSError *error = nil;
-    id object = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:encodedObject error:&error];
-    if (error) {
-        NSLog(@"Error while loading object: %@", error.localizedDescription);
-        return nil;
+    ZA_UNLOCK(self.userDefaultsLock);
+    [self decodeObjectOfClass:cls fromData:encodedObject completion:completion];
+}
+
+- (void)decodeObjectOfClass:(Class)cls fromData:(NSData *)data completion:(void (^)(id _Nullable, NSError * _Nullable))completion {
+#if DEBUG
+    NSParameterAssert(cls);
+    NSParameterAssert(completion);
+#endif
+    if (nil == cls || nil == completion) { return; }
+    
+    if (nil == data) {
+        completion(nil, nil);
     }
-    return object;
+    NSError *error = nil;
+    id object = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:&error];
+    if (error) {
+        completion(nil, error);
+    } else {
+        completion(object, nil);
+    }
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import "ZALocalTaskInfo.h"
 
+NSString * const KeyForIdentifier = @"identifier";
 NSString * const KeyForUrlString = @"urlString";
 NSString * const KeyForFilePath = @"filePath";
 NSString * const KeyForFileName = @"fileName";
@@ -19,6 +20,7 @@ NSString * const KeyForRequestPolicy = @"requestPolicy";
 @implementation ZALocalTaskInfo
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.identifier forKey:KeyForIdentifier];
     [aCoder encodeObject:self.urlString forKey:KeyForUrlString];
     [aCoder encodeObject:self.filePath forKey:KeyForFilePath];
     [aCoder encodeObject:self.fileName forKey:KeyForFileName];
@@ -30,6 +32,7 @@ NSString * const KeyForRequestPolicy = @"requestPolicy";
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
+        self.identifier = [aDecoder decodeObjectForKey:KeyForIdentifier];
         self.urlString = [aDecoder decodeObjectForKey:KeyForUrlString];
         self.filePath = [aDecoder decodeObjectForKey:KeyForFilePath];
         self.fileName = [aDecoder decodeObjectForKey:KeyForFileName];
