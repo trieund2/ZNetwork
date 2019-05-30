@@ -26,6 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)enqueueOperation:(ZAOperationModel *)operationModel;
 - (BOOL)canDequeueOperationModel;
 - (nullable ZAOperationModel *)dequeueOperationModel;
+- (void)pauseOperationByCallback:(ZAOperationCallback *)callback;
+- (void)cancelOperationByCallback:(ZAOperationCallback *)callback;
+- (void)operationDidFinish;
 
 @end
 

@@ -166,9 +166,30 @@
             }
         }
         
+        _currentOperationRunning += 1;
         return operationModel;
     } else {
         return NULL;
+    }
+}
+
+- (void)pauseOperationByCallback:(ZAOperationCallback *)callback {
+    ZA_LOCK(self.urlToOperationModelLock);
+    ZAOperationModel *operationModel = [self.urlToOperationModel objectForKey:callback.url];
+    [operationModel removeOperationCallback:callback];
+    ZA_UNLOCK(self.urlToOperationModelLock);
+}
+
+- (void)cancelOperationByCallback:(ZAOperationCallback *)callback {
+    ZA_LOCK(self.urlToOperationModelLock);
+    ZAOperationModel *operationModel = [self.urlToOperationModel objectForKey:callback.url];
+    [operationModel removeOperationCallback:callback];
+    ZA_UNLOCK(self.urlToOperationModelLock);
+}
+
+- (void)operationDidFinish {
+    if (_currentOperationRunning > 0) {
+        _currentOperationRunning -= 1;
     }
 }
 

@@ -12,12 +12,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZAOperationModel : NSObject
+@interface ZAOperationModel : NSObject {
+    
+@protected
+    dispatch_semaphore_t runningOperationCallbacksLock;
+    dispatch_semaphore_t pausedOperationCallbacksLock;
+    NSMutableDictionary<NSString *, ZAOperationCallback *> *runningOperationCallbacks;
+    NSMutableDictionary<NSString *, ZAOperationCallback *> *pausedOperationCallbacks;
+}
 
 @property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) NSURLRequestCachePolicy requestPolicy;
 @property (nonatomic) ZAOperationPriority priority;
-@property (nonatomic, readonly) NSURLSessionTask *task;
+@property (nonatomic) NSURLSessionTask *task;
 
 - (id)init NS_UNAVAILABLE;
 
@@ -35,6 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSUInteger)numberOfRunningOperation;
 - (NSUInteger)numberOfPausedOperation;
 - (void)addOperationCallback:(ZAOperationCallback *)callback;
+- (void)removeOperationCallback:(ZAOperationCallback *)callback;
 - (void)pauseOperationCallbackById:(NSString *)identifier;
 - (void)resumeOperationCallbackById:(NSString *)identifier;
 - (void)cancelOperationCallbackById:(NSString *)identifier;

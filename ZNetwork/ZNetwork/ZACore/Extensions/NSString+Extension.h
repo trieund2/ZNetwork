@@ -1,8 +1,8 @@
 //
-//  ZADownloadSessionManager.h
+//  NSString+Extension.h
 //  ZNetwork
 //
-//  Created by CPU12202 on 5/29/19.
+//  Created by MACOS on 5/29/19.
 //  Copyright © 2019 com.trieund. All rights reserved.
 //
 
@@ -10,9 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZADownloadSessionManager : NSObject
+@interface NSString (Extension)
 
-+ (instancetype)sharedManager;
+- (nullable NSURL *)toURL;
 
 @end
 
