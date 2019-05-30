@@ -10,16 +10,16 @@
 
 @implementation ZAOperationCallback
 
-- (instancetype)init
-{
-    return [self initWithOperationPriority:ZAOperationPriorityMedium];
+- (instancetype)initWithURL:(NSURL *)url {
+    return [self initWithURL:url operationPriority:(ZAOperationPriorityMedium)];
 }
 
-- (instancetype)initWithOperationPriority:(ZAOperationPriority)priority {
+- (instancetype)initWithURL:(NSURL *)url operationPriority:(ZAOperationPriority)priority {
     self = [super init];
     if (self) {
         _identifier = NSUUID.UUID.UUIDString;
         _priority = priority;
+        _url = url;
     }
     return self;
 }

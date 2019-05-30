@@ -17,7 +17,7 @@
     
     if (self.numberOfRunningOperation == 0) {
         if (self.numberOfPausedOperation == 0) {
-            [self.downloadTask cancel];
+            
         } else {
             // TODO: - Perform cancel task and save file
             

@@ -20,14 +20,16 @@ typedef void (^ZACompletionBlock)(NSURLResponse *response, NSError *error, NSStr
 @property (copy, readonly) ZADestinationBlock destinationBlock;
 @property (copy, readonly) ZACompletionBlock completionBlock;
 
-- (instancetype)initWithProgressBlock:(ZAProgressBlock)progressBlock
-                     destinationBlock:(ZADestinationBlock)destinationBlock
-                      completionBlock:(ZACompletionBlock)completionBlock;
+- (instancetype)initWithURL:(NSURL *)url
+              progressBlock:(ZAProgressBlock)progressBlock
+           destinationBlock:(ZADestinationBlock)destinationBlock
+            completionBlock:(ZACompletionBlock)completionBlock;
 
-- (instancetype)initWithProgressBlock:(ZAProgressBlock)progressBlock
-                     destinationBlock:(ZADestinationBlock)destinationBlock
-                      completionBlock:(ZACompletionBlock)completionBlock
-                             priority:(ZAOperationPriority)priority;
+- (instancetype)initWithURL:(NSURL *)url
+              progressBlock:(ZAProgressBlock)progressBlock
+           destinationBlock:(ZADestinationBlock)destinationBlock
+            completionBlock:(ZACompletionBlock)completionBlock
+                   priority:(ZAOperationPriority)priority;
 
 @end
 

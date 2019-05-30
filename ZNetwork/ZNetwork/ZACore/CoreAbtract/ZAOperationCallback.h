@@ -14,10 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZAOperationCallback : NSObject
 
 @property (nonatomic, readonly) NSString *identifier;
+@property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) ZAOperationPriority priority;
 
-- (instancetype)init;
-- (instancetype)initWithOperationPriority:(ZAOperationPriority)priority;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithURL:(NSURL *)url;
+- (instancetype)initWithURL:(NSURL *)url operationPriority:(ZAOperationPriority)priority;
 
 @end
 

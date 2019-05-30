@@ -10,22 +10,23 @@
 
 @implementation ZADownloadOperationCallback
 
-#pragma mark - LifeCycle
-
-- (instancetype)initWithProgressBlock:(ZAProgressBlock)progressBlock
-                     destinationBlock:(ZADestinationBlock)destinationBlock
-                      completionBlock:(ZACompletionBlock)completionBlock {
-    return [self initWithProgressBlock:progressBlock
-                      destinationBlock:destinationBlock
-                       completionBlock:completionBlock
-                              priority:(ZAOperationPriorityMedium)];
+- (instancetype)initWithURL:(NSURL *)url
+              progressBlock:(ZAProgressBlock)progressBlock
+           destinationBlock:(ZADestinationBlock)destinationBlock
+            completionBlock:(ZACompletionBlock)completionBlock {
+    return [self initWithURL:url
+               progressBlock:progressBlock
+            destinationBlock:destinationBlock
+             completionBlock:completionBlock
+                    priority:(ZAOperationPriorityMedium)];
 }
 
-- (instancetype)initWithProgressBlock:(ZAProgressBlock)progressBlock
-                     destinationBlock:(ZADestinationBlock)destinationBlock
-                      completionBlock:(ZACompletionBlock)completionBlock
-                             priority:(ZAOperationPriority)priority {
-    self = [super initWithOperationPriority:priority];
+- (instancetype)initWithURL:(NSURL *)url
+              progressBlock:(ZAProgressBlock)progressBlock
+           destinationBlock:(ZADestinationBlock)destinationBlock
+            completionBlock:(ZACompletionBlock)completionBlock
+                   priority:(ZAOperationPriority)priority {
+    self = [super initWithURL:url operationPriority:priority];
     if (self) {
         _progressBlock = progressBlock;
         _destinationBlock = destinationBlock;
