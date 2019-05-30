@@ -31,6 +31,13 @@ typedef void (^ZACompletionBlock)(NSURLResponse *response, NSError *error, NSStr
             completionBlock:(ZACompletionBlock)completionBlock
                    priority:(ZAOperationPriority)priority;
 
+- (instancetype)initWithURL:(NSURL *)url
+              progressBlock:(ZAProgressBlock)progressBlock
+           destinationBlock:(ZADestinationBlock)destinationBlock
+            completionBlock:(ZACompletionBlock)completionBlock
+                   priority:(ZAOperationPriority)priority
+                requestPlicy:(NSURLRequestCachePolicy)requestPlicy;
+
 @end
 
 NS_ASSUME_NONNULL_END

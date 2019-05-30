@@ -16,10 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *identifier;
 @property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) ZAOperationPriority priority;
+@property (nonatomic, readonly) NSURLRequestCachePolicy requestPolicy;
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithURL:(NSURL *)url;
 - (instancetype)initWithURL:(NSURL *)url operationPriority:(ZAOperationPriority)priority;
+- (instancetype)initWithURL:(NSURL *)url operationPriority:(ZAOperationPriority)priority requestPlicy:(NSURLRequestCachePolicy)requestPolicy;
 
 @end
 

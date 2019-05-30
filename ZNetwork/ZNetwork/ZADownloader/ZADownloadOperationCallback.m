@@ -18,7 +18,8 @@
                progressBlock:progressBlock
             destinationBlock:destinationBlock
              completionBlock:completionBlock
-                    priority:(ZAOperationPriorityMedium)];
+                    priority:(ZAOperationPriorityMedium)
+                 requestPlicy:(NSURLRequestUseProtocolCachePolicy)];
 }
 
 - (instancetype)initWithURL:(NSURL *)url
@@ -26,7 +27,21 @@
            destinationBlock:(ZADestinationBlock)destinationBlock
             completionBlock:(ZACompletionBlock)completionBlock
                    priority:(ZAOperationPriority)priority {
-    self = [super initWithURL:url operationPriority:priority];
+    return [self initWithURL:url
+               progressBlock:progressBlock
+            destinationBlock:destinationBlock
+             completionBlock:completionBlock
+                    priority:(priority)
+                 requestPlicy:(NSURLRequestUseProtocolCachePolicy)];
+}
+
+- (instancetype)initWithURL:(NSURL *)url
+              progressBlock:(ZAProgressBlock)progressBlock
+           destinationBlock:(ZADestinationBlock)destinationBlock
+            completionBlock:(ZACompletionBlock)completionBlock
+                   priority:(ZAOperationPriority)priority
+                requestPlicy:(NSURLRequestCachePolicy)requestPlicy {
+    self = [super initWithURL:url operationPriority:priority requestPlicy:requestPlicy];
     if (self) {
         _progressBlock = progressBlock;
         _destinationBlock = destinationBlock;
