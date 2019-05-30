@@ -28,6 +28,13 @@ typedef NS_ENUM(NSUInteger, ZAOperationPerformType) {
     ZAOperationPerformTypeConcurrency
 };
 
+typedef NS_ENUM(NSInteger, ZAHTTPResponseAcceptRangesType) {
+    // HTTP Response does not support request by range
+    ZAHTTPResponseAcceptRangesTypeNone = 0,
+    // HTTP Response supports request by range `bytes` (ex: Range: bytes=0-10000 for 10000 first bytes)
+    ZAHTTPResponseAcceptRangesTypeBytes = 1
+};
+
 #pragma mark - Define Macro
 
 #ifndef ZA_LOCK

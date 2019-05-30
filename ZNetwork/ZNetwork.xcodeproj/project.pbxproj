@@ -17,6 +17,8 @@
 		A1B7C7EC229E28850085FB3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7EA229E28850085FB3D /* LaunchScreen.storyboard */; };
 		A1B7C7EF229E28850085FB3D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7EE229E28850085FB3D /* main.m */; };
 		A1B7C7F9229E28850085FB3D /* ZNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */; };
+		D7BBAF18229EAB170029E63B /* ZAUserDefaultsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */; };
+		D7BBAF1B229EB1E00029E63B /* ZALocalTaskInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D7BBAF1A229EB1E00029E63B /* ZALocalTaskInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +52,10 @@
 		A1B7C7F4229E28850085FB3D /* ZNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZNetworkTests.m; sourceTree = "<group>"; };
 		A1B7C7FA229E28850085FB3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D7BBAF16229EAB170029E63B /* ZAUserDefaultsManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAUserDefaultsManager.h; sourceTree = "<group>"; };
+		D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAUserDefaultsManager.m; sourceTree = "<group>"; };
+		D7BBAF19229EB1E00029E63B /* ZALocalTaskInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZALocalTaskInfo.h; sourceTree = "<group>"; };
+		D7BBAF1A229EB1E00029E63B /* ZALocalTaskInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZALocalTaskInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +130,7 @@
 		A1B7C803229E288F0085FB3D /* ZACore */ = {
 			isa = PBXGroup;
 			children = (
+				D7BBAF15229EAAD30029E63B /* LocalStorage */,
 				A1998091229E70AF00FA5F38 /* CoreAbtract */,
 				A1998090229E6F3D00FA5F38 /* ZADefine.h */,
 			);
@@ -166,6 +173,17 @@
 				A1B7C7E3229E28840085FB3D /* ViewController.m */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		D7BBAF15229EAAD30029E63B /* LocalStorage */ = {
+			isa = PBXGroup;
+			children = (
+				D7BBAF16229EAB170029E63B /* ZAUserDefaultsManager.h */,
+				D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */,
+				D7BBAF19229EB1E00029E63B /* ZALocalTaskInfo.h */,
+				D7BBAF1A229EB1E00029E63B /* ZALocalTaskInfo.m */,
+			);
+			path = LocalStorage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,7 +287,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1B7C7E4229E28840085FB3D /* ViewController.m in Sources */,
+				D7BBAF1B229EB1E00029E63B /* ZALocalTaskInfo.m in Sources */,
 				A199809A229E771600FA5F38 /* ZAOperationCallback.m in Sources */,
+				D7BBAF18229EAB170029E63B /* ZAUserDefaultsManager.m in Sources */,
 				A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */,
 				A1B7C7EF229E28850085FB3D /* main.m in Sources */,
 				A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */,
