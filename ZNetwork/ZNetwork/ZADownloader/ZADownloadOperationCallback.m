@@ -41,7 +41,7 @@
             completionBlock:(ZACompletionBlock)completionBlock
                    priority:(ZAOperationPriority)priority
                 requestPlicy:(NSURLRequestCachePolicy)requestPlicy {
-    self = [super initWithURL:url operationPriority:priority requestPlicy:requestPlicy];
+    self = [super initWithURL:url operationPriority:priority requestPolicy:requestPlicy];
     if (self) {
         _progressBlock = progressBlock;
         _destinationBlock = destinationBlock;

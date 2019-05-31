@@ -15,8 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZAOperationModel : NSObject {
     
 @protected
-    dispatch_semaphore_t runningOperationCallbacksLock;
-    dispatch_semaphore_t pausedOperationCallbacksLock;
     NSMutableDictionary<NSString *, ZAOperationCallback *> *runningOperationCallbacks;
     NSMutableDictionary<NSString *, ZAOperationCallback *> *pausedOperationCallbacks;
 }
@@ -46,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)pauseOperationCallbackById:(NSString *)identifier;
 - (void)resumeOperationCallbackById:(NSString *)identifier;
 - (void)cancelOperationCallbackById:(NSString *)identifier;
+- (void)cancelAllOperations;
 - (NSArray<ZAOperationCallback *> *)allRunningOperationCallback;
 
 @end

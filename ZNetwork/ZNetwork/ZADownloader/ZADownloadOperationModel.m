@@ -18,40 +18,58 @@
 
 - (void)forwardProgress {
     NSProgress *progress = [[NSProgress alloc] init];
-    progress.totalUnitCount = self.contentLength;
+    progress.totalUnitCount = self.countOfTotalBytes;
     progress.completedUnitCount = self.completedUnitCount;
     
-    ZA_LOCK(runningOperationCallbacksLock);
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
         ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
-        if (callbackId && [callback isKindOfClass:ZADownloadOperationCallback.class]) {
+        if ([callback isKindOfClass:ZADownloadOperationCallback.class]) {
             ZADownloadOperationCallback *downloadOperationCallback = (ZADownloadOperationCallback *)callback;
             downloadOperationCallback.progressBlock(progress, callbackId);
         }
     }
-    ZA_UNLOCK(runningOperationCallbacksLock);
 }
 
 - (void)forwardCompletion {
-    ZA_LOCK(runningOperationCallbacksLock);
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
-        ZADownloadOperationCallback *callback = (ZADownloadOperationCallback *)[runningOperationCallbacks objectForKey:callbackId];
-        if (callback) {
-            callback.completionBlock(self.task.response, self.task.error, callbackId);
+        ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
+        if ([callback isKindOfClass:ZADownloadOperationCallback.class]) {
+            ZADownloadOperationCallback *downloadOperationCallback = (ZADownloadOperationCallback *)callback;
+            downloadOperationCallback.completionBlock(self.task.response, self.task.error, callbackId);
         }
     }
-    ZA_UNLOCK(runningOperationCallbacksLock);
 }
 - (void)forwarFileFromLocation:(NSURL *)url {
-    ZA_LOCK(runningOperationCallbacksLock);
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
-        ZADownloadOperationCallback *callback = (ZADownloadOperationCallback *)[runningOperationCallbacks objectForKey:callbackId];
-        NSURL *destinationURL = callback.destinationBlock(url, callbackId);
-        if (destinationURL) {
-            [NSFileManager.defaultManager copyItemAtURL:url toURL:destinationURL error:NULL];
+        ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
+        if ([callback isKindOfClass:ZADownloadOperationCallback.class]) {
+            ZADownloadOperationCallback *downloadOperationCallback = (ZADownloadOperationCallback *)callback;
+            NSURL *destinationURL = downloadOperationCallback.destinationBlock(url, callbackId);
+            if (destinationURL) {
+                [NSFileManager.defaultManager copyItemAtURL:url toURL:destinationURL error:NULL];
+            }
         }
     }
-    ZA_UNLOCK(runningOperationCallbacksLock);
+}
+
+- (void)forwardError:(NSError *)error {
+    for (NSString *callbackId in runningOperationCallbacks.allKeys) {
+        ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
+        if ([callback isKindOfClass:ZADownloadOperationCallback.class]) {
+            ZADownloadOperationCallback *downloadOperationCallback = (ZADownloadOperationCallback *)callback;
+            downloadOperationCallback.completionBlock(self.task.response, error, callbackId);
+        }
+    }
+}
+
+- (void)updateResumeStatusForAllCallbacks {
+    for (ZADownloadOperationCallback *downloadOperationCallback in runningOperationCallbacks) {
+        downloadOperationCallback.canResume = self.canResume;
+    }
+    
+    for (ZADownloadOperationCallback *downloadOperationCallback in pausedOperationCallbacks) {
+        downloadOperationCallback.canResume = self.canResume;
+    }
 }
 
 #pragma mark - Override methods

@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithURL:(NSURL *)url;
 - (instancetype)initWithURL:(NSURL *)url operationPriority:(ZAOperationPriority)priority;
-- (instancetype)initWithURL:(NSURL *)url operationPriority:(ZAOperationPriority)priority requestPlicy:(NSURLRequestCachePolicy)requestPolicy;
+- (instancetype)initWithURL:(NSURL *)url operationPriority:(ZAOperationPriority)priority requestPolicy:(NSURLRequestCachePolicy)requestPolicy;
 
 @end
 

@@ -16,9 +16,10 @@ typedef void (^ZACompletionBlock)(NSURLResponse *response, NSError *error, NSStr
 
 @interface ZADownloadOperationCallback : ZAOperationCallback
 
-@property (copy, readonly) ZAProgressBlock progressBlock;
-@property (copy, readonly) ZADestinationBlock destinationBlock;
-@property (copy, readonly) ZACompletionBlock completionBlock;
+@property (nonatomic) BOOL canResume;
+@property (nonatomic, copy, readonly) ZAProgressBlock progressBlock;
+@property (nonatomic, copy, readonly) ZADestinationBlock destinationBlock;
+@property (nonatomic, copy, readonly) ZACompletionBlock completionBlock;
 
 - (instancetype)initWithURL:(NSURL *)url
               progressBlock:(ZAProgressBlock)progressBlock

@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) ZASessionTaskStatus status;
 @property (nonatomic) ZADownloadOperationCallback *identifier;
 @property (nonatomic) ZAOperationPriority priority;
+@property (nonatomic) BOOL canResume;
 
 - (id)initFromURLString:(NSString *)urlString;
 
