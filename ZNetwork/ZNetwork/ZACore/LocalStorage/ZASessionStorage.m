@@ -36,8 +36,26 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
         [self _loadAllTaskInfo:^(NSError * _Nullable error) {
             
         }];
+        [NSNotificationCenter.defaultCenter addObserver:self
+                                               selector:@selector(applicationDidEnterBackgroundHandler:)
+                                                   name:NotificationApplicationDidEnterBackground
+                                                 object:nil];
+        [NSNotificationCenter.defaultCenter addObserver:self
+                                               selector:@selector(applicationWillTerminateHandler:)
+                                                   name:NotificationApplicationWillTerminate
+                                                 object:nil];
     }
     return self;
+}
+
+- (void)applicationDidEnterBackgroundHandler:(NSNotification *)notification {
+    [self pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {
+    }];
+}
+
+- (void)applicationWillTerminateHandler:(NSNotification *)notification {
+    [self pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {
+    }];
 }
 
 - (ZALocalTaskInfo * _Nullable)getTaskInfoByURLString:(NSString *)urlString {
@@ -106,11 +124,16 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
 }
 
 - (void)updateCountOfBytesReceived:(int64_t)amount byURLString:(NSString *)urlString {
-    ZA_LOCK(self.taskInfoLock);
-    ZALocalTaskInfo *taskInfo = [self.taskInfoKeyedByURLString objectForKey:urlString];
-    ZA_UNLOCK(self.taskInfoLock);
+    ZALocalTaskInfo *taskInfo = [self _getTaskInfoByURLString:urlString];
     if (taskInfo) {
         taskInfo.countOfBytesReceived += amount;
+    }
+}
+
+- (void)updateCountOfTotalBytes:(int64_t)count byURLString:(NSString *)urlString {
+    ZALocalTaskInfo *taskInfo = [self _getTaskInfoByURLString:urlString];
+    if (taskInfo) {
+        taskInfo.countOfTotalBytes = count;
     }
 }
 
@@ -140,13 +163,13 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
 - (void)removeTaskInfoByURLString:(NSString *)urlString completion:(void (^)(NSError * _Nullable))completion {
     ZALocalTaskInfo *taskInfo = [self _getTaskInfoByURLString:urlString];
     if (nil == taskInfo) {
-        completion(nil);
+        if (completion) { completion(nil); }
         return;
     }
     if (taskInfo.filePath) {
         [self _removeFileAtPath:taskInfo.filePath completion:^(NSError * _Nullable error) {
-            if (error && completion) {
-                completion(error);
+            if (error) {
+                if (completion) { completion(error); }
             } else {
                 [self.taskInfoKeyedByURLString removeObjectForKey:urlString];
             }

@@ -35,11 +35,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)commitTaskInfo:(ZALocalTaskInfo *)taskInfo;
 
 /**
- * @abstract Update count of bytes received by task info that has url string.
+ * @abstract Update count of bytes received by a task.
  * @discussion If no task info is found, then nothing happens.
  * @param amount The number of bytes to add up to current count of bytes received.
  */
 - (void)updateCountOfBytesReceived:(int64_t)amount byURLString:(NSString *)urlString;
+
+/**
+ * @abstract Update count of total bytes of a task.
+ * @discussion If no task info is found, then nothing happens.
+ * @param count The new number of total bytes.
+ */
+- (void)updateCountOfTotalBytes:(int64_t)count byURLString:(NSString *)urlString;
 
 /**
  * @abstract Push all task info currently on mem to local storage.
