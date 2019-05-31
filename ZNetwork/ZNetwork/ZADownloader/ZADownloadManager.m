@@ -126,7 +126,7 @@
                 [weakSelf.urlToOutputStream removeObjectForKey:downloadCallback.url];
                 
                 if ([operationModel numberOfPausedOperation] == 0) {
-                    // TODO: - Remove session task info in local storage
+                    [ZASessionStorage.sharedStorage removeTaskInfoByURLString:operationModel.url.absoluteString completion:NULL];
                 }
             }
         } else {
@@ -136,6 +136,7 @@
 }
 
 - (void)cancelAllRequests {
+    __weak typeof(self) weakSelf = self;
     
 }
 
@@ -175,7 +176,15 @@
         [stream open];
         self.urlToOutputStream[downloadOperationModel.url] = stream;
         
-        // Save request to Task info storage if needed
+        ZALocalTaskInfo *taskInfo = [ZASessionStorage.sharedStorage getTaskInfoByURLString:downloadOperationModel.url.absoluteString];
+        if (taskInfo) {
+            downloadOperationModel.completedUnitCount = taskInfo.countOfBytesReceived;
+            downloadOperationModel.contentLength = taskInfo.countOfTotalBytes;
+        } else {
+            taskInfo = [[ZALocalTaskInfo alloc] initWithURLString:downloadOperationModel.url.absoluteString
+                                                         filePath:NSFileTypeRegular fileName:downloadOperationModel.url.absoluteString.MD5String];
+            [ZASessionStorage.sharedStorage commitTaskInfo:taskInfo];
+        }
     } else {
         [self.queueModel enqueueOperation:downloadOperationModel];
         [self.queueModel operationDidFinish];
@@ -188,7 +197,11 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     request.timeoutInterval = [self _getTimeoutInterval];
     
-    // add resume header
+    ZALocalTaskInfo *taskInfo = [ZASessionStorage.sharedStorage getTaskInfoByURLString:url.absoluteString];
+    if (taskInfo) {
+        NSString *range = [NSString stringWithFormat:@"bytes=%lli-%lli", taskInfo.countOfBytesReceived, taskInfo.countOfTotalBytes];
+        [request setValue:range forHTTPHeaderField:@"Accept-Ranges"];
+    }
     
     return request;
 }
@@ -263,6 +276,12 @@ didReceiveResponse:(NSURLResponse *)response
         ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:url];
         [downloadOperationModel addCurrentDownloadLenght:data.length];
         [downloadOperationModel forwardProgress];
+        
+        ZALocalTaskInfo *taskInfo = [ZASessionStorage.sharedStorage getTaskInfoByURLString:url.absoluteString];
+        if (taskInfo) {
+            taskInfo.countOfBytesReceived += data.length;
+            [ZASessionStorage.sharedStorage commitTaskInfo:taskInfo];
+        }
     });
 }
 
@@ -285,11 +304,11 @@ didReceiveResponse:(NSURLResponse *)response
                 [NSFileManager.defaultManager removeItemAtURL:fileURL error:NULL];
                 [weakSelf.urlToDownloadOperation removeObjectForKey:url];
                 [weakSelf.urlToOutputStream removeObjectForKey:url];
+                [ZASessionStorage.sharedStorage removeTaskInfoByURLString:url.absoluteString completion:NULL];
             }
         }
         
         [weakSelf.queueModel operationDidFinish];
-        
         [weakSelf _triggerStartRequest];
     });
 }

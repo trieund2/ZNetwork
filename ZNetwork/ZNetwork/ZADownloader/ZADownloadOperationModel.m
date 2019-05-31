@@ -58,7 +58,6 @@
 
 - (void)pauseOperationCallbackById:(NSString *)identifier {
     [super pauseOperationCallbackById: identifier];
-    
     if (self.numberOfRunningOperation == 0) {
         [self.task cancel];
     }
@@ -66,7 +65,6 @@
 
 - (void)cancelOperationCallbackById:(NSString *)identifier {
     [super cancelOperationCallbackById:identifier];
-    
     if (self.numberOfRunningOperation == 0) {
         [self.task cancel];
     }

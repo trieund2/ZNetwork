@@ -27,6 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithURLString:(NSString *)urlString
                          filePath:(NSString *)filePath
+                         fileName:(NSString *)fileName;
+
+- (instancetype)initWithURLString:(NSString *)urlString
+                         filePath:(NSString *)filePath
                          fileName:(NSString *)fileName
                requestCachePolicy:(NSURLRequestCachePolicy)requestCachePolicy;
 
