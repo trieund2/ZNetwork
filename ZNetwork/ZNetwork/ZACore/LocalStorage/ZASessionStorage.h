@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)commitTaskInfo:(ZALocalTaskInfo *)taskInfo;
 
-- (void)updateCountOfBytesReceivedByURLString:(NSString *)urlString;
+- (void)updateCountOfBytesReceived:(int64_t)count byURLString:(NSString *)urlString;
 
 /**
  * @abstract Push all task info currently on mem to local storage.
