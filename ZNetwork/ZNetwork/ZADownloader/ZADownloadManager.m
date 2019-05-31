@@ -117,7 +117,7 @@
             if ([operationModel numberOfRunningOperation] == 0) {
                 [weakSelf.urlToDownloadOperation removeObjectForKey:downloadCallback.url];
                 if ([operationModel numberOfPausedOperation] == 0) {
-                    [ZASessionStorage.sharedStorage removeTaskInfoByURLString:operationModel.url.absoluteString completion:NULL];
+                    [ZASessionStorage.sharedStorage removeTaskInfoByURLString:operationModel.url.absoluteString completion:nil];
                 }
             }
         } else {
@@ -145,6 +145,7 @@
     ZADownloadOperationModel *downloadOperationModel = [self.urlToDownloadOperation objectForKey:downloadCallback.url];
     if (downloadOperationModel && self.queueModel.isMultiCallback && downloadOperationModel.task.state == NSURLSessionTaskStateRunning) {
         [downloadOperationModel addOperationCallback:downloadCallback];
+        downloadCallback.canResume = downloadOperationModel.canResume;
     } else {
         downloadOperationModel = [[ZADownloadOperationModel alloc] initByURL:downloadCallback.url
                                                                requestPolicy:downloadCallback.requestPolicy
@@ -263,6 +264,8 @@ didReceiveResponse:(NSURLResponse *)response
             } else {
                 downloadOperationModel.canResume = NO;
             }
+            
+            [downloadOperationModel updateResumeStatusForAllCallbacks];
         }
         
         completionHandler(NSURLSessionResponseAllow);
