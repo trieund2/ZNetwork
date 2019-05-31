@@ -27,6 +27,9 @@
 		A1B7C7EF229E28850085FB3D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7EE229E28850085FB3D /* main.m */; };
 		A1B7C7F9229E28850085FB3D /* ZNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */; };
 		C572577F229EE065009C3E66 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C572577E229EE065009C3E66 /* NSString+Extension.m */; };
+		D73696C9229FB4F200933863 /* ZASessionStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D73696C8229FB4F200933863 /* ZASessionStorage.m */; };
+		D7BBAF18229EAB170029E63B /* ZAUserDefaultsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */; };
+		D7BBAF1B229EB1E00029E63B /* ZALocalTaskInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D7BBAF1A229EB1E00029E63B /* ZALocalTaskInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +82,12 @@
 		A1B7C7FA229E28850085FB3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C572577D229EE065009C3E66 /* NSString+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
 		C572577E229EE065009C3E66 /* NSString+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
+		D73696C7229FB4F200933863 /* ZASessionStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZASessionStorage.h; sourceTree = "<group>"; };
+		D73696C8229FB4F200933863 /* ZASessionStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZASessionStorage.m; sourceTree = "<group>"; };
+		D7BBAF16229EAB170029E63B /* ZAUserDefaultsManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAUserDefaultsManager.h; sourceTree = "<group>"; };
+		D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAUserDefaultsManager.m; sourceTree = "<group>"; };
+		D7BBAF19229EB1E00029E63B /* ZALocalTaskInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZALocalTaskInfo.h; sourceTree = "<group>"; };
+		D7BBAF1A229EB1E00029E63B /* ZALocalTaskInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZALocalTaskInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				C5725779229EE038009C3E66 /* Extensions */,
+				D7BBAF15229EAAD30029E63B /* LocalStorage */,
 				A1998091229E70AF00FA5F38 /* CoreAbtract */,
 				A1998090229E6F3D00FA5F38 /* ZADefine.h */,
 				A1AFF4AF229FBBAE0040B283 /* ZANetworkManager.h */,
@@ -238,6 +248,19 @@
 				C572577E229EE065009C3E66 /* NSString+Extension.m */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		D7BBAF15229EAAD30029E63B /* LocalStorage */ = {
+			isa = PBXGroup;
+			children = (
+				D7BBAF16229EAB170029E63B /* ZAUserDefaultsManager.h */,
+				D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */,
+				D7BBAF19229EB1E00029E63B /* ZALocalTaskInfo.h */,
+				D7BBAF1A229EB1E00029E63B /* ZALocalTaskInfo.m */,
+				D73696C7229FB4F200933863 /* ZASessionStorage.h */,
+				D73696C8229FB4F200933863 /* ZASessionStorage.m */,
+			);
+			path = LocalStorage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -352,6 +375,9 @@
 				A1AFF49F229F77630040B283 /* ZADownloadManager.m in Sources */,
 				A1AFF4B0229FBBAE0040B283 /* ZANetworkManager.m in Sources */,
 				A199809E229E8BB900FA5F38 /* ZADownloadOperationCallback.m in Sources */,
+				D73696C9229FB4F200933863 /* ZASessionStorage.m in Sources */,
+				D7BBAF1B229EB1E00029E63B /* ZALocalTaskInfo.m in Sources */,
+				D7BBAF18229EAB170029E63B /* ZAUserDefaultsManager.m in Sources */,
 				A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */,
 				A1AFF516229FD2EA0040B283 /* DownloadTableViewCell.m in Sources */,
 				A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */,
