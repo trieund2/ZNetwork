@@ -15,7 +15,6 @@
 @property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *highQueue;
 @property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *mediumQueue;
 @property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *lowQueue;
-@property (nonnull, readonly) dispatch_semaphore_t urlToOperationModelLock;
 @property (nonatomic, readonly) NSMutableDictionary<NSURL *, ZAOperationModel *> *urlToOperationModel;
 
 @end
@@ -44,7 +43,6 @@
         _mediumQueue = [[NSMutableArray alloc] init];
         _lowQueue = [[NSMutableArray alloc] init];
         _urlToOperationModel = [[NSMutableDictionary alloc] init];
-        _urlToOperationModelLock = dispatch_semaphore_create(1);
         
         switch (_performType) {
             case ZAOperationPerformTypeSerial:
@@ -63,9 +61,7 @@
     if (NULL == operationModel && NULL != operationModel.url) { return; }
     
     if (self.isMultiCallback) {
-        ZA_LOCK(self.urlToOperationModelLock);
         ZAOperationModel *currentOperationModel = [self.urlToOperationModel objectForKey:operationModel.url];
-        ZA_UNLOCK(self.urlToOperationModelLock);
         
         if (currentOperationModel) {
             ZAOperationCallback *operationCallback = operationModel.allRunningOperationCallback.firstObject;
@@ -94,9 +90,7 @@
             
         } else {
             [self _addOperationToQueue:operationModel];
-            ZA_LOCK(self.urlToOperationModelLock);
             self.urlToOperationModel[operationModel.url] = operationModel;
-            ZA_UNLOCK(self.urlToOperationModelLock);
         }
     } else {
         [self _addOperationToQueue:operationModel];
@@ -176,17 +170,13 @@
 }
 
 - (void)pauseOperationByCallback:(ZAOperationCallback *)callback {
-    ZA_LOCK(self.urlToOperationModelLock);
     ZAOperationModel *operationModel = [self.urlToOperationModel objectForKey:callback.url];
     [operationModel removeOperationCallback:callback];
-    ZA_UNLOCK(self.urlToOperationModelLock);
 }
 
 - (void)cancelOperationByCallback:(ZAOperationCallback *)callback {
-    ZA_LOCK(self.urlToOperationModelLock);
     ZAOperationModel *operationModel = [self.urlToOperationModel objectForKey:callback.url];
     [operationModel removeOperationCallback:callback];
-    ZA_UNLOCK(self.urlToOperationModelLock);
 }
 
 - (void)operationDidFinish {
@@ -223,10 +213,7 @@
 
 - (void)_removeURLToOperationItemByURL:(NSURL *)url {
     if (nil == url) { return; }
-    
-    ZA_LOCK(self.urlToOperationModelLock);
     [self.urlToOperationModel removeObjectForKey:url];
-    ZA_UNLOCK(self.urlToOperationModelLock);
 }
 
 @end
