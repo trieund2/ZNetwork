@@ -13,7 +13,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
 
 @interface ZASessionStorage ()
 
-@property (strong, nonatomic) NSMutableDictionary *taskInfoKeyedById;
+@property (strong, nonatomic) NSMutableDictionary *taskInfoKeyedByURLString;
 @property (strong, nonatomic) dispatch_semaphore_t taskInfoLock;
 
 @end
@@ -31,7 +31,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
 
 - (instancetype)initSingleton {
     if (self = [super init]) {
-        self.taskInfoKeyedById = [NSMutableDictionary dictionary];
+        self.taskInfoKeyedByURLString = [NSMutableDictionary dictionary];
         self.taskInfoLock = dispatch_semaphore_create(1);
     }
     return self;
@@ -39,18 +39,18 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
 
 - (void)commitTaskInfo:(ZALocalTaskInfo *)taskInfo {
 #if DEBUG
-    NSAssert(taskInfo && taskInfo.identifier, @"ZASessionStorage commitTaskInfo: TaskInfo identifier must not be nil");
+    NSAssert(taskInfo && taskInfo.urlString, @"ZASessionStorage commitTaskInfo: TaskInfo urlString must not be nil");
 #endif
-    if (nil == taskInfo || nil == taskInfo.identifier) { return; }
+    if (nil == taskInfo || nil == taskInfo.urlString) { return; }
     
     ZA_LOCK(self.taskInfoLock);
-    [self.taskInfoKeyedById setObject:taskInfo forKey:taskInfo.identifier];
+    [self.taskInfoKeyedByURLString setObject:taskInfo forKey:taskInfo.urlString];
     ZA_UNLOCK(self.taskInfoLock);
 }
 
 - (void)pushAllTaskInfoWithCompletion:(void (^)(NSError * _Nullable error))completion {
     ZA_LOCK(self.taskInfoLock);
-    NSArray *allTaskInfo = self.taskInfoKeyedById.allValues;
+    NSArray *allTaskInfo = self.taskInfoKeyedByURLString.allValues;
     ZA_UNLOCK(self.taskInfoLock);
     
     /* Dispatch group to concurrently encode all ZALocalTaskInfo in dictionary to data */
@@ -65,7 +65,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
                     err = error;
                 } else {
                     ZA_LOCK(encodedDictLock);
-                    [encodedDict setObject:data forKey:taskInfo.identifier];
+                    [encodedDict setObject:data forKey:taskInfo.urlString];
                     ZA_UNLOCK(encodedDictLock);
                 }
             });
@@ -102,10 +102,10 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
                                                     NSDictionary *taskInfoDictionary = (NSDictionary *)object;
                                                     if (taskInfoDictionary) {
                                                         ZA_LOCK(self.taskInfoLock);
-                                                        [self.taskInfoKeyedById addEntriesFromDictionary:taskInfoDictionary];
+                                                        [self.taskInfoKeyedByURLString addEntriesFromDictionary:taskInfoDictionary];
                                                         ZA_UNLOCK(self.taskInfoLock);
                                                     }
-                                                    completion((NSDictionary *)self.taskInfoKeyedById, nil);
+                                                    completion((NSDictionary *)self.taskInfoKeyedByURLString, nil);
                                                 }];
 }
 

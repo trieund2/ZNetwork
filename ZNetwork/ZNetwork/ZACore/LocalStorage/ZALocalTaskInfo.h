@@ -13,8 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZALocalTaskInfo : NSObject <NSSecureCoding>
 
-/* @warning Careful when edit property because NSUserDefaults only support property list type */
-@property (strong, nonatomic) NSString *identifier;
+/* @warning Careful when edit property because NSUserDefaults only support property list type, urlString is a must because it is the key to identify task info
+ */
 @property (strong, nonatomic) NSString *urlString;
 @property (strong, nonatomic) NSString *filePath;
 @property (strong, nonatomic) NSString *fileName;
