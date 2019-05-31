@@ -16,7 +16,6 @@ NSString * const KeyForAcceptRangesType = @"acceptRangesType";
 NSString * const KeyForCountOfBytesReceived = @"countOfBytesReceived";
 NSString * const KeyForCountOfTotalBytes = @"countOfTotalBytes";
 NSString * const KeyForState = @"state";
-NSString * const KeyForRequestCachePolicy = @"requestCachePolicy";
 
 @implementation ZALocalTaskInfo
 
@@ -29,7 +28,6 @@ NSString * const KeyForRequestCachePolicy = @"requestCachePolicy";
     [aCoder encodeObject:[NSNumber numberWithUnsignedLongLong:self.countOfBytesReceived] forKey:KeyForCountOfBytesReceived];
     [aCoder encodeObject:[NSNumber numberWithUnsignedLongLong:self.countOfTotalBytes] forKey:KeyForCountOfTotalBytes];
     [aCoder encodeObject:[NSNumber numberWithInteger:self.state] forKey:KeyForState];
-    [aCoder encodeObject:[NSNumber numberWithUnsignedInteger:self.requestCachePolicy] forKey:KeyForRequestCachePolicy];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -42,7 +40,15 @@ NSString * const KeyForRequestCachePolicy = @"requestCachePolicy";
         _countOfBytesReceived = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForCountOfBytesReceived]).unsignedLongLongValue;
         _countOfTotalBytes = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForCountOfTotalBytes]).unsignedLongLongValue;
         _state = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForState]).integerValue;
-        _requestCachePolicy = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForRequestCachePolicy]).unsignedIntegerValue;
+    }
+    return self;
+}
+
+- (instancetype)initWithURLString:(NSString *)urlString filePath:(NSString *)filePath fileName:(NSString *)fileName {
+    if (self = [super init]) {
+        _urlString = urlString;
+        _filePath = filePath;
+        _fileName = fileName;
     }
     return self;
 }

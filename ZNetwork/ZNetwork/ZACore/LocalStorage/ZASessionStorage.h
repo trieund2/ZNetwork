@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 /* Return a singleton */
 + (instancetype)sharedStorage;
 
+
 - (ZALocalTaskInfo * _Nullable)getTaskInfoByURLString:(NSString *)urlString;
 
 /**
@@ -29,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)commitTaskInfo:(ZALocalTaskInfo *)taskInfo;
 
-- (void)removeTaskInfoByURLString:(NSString *)urlString completion:(void (^)(NSError * _Nullable))completion;
+- (void)updateCountOfBytesReceivedByURLString:(NSString *)urlString;
 
 /**
  * @abstract Push all task info currently on mem to local storage.
@@ -52,6 +53,8 @@ NS_ASSUME_NONNULL_BEGIN
  * @param completion Completion callback, check for error first if there is any while loading, if error is nil then data is loaded successfully.
  */
 - (void)loadAllTaskInfo:(void (^)(NSDictionary * _Nullable dictionary, NSError * _Nullable error))completion;
+
+- (void)removeTaskInfoByURLString:(NSString *)urlString completion:(nullable void (^)(NSError * _Nullable))completion;
 
 @end
 
