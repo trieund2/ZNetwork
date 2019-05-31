@@ -124,11 +124,16 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
 }
 
 - (void)updateCountOfBytesReceived:(int64_t)amount byURLString:(NSString *)urlString {
-    ZA_LOCK(self.taskInfoLock);
-    ZALocalTaskInfo *taskInfo = [self.taskInfoKeyedByURLString objectForKey:urlString];
-    ZA_UNLOCK(self.taskInfoLock);
+    ZALocalTaskInfo *taskInfo = [self _getTaskInfoByURLString:urlString];
     if (taskInfo) {
         taskInfo.countOfBytesReceived += amount;
+    }
+}
+
+- (void)updateCountOfTotalBytes:(int64_t)count byURLString:(NSString *)urlString {
+    ZALocalTaskInfo *taskInfo = [self _getTaskInfoByURLString:urlString];
+    if (taskInfo) {
+        taskInfo.countOfTotalBytes = count;
     }
 }
 
