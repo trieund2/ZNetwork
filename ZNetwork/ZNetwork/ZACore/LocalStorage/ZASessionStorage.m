@@ -36,8 +36,26 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
         [self _loadAllTaskInfo:^(NSError * _Nullable error) {
             
         }];
+        [NSNotificationCenter.defaultCenter addObserver:self
+                                               selector:@selector(applicationDidEnterBackgroundHandler:)
+                                                   name:NotificationApplicationDidEnterBackground
+                                                 object:nil];
+        [NSNotificationCenter.defaultCenter addObserver:self
+                                               selector:@selector(applicationWillTerminateHandler:)
+                                                   name:NotificationApplicationWillTerminate
+                                                 object:nil];
     }
     return self;
+}
+
+- (void)applicationDidEnterBackgroundHandler:(NSNotification *)notification {
+    [self pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {
+    }];
+}
+
+- (void)applicationWillTerminateHandler:(NSNotification *)notification {
+    [self pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {
+    }];
 }
 
 - (ZALocalTaskInfo * _Nullable)getTaskInfoByURLString:(NSString *)urlString {
