@@ -39,7 +39,8 @@
 {
     self = [super init];
     if (self) {
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.za.znetwork.background.download.session"];
+//        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.za.znetwork.background.download.session"];
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         _session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
         _root_queue = dispatch_queue_create("com.za.znetwork.sessionmanager.rootqueue", DISPATCH_QUEUE_SERIAL);
         _queueModel = [[ZAQueueModel alloc] init];
@@ -283,12 +284,7 @@ didReceiveResponse:(NSURLResponse *)response
         ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:url];
         [downloadOperationModel addCurrentDownloadLenght:data.length];
         [downloadOperationModel forwardProgress];
-        
-        ZALocalTaskInfo *taskInfo = [ZASessionStorage.sharedStorage getTaskInfoByURLString:url.absoluteString];
-        if (taskInfo) {
-            taskInfo.countOfBytesReceived += data.length;
-            [ZASessionStorage.sharedStorage commitTaskInfo:taskInfo];
-        }
+        [ZASessionStorage.sharedStorage updateCountOfBytesReceived:data.length byURLString:url.absoluteString];
     });
 }
 

@@ -145,7 +145,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     }
     if (taskInfo.filePath) {
         [self _removeFileAtPath:taskInfo.filePath completion:^(NSError * _Nullable error) {
-            if (error) {
+            if (error && completion) {
                 completion(error);
             } else {
                 [self.taskInfoKeyedByURLString removeObjectForKey:urlString];
