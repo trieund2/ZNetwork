@@ -23,12 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) int64_t countOfBytesReceived;
 @property (assign, nonatomic) int64_t countOfTotalBytes;
 @property (assign, nonatomic) NSURLSessionTaskState state;
-@property (assign, nonatomic, readonly) NSURLRequestCachePolicy requestCachePolicy;
 
 - (instancetype)initWithURLString:(NSString *)urlString
                          filePath:(NSString *)filePath
-                         fileName:(NSString *)fileName
-               requestCachePolicy:(NSURLRequestCachePolicy)requestCachePolicy;
+                         fileName:(NSString *)fileName;
 
 @end
 
