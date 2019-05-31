@@ -33,9 +33,7 @@
 - (void)forwardCompletion {
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
         ZADownloadOperationCallback *callback = (ZADownloadOperationCallback *)[runningOperationCallbacks objectForKey:callbackId];
-        if (callback) {
-            callback.completionBlock(self.task.response, self.task.error, callbackId);
-        }
+        callback.completionBlock(self.task.response, self.task.error, callbackId);
     }
 }
 - (void)forwarFileFromLocation:(NSURL *)url {
