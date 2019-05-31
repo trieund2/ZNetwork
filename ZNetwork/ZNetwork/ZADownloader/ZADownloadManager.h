@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "ZADownloadOperationCallback.h"
-#import "ZADefine.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

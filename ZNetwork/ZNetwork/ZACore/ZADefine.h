@@ -11,6 +11,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define NotificationApplicationDidEnterBackground @"NotificationApplicationDidEnterBackground"
+#define NotificationApplicationWillTerminate @"NotificationApplicationWillTerminate"
 #define ZASessionStorageErrorDomain @"com.trieund.ZNetwork.sessionStorageError"
 #define ZARequestAcceptRangeBytes @"bytes"
 #define ZARequestAcceptRangeNone @"none"
