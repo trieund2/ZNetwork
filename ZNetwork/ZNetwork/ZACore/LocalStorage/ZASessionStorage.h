@@ -19,7 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 /* Return a singleton */
 + (instancetype)sharedStorage;
 
-
+/**
+ * @abstract Get a copy of task info by url string.
+ * @param urlString The url string to search for.
+ * @return A ZALocalTaskInfo object or nil if no object is found.
+ */
 - (ZALocalTaskInfo * _Nullable)getTaskInfoByURLString:(NSString *)urlString;
 
 /**
@@ -30,7 +34,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)commitTaskInfo:(ZALocalTaskInfo *)taskInfo;
 
-- (void)updateCountOfBytesReceived:(int64_t)count byURLString:(NSString *)urlString;
+/**
+ * @abstract Update count of bytes received by task info that has url string.
+ * @discussion If no task info is found, then nothing happens.
+ * @param amount The number of bytes to add up to current count of bytes received.
+ */
+- (void)updateCountOfBytesReceived:(int64_t)amount byURLString:(NSString *)urlString;
 
 /**
  * @abstract Push all task info currently on mem to local storage.
@@ -48,12 +57,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)commitTaskInfo:(ZALocalTaskInfo *)taskInfo andPushAllTaskInfoWithCompletion:(void (^)(NSError * _Nullable error))completion;
 
 /**
- * @abstract Load all task info saved previously from local storage plus currently saved task info on mem.
- * @discussion This will get all task info from local st
- * @param completion Completion callback, check for error first if there is any while loading, if error is nil then data is loaded successfully.
+ * @abstract Remove a task info from dictionary and its file on disk.
+ * @discussion Task info dictionary will be updated to disk on the next time pushing.
+ * @param urlString The url string of task info to remove.
+ * @param completion Completion callback that receives error if there is one while removing file from disk.
  */
-- (void)loadAllTaskInfo:(void (^)(NSDictionary * _Nullable dictionary, NSError * _Nullable error))completion;
-
 - (void)removeTaskInfoByURLString:(NSString *)urlString completion:(nullable void (^)(NSError * _Nullable))completion;
 
 @end
