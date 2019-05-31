@@ -14,6 +14,7 @@ NSString * const KeyForFilePath = @"filePath";
 NSString * const KeyForFileName = @"fileName";
 NSString * const KeyForAcceptRangesType = @"acceptRangesType";
 NSString * const KeyForCountOfBytesReceived = @"countOfBytesReceived";
+NSString * const KeyForCountOfTotalBytes = @"countOfTotalBytes";
 NSString * const KeyForState = @"state";
 NSString * const KeyForRequestPolicy = @"requestPolicy";
 
@@ -26,6 +27,7 @@ NSString * const KeyForRequestPolicy = @"requestPolicy";
     [aCoder encodeObject:self.fileName forKey:KeyForFileName];
     [aCoder encodeObject:[NSNumber numberWithInteger:self.acceptRangesType] forKey:KeyForAcceptRangesType];
     [aCoder encodeObject:[NSNumber numberWithUnsignedLongLong:self.countOfBytesReceived] forKey:KeyForCountOfBytesReceived];
+    [aCoder encodeObject:[NSNumber numberWithUnsignedLongLong:self.countOfTotalBytes] forKey:KeyForCountOfTotalBytes];
     [aCoder encodeObject:[NSNumber numberWithInteger:self.state] forKey:KeyForState];
     [aCoder encodeObject:[NSNumber numberWithUnsignedInteger:self.requestPolicy] forKey:KeyForRequestPolicy];
 }
@@ -38,6 +40,7 @@ NSString * const KeyForRequestPolicy = @"requestPolicy";
         self.fileName = [aDecoder decodeObjectForKey:KeyForFileName];
         self.acceptRangesType = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForAcceptRangesType]).integerValue;
         self.countOfBytesReceived = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForCountOfBytesReceived]).unsignedLongLongValue;
+        self.countOfTotalBytes = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForCountOfTotalBytes]).unsignedLongLongValue;
         self.state = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForState]).integerValue;
         self.requestPolicy = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForRequestPolicy]).unsignedIntegerValue;
     }
