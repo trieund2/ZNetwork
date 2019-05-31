@@ -29,7 +29,7 @@
         _url = url;
         _requestPolicy = requestPolicy;
         _priority = priority;
-        _task = NULL;
+        _task = nil;
         runningOperationCallbacks = [[NSMutableDictionary alloc] init];
         pausedOperationCallbacks = [[NSMutableDictionary alloc] init];
         
@@ -43,13 +43,11 @@
 #pragma mark - Interface method
 
 - (NSUInteger)numberOfRunningOperation {
-    NSUInteger count = runningOperationCallbacks.count;
-    return count;
+    return runningOperationCallbacks.count;
 }
 
 - (NSUInteger)numberOfPausedOperation {
-    NSUInteger count = pausedOperationCallbacks.count;
-    return count;
+    return pausedOperationCallbacks.count;
 }
 
 - (void)addOperationCallback:(ZAOperationCallback *)callback {
@@ -70,9 +68,7 @@
     if (nil == identifier) { return; }
     
     ZAOperationCallback *pauseOperationCallback = [runningOperationCallbacks objectForKey:identifier];
-    if (pauseOperationCallback == nil) {
-        return;
-    }
+    if (pauseOperationCallback == nil) { return; }
     [runningOperationCallbacks removeObjectForKey:identifier];
     pausedOperationCallbacks[identifier] = pauseOperationCallback;
 }
@@ -82,11 +78,15 @@
     
     if ([runningOperationCallbacks objectForKey:identifier]) {
         [runningOperationCallbacks removeObjectForKey:identifier];
-    } else {
-        if ([pausedOperationCallbacks objectForKey:identifier]) {
-            [pausedOperationCallbacks removeObjectForKey:identifier];
-        }
+    } else if ([pausedOperationCallbacks objectForKey:identifier]) {
+        [pausedOperationCallbacks removeObjectForKey:identifier];
     }
+}
+
+- (void)cancelAllOperations {
+    [runningOperationCallbacks removeAllObjects];
+    [pausedOperationCallbacks removeAllObjects];
+    [self.task cancel];
 }
 
 - (void)resumeOperationCallbackById:(NSString *)identifier {
@@ -103,6 +103,8 @@
 }
 
 - (void)removeOperationCallback:(ZAOperationCallback *)callback {
+    if (nil == callback) { return; }
+    
     if ([runningOperationCallbacks objectForKey:callback.identifier]) {
         [runningOperationCallbacks removeObjectForKey:callback.identifier];
     } else if ([pausedOperationCallbacks objectForKey:callback.identifier]) {

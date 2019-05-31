@@ -158,11 +158,11 @@
             }
         }
         
-        _currentOperationRunning += 1;
         if (nil != operationModel && nil != operationModel.url) {
-             [self.urlToOperationModel removeObjectForKey:operationModel.url];
+            _currentOperationRunning += 1;
+            [self.urlToOperationModel removeObjectForKey:operationModel.url];
         }
-       
+        
         return operationModel;
     } else {
         return NULL;
@@ -170,13 +170,30 @@
 }
 
 - (void)pauseOperationByCallback:(ZAOperationCallback *)callback {
+    if (nil == callback || nil == callback.url) { return; }
     ZAOperationModel *operationModel = [self.urlToOperationModel objectForKey:callback.url];
     [operationModel removeOperationCallback:callback];
+    
+    if ([operationModel numberOfPausedOperation] == 0 && [operationModel numberOfRunningOperation] == 0) {
+        switch (operationModel.priority) {
+            case ZAOperationPriorityVeryHigh:
+                [self.veryHighQueue removeObject:operationModel];
+                break;
+            case ZAOperationPriorityHigh:
+                [self.highQueue removeObject:operationModel];
+                break;
+            case ZAOperationPriorityMedium:
+                [self.mediumQueue removeObject:operationModel];
+                break;
+            case ZAOperationPriorityLow:
+                [self.lowQueue removeObject:operationModel];
+                break;
+        }
+    }
 }
 
 - (void)cancelOperationByCallback:(ZAOperationCallback *)callback {
-    ZAOperationModel *operationModel = [self.urlToOperationModel objectForKey:callback.url];
-    [operationModel removeOperationCallback:callback];
+    [self pauseOperationByCallback:callback];
 }
 
 - (void)operationDidFinish {
@@ -195,6 +212,8 @@
 #pragma mark - Private methods
 
 - (void)_addOperationToQueue:(ZAOperationModel *)operationModel {
+    if (nil == operationModel) { return; }
+    
     switch (operationModel.priority) {
         case ZAOperationPriorityVeryHigh:
             [self.veryHighQueue addObject:operationModel];
@@ -209,11 +228,6 @@
             [self.lowQueue addObject:operationModel];
             break;
     }
-}
-
-- (void)_removeURLToOperationItemByURL:(NSURL *)url {
-    if (nil == url) { return; }
-    [self.urlToOperationModel removeObjectForKey:url];
 }
 
 @end

@@ -44,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)pauseOperationCallbackById:(NSString *)identifier;
 - (void)resumeOperationCallbackById:(NSString *)identifier;
 - (void)cancelOperationCallbackById:(NSString *)identifier;
+- (void)cancelAllOperations;
 - (NSArray<ZAOperationCallback *> *)allRunningOperationCallback;
 
 @end

@@ -19,6 +19,10 @@ typedef NS_ENUM(NSInteger, ZASessionStorageErrorCode) {
     kErrorWhileEncodingTaskInfo = 101,
 };
 
+typedef NS_ENUM(NSUInteger, ZANetworkError) {
+    ZANetworkErrorFullDisk = 9981
+};
+
 typedef NS_ENUM(NSInteger, ZAPerformOperationType) {
     ZAPerformOperationTypeFIFO,
     ZAPerformOperationTypeLIFO
