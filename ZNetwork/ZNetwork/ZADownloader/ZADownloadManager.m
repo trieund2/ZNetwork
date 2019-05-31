@@ -41,8 +41,6 @@
     self = [super init];
     if (self) {
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.za.znetwork.background.download.session"];
-        configuration.sessionSendsLaunchEvents = YES;
-        configuration.discretionary = YES;
         _session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
         _root_queue = dispatch_queue_create("com.za.znetwork.sessionmanager.rootqueue", DISPATCH_QUEUE_SERIAL);
         _queueModel = [[ZAQueueModel alloc] init];
@@ -137,7 +135,14 @@
 
 - (void)cancelAllRequests {
     __weak typeof(self) weakSelf = self;
-    
+    dispatch_async(self.root_queue, ^{
+        [weakSelf.queueModel removeAllOperations];
+        for (ZADownloadOperationModel *downloadOperationModel in weakSelf.urlToDownloadOperation) {
+            [downloadOperationModel.task cancel];
+        }
+        [weakSelf.urlToDownloadOperation removeAllObjects];
+        [weakSelf.urlToOutputStream removeAllObjects];
+    });
 }
 
 #pragma mark - Helper methods

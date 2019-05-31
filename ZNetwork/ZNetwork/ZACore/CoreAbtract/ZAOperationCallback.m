@@ -11,16 +11,16 @@
 @implementation ZAOperationCallback
 
 - (instancetype)initWithURL:(NSURL *)url {
-    return [self initWithURL:url operationPriority:(ZAOperationPriorityMedium) requestPlicy:NSURLRequestUseProtocolCachePolicy];
+    return [self initWithURL:url operationPriority:(ZAOperationPriorityMedium) requestPolicy:NSURLRequestUseProtocolCachePolicy];
 }
 
 - (instancetype)initWithURL:(NSURL *)url operationPriority:(ZAOperationPriority)priority {
-    return [self initWithURL:url operationPriority:(priority) requestPlicy:NSURLRequestUseProtocolCachePolicy];
+    return [self initWithURL:url operationPriority:(priority) requestPolicy:NSURLRequestUseProtocolCachePolicy];
 }
 
 - (instancetype)initWithURL:(NSURL *)url
           operationPriority:(ZAOperationPriority)priority
-                requestPlicy:(NSURLRequestCachePolicy)requestPolicy {
+                requestPolicy:(NSURLRequestCachePolicy)requestPolicy {
     self = [super init];
     if (self) {
         _identifier = NSUUID.UUID.UUIDString;
