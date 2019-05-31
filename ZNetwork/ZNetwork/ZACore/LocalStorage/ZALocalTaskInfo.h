@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *fileName;
 @property (assign, nonatomic) ZAHTTPResponseAcceptRangesType acceptRangesType;
 @property (assign, nonatomic) int64_t countOfBytesReceived;
+@property (assign, nonatomic) int64_t countOfTotalBytes;
 @property (assign, nonatomic) NSURLSessionTaskState state;
 @property (assign, nonatomic) NSURLRequestCachePolicy requestPolicy;
 
