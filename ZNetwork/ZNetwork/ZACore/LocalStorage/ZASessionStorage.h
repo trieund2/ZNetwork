@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 /* Return a singleton */
 + (instancetype)sharedStorage;
 
+- (ZALocalTaskInfo * _Nullable)getTaskInfoByURLString:(NSString *)urlString;
+
 /**
  * @abstract Commit a local task info to temporary storage (still on mem).
  * @discussion If there isn't a need to save task info to local storage right away, use this to save on mem first.
@@ -26,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
  * @warning This is not saved to local storage yet.
  */
 - (void)commitTaskInfo:(ZALocalTaskInfo *)taskInfo;
+
+- (void)removeTaskInfoByURLString:(NSString *)urlString completion:(void (^)(NSError * _Nullable))completion;
 
 /**
  * @abstract Push all task info currently on mem to local storage.
