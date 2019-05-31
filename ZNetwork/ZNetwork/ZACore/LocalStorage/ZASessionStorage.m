@@ -33,8 +33,27 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     if (self = [super init]) {
         self.taskInfoKeyedByURLString = [NSMutableDictionary dictionary];
         self.taskInfoLock = dispatch_semaphore_create(1);
+        [self _loadAllTaskInfo:^(NSError * _Nullable error) {
+            
+        }];
     }
     return self;
+}
+
+- (ZALocalTaskInfo * _Nullable)getTaskInfoByURLString:(NSString *)urlString {
+    ZALocalTaskInfo *taskInfo = [self _getTaskInfoByURLString:urlString];
+    if (taskInfo) {
+        return [taskInfo copy];
+    } else {
+        return nil;
+    }
+}
+
+- (ZALocalTaskInfo * _Nullable)_getTaskInfoByURLString:(NSString *)urlString {
+    ZA_LOCK(self.taskInfoLock);
+    ZALocalTaskInfo *taskInfo = [self.taskInfoKeyedByURLString objectForKey:urlString];
+    ZA_UNLOCK(self.taskInfoLock);
+    return taskInfo;
 }
 
 - (void)commitTaskInfo:(ZALocalTaskInfo *)taskInfo {
@@ -86,17 +105,26 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     });
 }
 
+- (void)updateCountOfBytesReceived:(int64_t)amount byURLString:(NSString *)urlString {
+    ZA_LOCK(self.taskInfoLock);
+    ZALocalTaskInfo *taskInfo = [self.taskInfoKeyedByURLString objectForKey:urlString];
+    ZA_UNLOCK(self.taskInfoLock);
+    if (taskInfo) {
+        taskInfo.countOfBytesReceived += amount;
+    }
+}
+
 - (void)commitTaskInfo:(ZALocalTaskInfo *)taskInfo andPushAllTaskInfoWithCompletion:(void (^)(NSError * _Nullable))completion {
     [self commitTaskInfo:taskInfo];
     [self pushAllTaskInfoWithCompletion:completion];
 }
 
-- (void)loadAllTaskInfo:(void (^)(NSDictionary * _Nullable, NSError * _Nullable))completion {
+- (void)_loadAllTaskInfo:(void (^)(NSError * _Nullable))completion {
     [ZAUserDefaultsManager.sharedManager loadObjectOfClass:[NSDictionary class]
                                                    withKey:KeyForTaskInfoDictionary
                                                 completion:^(id  _Nullable object, NSError * _Nullable error) {
                                                     if (error) {
-                                                        completion(nil, error);
+                                                        completion(error);
                                                         return;
                                                     }
                                                     NSDictionary *taskInfoDictionary = (NSDictionary *)object;
@@ -105,8 +133,33 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
                                                         [self.taskInfoKeyedByURLString addEntriesFromDictionary:taskInfoDictionary];
                                                         ZA_UNLOCK(self.taskInfoLock);
                                                     }
-                                                    completion((NSDictionary *)self.taskInfoKeyedByURLString, nil);
+                                                    completion(nil);
                                                 }];
+}
+
+- (void)removeTaskInfoByURLString:(NSString *)urlString completion:(void (^)(NSError * _Nullable))completion {
+    ZALocalTaskInfo *taskInfo = [self _getTaskInfoByURLString:urlString];
+    if (nil == taskInfo) {
+        completion(nil);
+        return;
+    }
+    if (taskInfo.filePath) {
+        [self _removeFileAtPath:taskInfo.filePath completion:^(NSError * _Nullable error) {
+            if (error) {
+                completion(error);
+            } else {
+                [self.taskInfoKeyedByURLString removeObjectForKey:urlString];
+            }
+        }];
+    } else {
+        [self.taskInfoKeyedByURLString removeObjectForKey:urlString];
+    }
+}
+
+- (void)_removeFileAtPath:(NSString *)filePath completion:(void (^)(NSError * _Nullable))completion {
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+    completion(error);
 }
 
 @end
