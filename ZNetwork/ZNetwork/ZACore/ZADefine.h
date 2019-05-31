@@ -11,6 +11,12 @@
 
 #import <Foundation/Foundation.h>
 
+#define ZASessionStorageErrorDomain @"com.trieund.ZNetwork.sessionStorageError"
+
+typedef NS_ENUM(NSInteger, ZASessionStorageErrorCode) {
+    kErrorWhileEncodingTaskInfo = 101,
+};
+
 typedef NS_ENUM(NSInteger, ZAPerformOperationType) {
     ZAPerformOperationTypeFIFO,
     ZAPerformOperationTypeLIFO
@@ -42,6 +48,14 @@ typedef NS_ENUM(NSInteger, ZASessionTaskStatus) {
     // Status when task Failed
     ZASessionTaskStatusFailed       = 5
 };
+
+typedef NS_ENUM(NSInteger, ZAHTTPResponseAcceptRangesType) {
+    // HTTP Response does not support request by range
+    ZAHTTPResponseAcceptRangesTypeNone = 0,
+    // HTTP Response supports request by range `bytes` (ex: Range: bytes=0-10000 for 10000 first bytes)
+    ZAHTTPResponseAcceptRangesTypeBytes = 1
+};
+
 
 #pragma mark - Define Macro
 
