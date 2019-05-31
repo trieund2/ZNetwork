@@ -174,6 +174,8 @@
         NSOutputStream *stream = [NSOutputStream outputStreamToFileAtPath:[self _getFilePathFromURL:downloadOperationModel.url] append:YES];
         [stream open];
         self.urlToOutputStream[downloadOperationModel.url] = stream;
+        
+        // Save request to Task info storage if needed
     } else {
         [self.queueModel enqueueOperation:downloadOperationModel];
         [self.queueModel operationDidFinish];
@@ -232,11 +234,18 @@ didReceiveResponse:(NSURLResponse *)response
         if (nil == HTTPResponse) { return; }
         
         NSUInteger contentLength = [HTTPResponse.allHeaderFields[@"Content-Length"] integerValue];
+        NSString *acceptRange = (NSString *)[HTTPResponse.allHeaderFields objectForKey:@"Accept-Ranges"];
         
         NSURL *url = dataTask.currentRequest.URL;
         if (url) {
             ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:url];
             downloadOperationModel.contentLength = contentLength;
+            
+            if ([acceptRange isEqualToString:ZARequestAcceptRangeBytes]) {
+                downloadOperationModel.canResume = YES;
+            } else {
+                downloadOperationModel.canResume = NO;
+            }
         }
         
         completionHandler(NSURLSessionResponseAllow);

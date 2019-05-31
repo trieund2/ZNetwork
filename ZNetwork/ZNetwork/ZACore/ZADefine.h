@@ -12,6 +12,8 @@
 #import <Foundation/Foundation.h>
 
 #define ZASessionStorageErrorDomain @"com.trieund.ZNetwork.sessionStorageError"
+#define ZARequestAcceptRangeBytes @"bytes"
+#define ZARequestAcceptRangeNone @"none"
 
 typedef NS_ENUM(NSInteger, ZASessionStorageErrorCode) {
     kErrorWhileEncodingTaskInfo = 101,

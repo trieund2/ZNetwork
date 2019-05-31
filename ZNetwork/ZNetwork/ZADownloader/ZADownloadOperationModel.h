@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZADownloadOperationModel : ZAOperationModel
 
+@property (nonatomic) BOOL canResume;
 @property (nonatomic) NSUInteger contentLength;
 @property (nonatomic, readonly) NSUInteger completedUnitCount;
 
