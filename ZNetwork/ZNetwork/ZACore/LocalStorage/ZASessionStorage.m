@@ -163,13 +163,13 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
 - (void)removeTaskInfoByURLString:(NSString *)urlString completion:(void (^)(NSError * _Nullable))completion {
     ZALocalTaskInfo *taskInfo = [self _getTaskInfoByURLString:urlString];
     if (nil == taskInfo) {
-        completion(nil);
+        if (completion) { completion(nil); }
         return;
     }
     if (taskInfo.filePath) {
         [self _removeFileAtPath:taskInfo.filePath completion:^(NSError * _Nullable error) {
             if (error) {
-                completion(error);
+                if (completion) { completion(error); }
             } else {
                 [self.taskInfoKeyedByURLString removeObjectForKey:urlString];
             }
