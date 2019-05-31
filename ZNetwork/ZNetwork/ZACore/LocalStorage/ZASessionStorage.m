@@ -91,17 +91,21 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     [self pushAllTaskInfoWithCompletion:completion];
 }
 
-- (void)loadAllTaskInfo:(void (^)(NSDictionary * _Nullable))handler {
+- (void)loadAllTaskInfo:(void (^)(NSDictionary * _Nullable, NSError * _Nullable))completion {
     [ZAUserDefaultsManager.sharedManager loadObjectOfClass:[NSDictionary class]
                                                    withKey:KeyForTaskInfoDictionary
                                                 completion:^(id  _Nullable object, NSError * _Nullable error) {
+                                                    if (error) {
+                                                        completion(nil, error);
+                                                        return;
+                                                    }
                                                     NSDictionary *taskInfoDictionary = (NSDictionary *)object;
                                                     if (taskInfoDictionary) {
                                                         ZA_LOCK(self.taskInfoLock);
                                                         [self.taskInfoKeyedById addEntriesFromDictionary:taskInfoDictionary];
                                                         ZA_UNLOCK(self.taskInfoLock);
                                                     }
-                                                    handler((NSDictionary *)self.taskInfoKeyedById);
+                                                    completion((NSDictionary *)self.taskInfoKeyedById, nil);
                                                 }];
 }
 
