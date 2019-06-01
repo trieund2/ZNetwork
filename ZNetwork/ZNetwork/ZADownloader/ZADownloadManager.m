@@ -185,7 +185,7 @@
             downloadOperationModel.countOfTotalBytes = taskInfo.countOfTotalBytes;
         } else {
             taskInfo = [[ZALocalTaskInfo alloc] initWithURLString:downloadOperationModel.url.absoluteString
-                                                         filePath:NSFileTypeRegular fileName:downloadOperationModel.url.absoluteString.MD5String];
+                                                         filePath:filePath fileName:downloadOperationModel.url.absoluteString.MD5String];
             [ZASessionStorage.sharedStorage commitTaskInfo:taskInfo];
         }
     } else {

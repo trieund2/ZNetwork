@@ -542,6 +542,7 @@
 				DEVELOPMENT_TEAM = DAA47P5N57;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/ZNetwork/Supports/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -560,6 +561,7 @@
 				DEVELOPMENT_TEAM = DAA47P5N57;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/ZNetwork/Supports/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
