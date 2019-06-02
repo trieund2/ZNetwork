@@ -91,7 +91,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     ZA_UNLOCK(self.taskInfoLock);
     
     /* Dispatch group to concurrently encode all ZALocalTaskInfo in dictionary to data */
-    NSMutableDictionary *encodedDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *, NSData *> *encodedDict = [NSMutableDictionary dictionary];
     dispatch_semaphore_t encodedDictLock = dispatch_semaphore_create(1);
     __block NSError *err = nil;
     dispatch_group_t group = dispatch_group_create();
@@ -102,14 +102,14 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
                     err = error;
                 } else {
                     ZA_LOCK(encodedDictLock);
-                    [encodedDict setObject:data forKey:taskInfo.urlString];
+                    [encodedDict setObject:[NSData dataWithData:data] forKey:taskInfo.urlString];
                     ZA_UNLOCK(encodedDictLock);
                 }
             });
         }];
     }
     /* If there is an error while encoding, return it.
-     * If all are successfully encoded to data, push encoded dictionary to local storage and mark pushing task info NO
+     * If all are successfully encoded to data, push encoded dictionary to local storage
      */
     dispatch_group_notify(group, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         if (err) {
@@ -143,21 +143,47 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
 }
 
 - (void)_loadAllTaskInfo:(void (^)(NSError * _Nullable))completion {
-    [ZAUserDefaultsManager.sharedManager loadObjectOfClass:[NSDictionary class]
-                                                   withKey:KeyForTaskInfoDictionary
-                                                completion:^(id  _Nullable object, NSError * _Nullable error) {
-                                                    if (error) {
-                                                        completion(error);
-                                                        return;
-                                                    }
-                                                    NSDictionary *taskInfoDictionary = (NSDictionary *)object;
-                                                    if (taskInfoDictionary) {
-                                                        ZA_LOCK(self.taskInfoLock);
-                                                        [self.taskInfoKeyedByURLString addEntriesFromDictionary:taskInfoDictionary];
-                                                        ZA_UNLOCK(self.taskInfoLock);
-                                                    }
-                                                    completion(nil);
-                                                }];
+    [ZAUserDefaultsManager.sharedManager loadObjectOfClass:[NSDictionary class] withKey:KeyForTaskInfoDictionary completion:^(id  _Nullable object, NSError * _Nullable error) {
+        /* If there is an error loading task info dictionary, return it */
+        if (error) {
+            completion(error);
+            return;
+        }
+        NSDictionary *taskInfoDictionary = (NSDictionary *)object;
+        /* Dispatch group to concurrently decode all data in dictionary to ZALocalTaskInfo */
+        NSMutableDictionary *decodedDict = [NSMutableDictionary dictionary];
+        dispatch_semaphore_t decodedDictLock = dispatch_semaphore_create(1);
+        __block NSError *err = nil;
+        dispatch_group_t group = dispatch_group_create();
+        for (NSData *data in taskInfoDictionary.allValues) {
+            [ZAUserDefaultsManager.sharedManager decodeObjectOfClass:ZALocalTaskInfo.class fromData:data completion:^(id  _Nullable object, NSError * _Nullable error) {
+                dispatch_group_async(group, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+                    if (error) {
+                        err = error;
+                    } else {
+                        ZALocalTaskInfo *taskInfo = (ZALocalTaskInfo *)object;
+                        ZA_LOCK(decodedDictLock);
+                        [decodedDict setObject:taskInfo forKey:taskInfo.urlString];
+                        ZA_UNLOCK(decodedDictLock);
+                    }
+                });
+            }];
+        }
+        /* If there is an error while decoding, return it.
+         * If all are successfully decoded to ZALocalTaskInfo, add them to current task info on mem
+         */
+        dispatch_group_notify(group, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+            if (err) {
+                NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:kErrorWhileDecodingTaskInfo userInfo:nil];
+                completion(error);
+            } else {
+                ZA_LOCK(self.taskInfoLock);
+                [self.taskInfoKeyedByURLString addEntriesFromDictionary:decodedDict];
+                ZA_UNLOCK(self.taskInfoLock);
+                completion(nil);
+            }
+        });
+    }];
 }
 
 - (void)removeTaskInfoByURLString:(NSString *)urlString completion:(void (^)(NSError * _Nullable))completion {
