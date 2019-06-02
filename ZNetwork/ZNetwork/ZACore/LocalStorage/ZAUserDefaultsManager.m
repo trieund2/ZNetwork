@@ -66,11 +66,17 @@
     if (nil == object) {
         completion(nil, nil);
     }
-    NSError *error = nil;
-    NSData *encodedObject = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:YES error:&error];
-    if (error) {
-        completion(nil, error);
+    NSData *encodedObject = nil;
+    if (@available(iOS 11.0, *)) {
+        NSError *error = nil;
+        encodedObject = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:YES error:&error];
+        if (error) {
+            completion(nil, error);
+        } else {
+            completion(encodedObject, nil);
+        }
     } else {
+        encodedObject = [NSKeyedArchiver archivedDataWithRootObject:object];
         completion(encodedObject, nil);
     }
 }
@@ -99,11 +105,17 @@
     if (nil == data) {
         completion(nil, nil);
     }
-    NSError *error = nil;
-    id object = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:&error];
-    if (error) {
-        completion(nil, error);
+    id object = nil;
+    if (@available(iOS 11.0, *)) {
+        NSError *error = nil;
+        object = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:&error];
+        if (error) {
+            completion(nil, error);
+        } else {
+            completion(object, nil);
+        }
     } else {
+        object = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         completion(object, nil);
     }
 }
