@@ -84,9 +84,9 @@
 }
 
 - (void)cancelAllOperations {
+    [self.task cancel];
     [runningOperationCallbacks removeAllObjects];
     [pausedOperationCallbacks removeAllObjects];
-    [self.task cancel];
 }
 
 - (void)resumeOperationCallbackById:(NSString *)identifier {

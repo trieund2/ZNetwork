@@ -57,6 +57,10 @@
     return self;
 }
 
+- (NSUInteger)numberOfTaskInQueue {
+    return self.urlToOperationModel.count;
+}
+
 - (void)enqueueOperation:(ZAOperationModel *)operationModel {
     if (NULL == operationModel && NULL != operationModel.url) { return; }
     

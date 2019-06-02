@@ -34,7 +34,13 @@
                             <constraint firstItem="heo-BI-aQU" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="jl1-NB-if3"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="vEd-XJ-kUw"/>
+                    <navigationItem key="navigationItem" id="vEd-XJ-kUw">
+                        <barButtonItem key="rightBarButtonItem" title="CanCel All Request" id="oyW-ev-QU0">
+                            <connections>
+                                <action selector="tapAllCancellAllRequest:" destination="BYZ-38-t0r" id="SL6-1F-7R2"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="downloadTableView" destination="heo-BI-aQU" id="BS6-BD-7Jj"/>
                     </connections>
