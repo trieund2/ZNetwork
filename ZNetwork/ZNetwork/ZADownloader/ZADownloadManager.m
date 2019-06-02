@@ -95,12 +95,6 @@
         ZADownloadOperationModel *operationModel = [weakSelf.urlToDownloadOperation objectForKey:downloadCallback.url];
         if (operationModel) {
             [operationModel pauseOperationCallbackById:downloadCallback.identifier];
-            if ([operationModel numberOfRunningOperation] == 0) {
-                [operationModel.outputStream close];
-                [weakSelf.queueModel operationDidFinish];
-                [weakSelf _triggerStartRequest];
-                [weakSelf.urlToDownloadOperation removeObjectForKey:downloadCallback.url];
-            }
         } else {
             [weakSelf.queueModel pauseOperationByCallback:downloadCallback];
         }
@@ -125,14 +119,6 @@
         
         if (operationModel) {
             [operationModel cancelOperationCallbackById:downloadCallback.identifier];
-            if ([operationModel numberOfRunningOperation] == 0) {
-                [weakSelf.urlToDownloadOperation removeObjectForKey:downloadCallback.url];
-                [weakSelf.queueModel operationDidFinish];
-                [weakSelf _triggerStartRequest];
-                if ([operationModel numberOfPausedOperation] == 0) {
-                    [ZASessionStorage.sharedStorage removeTaskInfoByURLString:operationModel.url.absoluteString completion:nil];
-                }
-            }
         } else {
             [weakSelf.queueModel cancelOperationByCallback:downloadCallback];
         }
@@ -144,8 +130,9 @@
     dispatch_async(self.root_queue, ^{
         [weakSelf.queueModel removeAllOperations];
         for (ZADownloadOperationModel *downloadOperationModel in weakSelf.urlToDownloadOperation.allValues) {
-            downloadOperationModel.forwardCompletion;
+            [downloadOperationModel cancelAllOperations];
         }
+        [weakSelf.urlToDownloadOperation removeAllObjects];
     });
 }
 
@@ -306,6 +293,7 @@ didReceiveResponse:(NSURLResponse *)response
         if (nil == url) { return; }
         
         ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:url];
+        if (nil == downloadOperationModel) { return; }
         [downloadOperationModel.outputStream close];
         
         if (nil == error) {
@@ -314,21 +302,23 @@ didReceiveResponse:(NSURLResponse *)response
             if (fileSize == downloadOperationModel.countOfTotalBytes) {
                 NSURL *fileURL = [NSURL fileURLWithPath:filePath];
                 [downloadOperationModel forwarFileFromLocation:fileURL];
+                [downloadOperationModel forwardCompletion];
             } else {
                 NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorFileError userInfo:nil];
                 [downloadOperationModel forwardError:error];
                 return;
             }
+            
+        } else if (NSURLErrorCancelled != error.code) {
+            [downloadOperationModel forwardError:error];
         }
-        
-        [downloadOperationModel forwardCompletion];
         
         if ([downloadOperationModel numberOfRunningOperation] == 0 && [downloadOperationModel numberOfPausedOperation] == 0) {
             [weakSelf.urlToDownloadOperation removeObjectForKey:url];
             [ZASessionStorage.sharedStorage removeTaskInfoByURLString:url.absoluteString completion:nil];
-            [weakSelf.queueModel operationDidFinish];
         }
         
+        [weakSelf.queueModel operationDidFinish];
         [weakSelf _triggerStartRequest];
     });
 }
