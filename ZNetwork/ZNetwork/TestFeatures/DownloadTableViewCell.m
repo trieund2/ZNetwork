@@ -101,7 +101,7 @@
 
 - (IBAction)tapOnPause:(id)sender {
     if ([self.delegate conformsToProtocol:@protocol(DownloadTableViewCellDelegate)]) {
-        if (self.trackDownload.status == ZASessionTaskStatusPaused) {
+        if (self.trackDownload.status == ZASessionTaskStatusPaused || self.trackDownload.status == ZASessionTaskStatusFailed) {
             [self.delegate didSelectResumeAtIndexPath:self.currentIndexPath];
         } else {
             [self.delegate didSelectPauseAtIndexPath:self.currentIndexPath];

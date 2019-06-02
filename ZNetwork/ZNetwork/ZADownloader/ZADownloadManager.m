@@ -89,6 +89,8 @@
         if (operationModel) {
             [operationModel pauseOperationCallbackById:downloadCallback.identifier];
             if ([operationModel numberOfRunningOperation] == 0) {
+                [weakSelf.queueModel operationDidFinish];
+                [weakSelf _triggerStartRequest];
                 [weakSelf.urlToDownloadOperation removeObjectForKey:downloadCallback.url];
             }
         } else {
@@ -117,6 +119,8 @@
             [operationModel cancelOperationCallbackById:downloadCallback.identifier];
             if ([operationModel numberOfRunningOperation] == 0) {
                 [weakSelf.urlToDownloadOperation removeObjectForKey:downloadCallback.url];
+                [weakSelf.queueModel operationDidFinish];
+                [weakSelf _triggerStartRequest];
                 if ([operationModel numberOfPausedOperation] == 0) {
                     [ZASessionStorage.sharedStorage removeTaskInfoByURLString:operationModel.url.absoluteString completion:nil];
                 }
@@ -181,7 +185,7 @@
             downloadOperationModel.countOfTotalBytes = taskInfo.countOfTotalBytes;
         } else {
             taskInfo = [[ZALocalTaskInfo alloc] initWithURLString:downloadOperationModel.url.absoluteString
-                                                         filePath:NSFileTypeRegular fileName:downloadOperationModel.url.absoluteString.MD5String];
+                                                         filePath:filePath fileName:downloadOperationModel.url.absoluteString.MD5String];
             [ZASessionStorage.sharedStorage commitTaskInfo:taskInfo];
         }
     } else {
