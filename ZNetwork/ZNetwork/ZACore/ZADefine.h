@@ -19,6 +19,7 @@
 
 typedef NS_ENUM(NSInteger, ZASessionStorageErrorCode) {
     kErrorWhileEncodingTaskInfo = 101,
+    kErrorWhileDecodingTaskInfo = 102
 };
 
 typedef NS_ENUM(NSUInteger, ZANetworkError) {
