@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)pauseDownloadTaskByDownloadCallback:(ZADownloadOperationCallback *)downloadCallback;
 - (void)cancelDownloadTaskByDownloadCallback:(ZADownloadOperationCallback *)downloadCallback;
 - (void)cancelAllRequests;
+- (NSUInteger)numberOfTaskRunning;
+- (NSUInteger)numberOfTaskInQueue;
 
 @end
 

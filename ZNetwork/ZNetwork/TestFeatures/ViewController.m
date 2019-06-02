@@ -36,6 +36,11 @@
     self.downloadTableView.dataSource = self;
 }
 
+- (IBAction)tapAllCancellAllRequest:(id)sender {
+    [ZADownloadManager.sharedManager cancelAllRequests];
+    [self.currentDownload removeAllObjects];
+}
+
 - (void)initDataSource {
     _trackDownloads = [[NSMutableArray alloc] init];
     
@@ -70,8 +75,6 @@
     TrackDownload *track22 = [[TrackDownload alloc] initFromURLString:@"http://mirror.filearena.net/pub/speed/SpeedTest_512MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009" trackName:@"Adam Blank Test Files 512Mb" priority:(ZAOperationPriorityHigh)];
     TrackDownload *track23 = [[TrackDownload alloc] initFromURLString:@"http://mirror.filearena.net/pub/speed/SpeedTest_1024MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009" trackName:@"Adam Blank Test Files 1Gb" priority:(ZAOperationPriorityHigh)];
     TrackDownload *track24 = [[TrackDownload alloc] initFromURLString:@"http://mirror.filearena.net/pub/speed/SpeedTest_2048MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009" trackName:@"Adam Blank Test Files 2Gb" priority:(ZAOperationPriorityHigh)];
-    
-    // https://firebasestorage.googleapis.com/v0/b/bustracking-1524793108793.appspot.com/o/30%20Minute%20Deep%20Sleep%20Music%20Calming%20Music%20Relaxing%20Music%20Soothing%20Music%20Calming%20Music%20%E2%98%AF426B.mp3?alt=media&token=6ffe629d-f6b3-42a6-830a-116cb6224e17
     
     TrackDownload *track25 = [[TrackDownload alloc] initFromURLString:@"https://firebasestorage.googleapis.com/v0/b/bustracking-1524793108793.appspot.com/o/30%20Minute%20Deep%20Sleep%20Music%20Calming%20Music%20Relaxing%20Music%20Soothing%20Music%20Calming%20Music%20%E2%98%AF426B.mp3?alt=media&token=6ffe629d-f6b3-42a6-830a-116cb6224e17" trackName:@"Dung yeu nua em met roi" priority:(ZAOperationPriorityHigh)];
     
@@ -116,6 +119,7 @@
     __weak typeof(self) weakSelf = self;
     
     ZADownloadOperationCallback *downloadCallback = [ZADownloadManager.sharedManager downloadTaskFromURLString:trackDownload.urlString requestPolicy:(NSURLRequestUseProtocolCachePolicy) priority:trackDownload.priority progressBlock:^(NSProgress * _Nonnull progress, NSString * _Nonnull callBackIdentifier) {
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             TrackDownload *currentTrackDownload = [weakSelf.currentDownload objectForKey:callBackIdentifier];
             if (currentTrackDownload) {
@@ -126,15 +130,22 @@
                 [cell configCellByTrackDownload:currentTrackDownload indexPath:indexPath];
             }
         });
+        
     } destinationBlock:^NSURL *(NSURL * _Nonnull location, NSString * _Nonnull callBackIdentifier) {
         return [self localFilePathForURL:[NSURL URLWithString:trackDownload.urlString]];
+        
     } completionBlock:^(NSURLResponse * _Nonnull response, NSError * _Nonnull error, NSString * _Nonnull callBackIdentifier) {
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             
             TrackDownload *currentTrackDownload = [weakSelf.currentDownload objectForKey:callBackIdentifier];
             
             if (error) {
-                currentTrackDownload.status = ZASessionTaskStatusFailed;
+                if (error.code == NSURLErrorCancelled) {
+                    currentTrackDownload.status = ZASessionTaskStatusCancelled;
+                } else {
+                    currentTrackDownload.status = ZASessionTaskStatusFailed;
+                }
             } else {
                 [weakSelf.currentDownload removeObjectForKey:callBackIdentifier];
                 currentTrackDownload.status = ZASessionTaskStatusSuccessed;

@@ -63,13 +63,13 @@
 }
 
 - (void)updateResumeStatusForAllCallbacks {
-//    for (ZADownloadOperationCallback *downloadOperationCallback in runningOperationCallbacks) {
-//        downloadOperationCallback.canResume = self.canResume;
-//    }
-//
-//    for (ZADownloadOperationCallback *downloadOperationCallback in pausedOperationCallbacks) {
-//        downloadOperationCallback.canResume = self.canResume;
-//    }
+    for (ZADownloadOperationCallback *downloadOperationCallback in runningOperationCallbacks.allValues) {
+        downloadOperationCallback.canResume = self.canResume;
+    }
+
+    for (ZADownloadOperationCallback *downloadOperationCallback in pausedOperationCallbacks.allValues) {
+        downloadOperationCallback.canResume = self.canResume;
+    }
 }
 
 #pragma mark - Override methods
