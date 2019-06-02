@@ -44,6 +44,7 @@
         _root_queue = dispatch_queue_create("com.za.znetwork.sessionmanager.rootqueue", DISPATCH_QUEUE_SERIAL);
         _queueModel = [[ZAQueueModel alloc] init];
         _urlToDownloadOperation = [[NSMutableDictionary alloc] init];
+        ZASessionStorage.sharedStorage;
         
         [NSNotificationCenter.defaultCenter addObserver:self
                                                selector:@selector(_triggerStartRequest)
@@ -177,10 +178,6 @@
         if (taskInfo) {
             downloadOperationModel.completedUnitCount = taskInfo.countOfBytesReceived;
             downloadOperationModel.countOfTotalBytes = taskInfo.countOfTotalBytes;
-        } else {
-            taskInfo = [[ZALocalTaskInfo alloc] initWithURLString:downloadOperationModel.url.absoluteString
-                                                         filePath:filePath fileName:downloadOperationModel.url.absoluteString.MD5String];
-            [ZASessionStorage.sharedStorage commitTaskInfo:taskInfo];
         }
     } else {
         [self.queueModel enqueueOperation:downloadOperationModel];
@@ -195,9 +192,11 @@
     request.timeoutInterval = [self _getTimeoutInterval];
     
     ZALocalTaskInfo *taskInfo = [ZASessionStorage.sharedStorage getTaskInfoByURLString:url.absoluteString];
-    if (taskInfo && taskInfo.countOfBytesReceived != 0 && taskInfo.countOfTotalBytes) {
-        NSString *range = [NSString stringWithFormat:@"bytes=%lli-%lli", taskInfo.countOfBytesReceived, taskInfo.countOfTotalBytes];
-        [request setValue:range forHTTPHeaderField:@"Accept-Ranges"];
+    if (taskInfo && taskInfo.countOfBytesReceived != 0 && taskInfo.countOfTotalBytes != 0) {
+        int64_t fromRange = taskInfo.countOfBytesReceived + 1;
+        int64_t toRange = taskInfo.countOfTotalBytes - 1;
+        NSString *range = [NSString stringWithFormat:@"bytes=%lli-%lli", fromRange, toRange];
+        [request setValue:range forHTTPHeaderField:@"Range"];
     }
     
     return request;
@@ -259,6 +258,10 @@ didReceiveResponse:(NSURLResponse *)response
             NSString *acceptRange = (NSString *)[HTTPResponse.allHeaderFields objectForKey:@"Accept-Ranges"];
             if ([acceptRange isEqualToString:ZARequestAcceptRangeBytes]) {
                 downloadOperationModel.canResume = YES;
+                ZALocalTaskInfo *taskInfo = [[ZALocalTaskInfo alloc] initWithURLString:downloadOperationModel.url.absoluteString
+                                                                              filePath:[self _getFilePathFromURL:url] fileName:url.absoluteString.MD5String];
+                [ZASessionStorage.sharedStorage commitTaskInfo:taskInfo];
+                [ZASessionStorage.sharedStorage updateCountOfTotalBytes:contentLength byURLString:url.absoluteString];
             } else {
                 downloadOperationModel.canResume = NO;
             }
@@ -289,7 +292,7 @@ didReceiveResponse:(NSURLResponse *)response
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(self.root_queue, ^{
-        NSURL *url = task.currentRequest.URL;
+        NSURL *url = task.originalRequest.URL;
         if (nil == url) { return; }
         
         ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:url];
@@ -306,14 +309,13 @@ didReceiveResponse:(NSURLResponse *)response
             } else {
                 NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorFileError userInfo:nil];
                 [downloadOperationModel forwardError:error];
-                return;
             }
             
         } else if (NSURLErrorCancelled != error.code) {
             [downloadOperationModel forwardError:error];
         }
         
-        if ([downloadOperationModel numberOfRunningOperation] == 0 && [downloadOperationModel numberOfPausedOperation] == 0) {
+        if ([downloadOperationModel numberOfPausedOperation] == 0) {
             [weakSelf.urlToDownloadOperation removeObjectForKey:url];
             [ZASessionStorage.sharedStorage removeTaskInfoByURLString:url.absoluteString completion:nil];
         }
