@@ -20,9 +20,9 @@ NSString * const KeyForState = @"state";
 @implementation ZALocalTaskInfo
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:self.urlString forKey:KeyForUrlString];
-    [aCoder encodeObject:self.filePath forKey:KeyForFilePath];
-    [aCoder encodeObject:self.fileName forKey:KeyForFileName];
+    [aCoder encodeObject:[NSString stringWithString:self.urlString] forKey:KeyForUrlString];
+    [aCoder encodeObject:[NSString stringWithString:self.filePath] forKey:KeyForFilePath];
+    [aCoder encodeObject:[NSString stringWithString:self.fileName] forKey:KeyForFileName];
     [aCoder encodeObject:self.lastTimeModified forKey:KeyForLastTimeModified];
     [aCoder encodeObject:[NSNumber numberWithInteger:self.acceptRangesType] forKey:KeyForAcceptRangesType];
     [aCoder encodeObject:[NSNumber numberWithUnsignedLongLong:self.countOfBytesReceived] forKey:KeyForCountOfBytesReceived];
