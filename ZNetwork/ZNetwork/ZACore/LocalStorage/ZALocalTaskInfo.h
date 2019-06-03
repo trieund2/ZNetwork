@@ -34,7 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithURLString:(NSString *)urlString
                          filePath:(NSString *)filePath
-                         fileName:(NSString *)fileName;
+                         fileName:(NSString *)fileName
+                countOfTotalBytes:(int64_t)countOfTotalBytes;
 @end
 
 NS_ASSUME_NONNULL_END
