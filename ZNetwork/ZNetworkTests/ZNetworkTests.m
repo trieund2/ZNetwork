@@ -21,7 +21,29 @@
         ZALocalTaskInfo *taskInfo = [[ZALocalTaskInfo alloc] initWithURLString:testURLString filePath:@"testFilePaht" fileName:@"testFileName" countOfTotalBytes:10000];
         [[ZASessionStorage sharedStorage] commitTaskInfo:taskInfo];
     });
-    XCTAssertTrue([[ZASessionStorage sharedStorage] containsTaskInfo:testURLString]);
+}
+
+- (void)testExistenceOfTaskInfo {
+    NSString *testURLString1 = @"testURLString1";
+    NSString *testURLString2 = @"testURLString2";
+    NSString *testURLString3 = @"testURLString3";
+    ZALocalTaskInfo *taskInfo1 = [[ZALocalTaskInfo alloc] initWithURLString:testURLString1
+                                                                  filePath:@"testFilePath"
+                                                                  fileName:@"testFileName"
+                                                         countOfTotalBytes:10000];
+    ZALocalTaskInfo *taskInfo2 = [[ZALocalTaskInfo alloc] initWithURLString:testURLString2
+                                                                   filePath:@"testFilePath"
+                                                                   fileName:@"testFileName"
+                                                          countOfTotalBytes:10000];
+    ZALocalTaskInfo __unused *taskInfo3 = [[ZALocalTaskInfo alloc] initWithURLString:testURLString3
+                                                                   filePath:@"testFilePath"
+                                                                   fileName:@"testFileName"
+                                                          countOfTotalBytes:10000];
+    [[ZASessionStorage sharedStorage] commitTaskInfo:taskInfo1];
+    [[ZASessionStorage sharedStorage] commitTaskInfo:taskInfo2];
+    XCTAssertTrue([[ZASessionStorage sharedStorage] containsTaskInfo:testURLString1]);
+    XCTAssertTrue([[ZASessionStorage sharedStorage] containsTaskInfo:testURLString2]);
+    XCTAssertTrue(![[ZASessionStorage sharedStorage] containsTaskInfo:testURLString3]);
 }
 
 @end
