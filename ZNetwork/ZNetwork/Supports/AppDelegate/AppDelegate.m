@@ -26,7 +26,6 @@
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     [ZADownloadManager.sharedManager pauseAllRequests];
     [NSNotificationCenter.defaultCenter postNotificationName:NotificationApplicationWillResignActive object:nil];
-    NSLog(@"resign");
 }
 
 
@@ -48,7 +47,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-     NSLog(@"Ternimal ---------");
 }
 
 

@@ -132,6 +132,7 @@
             
             if ([downloadOperation numberOfPausedOperation] == 0) {
                 [weakSelf.queueModel operationDidFinish];
+                [weakSelf _triggerStartRequest];
                 if ([downloadOperation numberOfRunningOperation] == 0) {
                     [weakSelf.urlToDownloadOperation removeObjectForKey:downloadCallback.url];
                     [ZASessionStorage.sharedStorage removeTaskInfoByURLString:downloadCallback.url.absoluteString completion:NULL];
@@ -158,6 +159,8 @@
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.root_queue, ^{
         for (ZADownloadOperationModel *downloadOperationModel in weakSelf.urlToDownloadOperation.allValues) {
+            NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorAppEnterBackground userInfo:nil];
+            [downloadOperationModel forwardError:error];
             [downloadOperationModel pauseAllOperations];
         }
         [weakSelf.queueModel resetNumberOfRunningOperations];
@@ -387,7 +390,7 @@ didReceiveResponse:(NSURLResponse *)response
             [ZASessionStorage.sharedStorage removeTaskInfoByURLString:url.absoluteString completion:nil];
             [weakSelf.urlToDownloadOperation removeObjectForKey:url];
             [downloadOperationModel.outputStream close];
-            NSLog(@"--- REMOVE FILE");
+            NSLog(@"--- REMOVED FILE -----");
         }
         
         [weakSelf.queueModel operationDidFinish];

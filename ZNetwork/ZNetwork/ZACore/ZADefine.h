@@ -24,8 +24,9 @@ typedef NS_ENUM(NSInteger, ZASessionStorageErrorCode) {
 };
 
 typedef NS_ENUM(NSUInteger, ZANetworkError) {
-    ZANetworkErrorFullDisk          = 9981,
-    ZANetworkErrorFileError         = 9982
+    ZANetworkErrorFullDisk              = 9981,
+    ZANetworkErrorFileError             = 9982,
+    ZANetworkErrorAppEnterBackground    = 9983
 };
 
 typedef NS_ENUM(NSInteger, ZAPerformOperationType) {

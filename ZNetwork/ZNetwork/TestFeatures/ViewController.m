@@ -147,6 +147,8 @@
             if (error) {
                 if (error.code == NSURLErrorCancelled) {
                     currentTrackDownload.status = ZASessionTaskStatusCancelled;
+                } else if (error.code == ZANetworkErrorAppEnterBackground) {
+                    currentTrackDownload.status = ZASessionTaskStatusPaused;
                 } else {
                     currentTrackDownload.status = ZASessionTaskStatusFailed;
                 }

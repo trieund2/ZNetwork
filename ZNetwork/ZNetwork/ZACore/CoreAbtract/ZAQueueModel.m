@@ -186,7 +186,9 @@
     ZAOperationModel *operationModel = [self.urlToOperationModel objectForKey:callback.url];
     [operationModel removeOperationCallback:callback];
     
-    if ([operationModel numberOfPausedOperation] == 0 && [operationModel numberOfRunningOperation] == 0) {
+    if ([operationModel numberOfRunningOperation] == 0) {
+        [self.urlToOperationModel removeObjectForKey:callback.url];
+        
         switch (operationModel.priority) {
             case ZAOperationPriorityVeryHigh:
                 [self.veryHighQueue removeObject:operationModel];
@@ -200,6 +202,38 @@
             case ZAOperationPriorityLow:
                 [self.lowQueue removeObject:operationModel];
                 break;
+        }
+    } else if (operationModel.priority == callback.priority) {
+        [self.urlToOperationModel removeObjectForKey:callback.url];
+        
+        ZAOperationPriority newPriority = ZAOperationPriorityLow;;
+        for (ZAOperationModel *currentOperationModel in operationModel.allRunningOperationCallback) {
+            if (currentOperationModel.priority > newPriority) {
+                newPriority = currentOperationModel.priority;
+            }
+        }
+        if (newPriority > operationModel.priority) {
+            switch (operationModel.priority) {
+                case ZAOperationPriorityLow:
+                    [self.lowQueue removeObject:operationModel];
+                    break;
+                    
+                case ZAOperationPriorityMedium:
+                    [self.mediumQueue removeObject:operationModel];
+                    break;
+                    
+                case ZAOperationPriorityHigh:
+                    [self.highQueue removeObject:operationModel];
+                    break;
+                    
+                case ZAOperationPriorityVeryHigh:
+                    [self.veryHighQueue removeObject:operationModel];
+                    break;
+            }
+            
+            operationModel.priority = newPriority;
+            [self _addOperationToQueue:operationModel];
+            
         }
     }
 }
