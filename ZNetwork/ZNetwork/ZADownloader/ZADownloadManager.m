@@ -19,6 +19,7 @@
 @property (nonatomic, readonly) dispatch_queue_t root_queue;
 @property (nonatomic, readonly) ZAQueueModel *queueModel;
 @property (nonatomic, readonly) NSMutableDictionary<NSURL *, ZADownloadOperationModel *> *urlToDownloadOperation;
+@property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskId;
 
 @end
 
@@ -45,13 +46,26 @@
         _queueModel = [[ZAQueueModel alloc] init];
         _urlToDownloadOperation = [[NSMutableDictionary alloc] init];
         [ZASessionStorage.sharedStorage loadAllTaskInfo:^(NSError * _Nullable error) {}];
+        _continueDownloadInBackground = YES;
+        _backgroundTaskId = UIBackgroundTaskInvalid;
         
         [NSNotificationCenter.defaultCenter addObserver:self
                                                selector:@selector(_triggerStartRequest)
                                                    name:NetworkStatusDidChangeNotification
                                                  object:nil];
+        
+        UIApplication *app = [UIApplication sharedApplication];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(applicationWillTerminate:)
+                                                     name:UIApplicationWillTerminateNotification
+                                                   object:app];
     }
     return self;
+}
+
+- (void)applicationWillTerminate:(NSNotification *)notification {
+    [self pauseAllRequests];
+    [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
 }
 
 #pragma mark - Interface methods
@@ -93,9 +107,13 @@
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.root_queue, ^{
-        ZADownloadOperationModel *operationModel = [weakSelf.urlToDownloadOperation objectForKey:downloadCallback.url];
-        if (operationModel) {
-            [operationModel pauseOperationCallbackById:downloadCallback.identifier];
+        ZADownloadOperationModel *downloadOperation = [weakSelf.urlToDownloadOperation objectForKey:downloadCallback.url];
+        if (downloadOperation) {
+            [downloadOperation pauseOperationCallbackById:downloadCallback.identifier];
+            if ([downloadOperation numberOfRunningOperation] == 0) {
+                [weakSelf.queueModel operationDidFinish];
+            }
+            [self _triggerStartRequest];
         } else {
             [weakSelf.queueModel pauseOperationByCallback:downloadCallback];
         }
@@ -107,7 +125,11 @@
     
     __weak typeof(self) weakSelf = self;
     dispatch_sync(self.root_queue, ^{
-        [[self.urlToDownloadOperation objectForKey:downloadCallback.url] removePausedOperationCallbackById:downloadCallback.identifier];
+        ZADownloadOperationModel *downloadOperation = [weakSelf.urlToDownloadOperation objectForKey:downloadCallback.url];
+        if (nil == downloadOperation) {
+            return;
+        }
+        [downloadOperation removePausedOperationCallbackById:downloadCallback.identifier];
         [weakSelf _startRequestByDownloadOperationCallback:downloadCallback];
     });
 }
@@ -117,10 +139,19 @@
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.root_queue, ^{
-        ZADownloadOperationModel *operationModel = [weakSelf.urlToDownloadOperation objectForKey:downloadCallback.url];
+        ZADownloadOperationModel *downloadOperation = [weakSelf.urlToDownloadOperation objectForKey:downloadCallback.url];
         
-        if (operationModel) {
-            [operationModel cancelOperationCallbackById:downloadCallback.identifier];
+        if (downloadOperation) {
+            [downloadOperation cancelOperationCallbackById:downloadCallback.identifier];
+            
+            if ([downloadOperation numberOfPausedOperation] == 0) {
+                [weakSelf.queueModel operationDidFinish];
+                [weakSelf _triggerStartRequest];
+                if ([downloadOperation numberOfRunningOperation] == 0) {
+                    [weakSelf.urlToDownloadOperation removeObjectForKey:downloadCallback.url];
+                    [ZASessionStorage.sharedStorage removeTaskInfoByURLString:downloadCallback.url.absoluteString completion:NULL];
+                }
+            }
         } else {
             [weakSelf.queueModel cancelOperationByCallback:downloadCallback];
         }
@@ -130,11 +161,23 @@
 - (void)cancelAllRequests {
     __weak typeof(self) weakSelf = self;
     dispatch_async(self.root_queue, ^{
-        [weakSelf.queueModel removeAllOperations];
         for (ZADownloadOperationModel *downloadOperationModel in weakSelf.urlToDownloadOperation.allValues) {
             [downloadOperationModel cancelAllOperations];
         }
         [weakSelf.urlToDownloadOperation removeAllObjects];
+        [weakSelf.queueModel removeAllOperations];
+    });
+}
+
+- (void)pauseAllRequests {
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(self.root_queue, ^{
+        for (ZADownloadOperationModel *downloadOperationModel in weakSelf.urlToDownloadOperation.allValues) {
+            NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorAppEnterBackground userInfo:nil];
+            [downloadOperationModel forwardError:error];
+            [downloadOperationModel pauseAllOperations];
+        }
+        [weakSelf.queueModel resetNumberOfRunningOperations];
     });
 }
 
@@ -144,13 +187,20 @@
     if (nil == downloadCallback || nil == downloadCallback.url) { return; }
     
     ZADownloadOperationModel *downloadOperationModel = [self.urlToDownloadOperation objectForKey:downloadCallback.url];
-    if (downloadOperationModel && self.queueModel.isMultiCallback && downloadOperationModel.status == ZASessionTaskStatusRunning) {
+    
+    if (downloadOperationModel
+        && self.queueModel.isMultiCallback
+        && downloadOperationModel.status == ZASessionTaskStatusRunning) {
+        
         [downloadOperationModel addOperationCallback:downloadCallback];
         downloadCallback.canResume = downloadOperationModel.canResume;
-    } else if (downloadOperationModel && downloadOperationModel.status == ZASessionTaskStatusSuccessed) {
+        
+    } else if (downloadOperationModel
+               && downloadOperationModel.status == ZASessionTaskStatusSuccessed) {
         [downloadOperationModel cancelOperationCallbackById:downloadCallback.identifier];
         downloadCallback.completionBlock(downloadOperationModel.task.response, downloadOperationModel.task.error, downloadCallback.identifier);
         return;
+        
     } else {
         if (nil == downloadOperationModel) {
             downloadOperationModel = [[ZADownloadOperationModel alloc] initByURL:downloadCallback.url
@@ -166,11 +216,27 @@
     }
 }
 
+- (void)_endBackgroundTask {
+    [self pauseAllRequests];
+    [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
+    UIApplication *app = [UIApplication sharedApplication];
+    [app endBackgroundTask:self.backgroundTaskId];
+    _backgroundTaskId = UIBackgroundTaskInvalid;
+}
+
 - (void)_triggerStartRequest {
     if (ZANetworkManager.sharedInstance.isConnectionAvailable == NO) { return; }
     
     ZADownloadOperationModel *downloadOperationModel = (ZADownloadOperationModel *)[self.queueModel dequeueOperationModel];
     if (nil == downloadOperationModel) { return; }
+    
+    if (self.continueDownloadInBackground) {
+        __weak __typeof__ (self) wself = self;
+        UIApplication *app = [UIApplication sharedApplication];
+        self.backgroundTaskId = [app beginBackgroundTaskWithExpirationHandler:^{
+            [wself _endBackgroundTask];
+        }];
+    }
     
     self.urlToDownloadOperation[downloadOperationModel.url] = downloadOperationModel;
     downloadOperationModel.status = ZASessionTaskStatusRunning;
@@ -254,17 +320,18 @@ didReceiveResponse:(NSURLResponse *)response
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(self.root_queue, ^{
-        NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
-        NSUInteger contentLength = [HTTPResponse.allHeaderFields[@"Content-Length"] integerValue];
-        NSURL *url = dataTask.currentRequest.URL;
+        NSURL *url = dataTask.originalRequest.URL;
         
         if (url) {
             ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:url];
+            NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
+            NSUInteger contentLength = [HTTPResponse.allHeaderFields[@"Content-Length"] integerValue];
             
             long long freeDiskSize = [[[NSFileManager.defaultManager attributesOfFileSystemForPath:NSHomeDirectory() error:nil] objectForKey:NSFileSystemSize] longLongValue];
             if (contentLength > freeDiskSize) {
                 NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorFullDisk userInfo:nil];
                 [downloadOperationModel forwardError:error];
+                downloadOperationModel.status = ZASessionTaskStatusFailed;
                 [downloadOperationModel.task cancel];
                 completionHandler(NSURLSessionResponseCancel);
                 return;
@@ -276,7 +343,6 @@ didReceiveResponse:(NSURLResponse *)response
             
             NSString *acceptRange = (NSString *)[HTTPResponse.allHeaderFields objectForKey:@"Accept-Ranges"];
             if ([acceptRange isEqualToString:ZARequestAcceptRangeBytes]) {
-                downloadOperationModel.canResume = YES;
                 if ([ZASessionStorage.sharedStorage containsTaskInfo:url.absoluteString] == NO) {
                     ZALocalTaskInfo *taskInfo = [[ZALocalTaskInfo alloc] initWithURLString:downloadOperationModel.url.absoluteString
                                                                                   filePath:downloadOperationModel.filePath
@@ -284,6 +350,8 @@ didReceiveResponse:(NSURLResponse *)response
                                                                          countOfTotalBytes:downloadOperationModel.countOfTotalBytes];
                     [ZASessionStorage.sharedStorage commitTaskInfo:taskInfo];
                 }
+                
+                downloadOperationModel.canResume = YES;
             } else {
                 downloadOperationModel.canResume = NO;
             }
@@ -304,7 +372,9 @@ didReceiveResponse:(NSURLResponse *)response
         
         ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:url];
         [downloadOperationModel updateCountOfBytesReceived:data.length];
+        
         if (downloadOperationModel.countOfBytesReceived > downloadOperationModel.countOfTotalBytes) {
+            downloadOperationModel.status = ZASessionTaskStatusFailed;
             [downloadOperationModel.task cancel];
             NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorFileError userInfo:nil];
             [downloadOperationModel forwardError:error];
@@ -324,7 +394,10 @@ didReceiveResponse:(NSURLResponse *)response
         if (nil == url) { return; }
         
         ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:url];
-        if (nil == downloadOperationModel) { return; }
+        if (nil == downloadOperationModel) {
+            [ZASessionStorage.sharedStorage removeTaskInfoByURLString:url.absoluteString completion:nil];
+            return;
+        }
         
         if (nil == error) {
             unsigned long long fileSize = [[NSFileManager.defaultManager attributesOfItemAtPath:downloadOperationModel.filePath error:nil] fileSize];
@@ -339,17 +412,15 @@ didReceiveResponse:(NSURLResponse *)response
             }
             
             [downloadOperationModel removeAllRunningOperations];
-        } else if (NSURLErrorCancelled != error.code) {
-            downloadOperationModel.status = ZASessionTaskStatusFailed;
+        } else if (error && downloadOperationModel.status != ZASessionTaskStatusFailed) {
             [downloadOperationModel forwardError:error];
-        } else {
-            downloadOperationModel.status = ZASessionTaskStatusFailed;
         }
         
         if ([downloadOperationModel numberOfPausedOperation] == 0) {
             [ZASessionStorage.sharedStorage removeTaskInfoByURLString:url.absoluteString completion:nil];
             [weakSelf.urlToDownloadOperation removeObjectForKey:url];
             [downloadOperationModel.outputStream close];
+            NSLog(@"--- REMOVED FILE -----");
         }
         
         [weakSelf.queueModel operationDidFinish];

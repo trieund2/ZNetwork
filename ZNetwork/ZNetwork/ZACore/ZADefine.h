@@ -11,9 +11,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define NotificationApplicationWillResignActive @"NotificationApplicationWillResignActive"
-#define NotificationApplicationDidEnterBackground @"NotificationApplicationDidEnterBackground"
-#define NotificationApplicationWillTerminate @"NotificationApplicationWillTerminate"
 #define ZASessionStorageErrorDomain @"com.trieund.ZNetwork.sessionStorageError"
 #define ZARequestAcceptRangeBytes @"bytes"
 #define ZARequestAcceptRangeNone @"none"
@@ -24,8 +21,9 @@ typedef NS_ENUM(NSInteger, ZASessionStorageErrorCode) {
 };
 
 typedef NS_ENUM(NSUInteger, ZANetworkError) {
-    ZANetworkErrorFullDisk          = 9981,
-    ZANetworkErrorFileError         = 9982
+    ZANetworkErrorFullDisk              = 9981,
+    ZANetworkErrorFileError             = 9982,
+    ZANetworkErrorAppEnterBackground    = 9983
 };
 
 typedef NS_ENUM(NSInteger, ZAPerformOperationType) {

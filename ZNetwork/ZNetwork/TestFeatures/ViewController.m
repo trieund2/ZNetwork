@@ -38,7 +38,7 @@
 
 - (IBAction)tapAllCancellAllRequest:(id)sender {
     [ZADownloadManager.sharedManager cancelAllRequests];
-    for (TrackDownload *trackDownload in self.currentDownload) {
+    for (TrackDownload *trackDownload in self.currentDownload.allValues) {
         trackDownload.status = ZASessionTaskStatusCancelled;
     }
     [self.currentDownload removeAllObjects];
@@ -52,7 +52,7 @@
     TrackDownload *track2 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/5MB.zip" trackName:@"Thinkbroadband 5MB" priority:(ZAOperationPriorityHigh)];
     TrackDownload *track3 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/5MB.zip" trackName:@"Thinkbroadband 5MB" priority:(ZAOperationPriorityMedium)];
     TrackDownload *track4 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/5MB.zip" trackName:@"Thinkbroadband 5MB" priority:(ZAOperationPriorityHigh)];
-    TrackDownload *track5 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/5MB.zip" trackName:@"Test file 1GB"];
+    TrackDownload *track5 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/1GB.bin" trackName:@"Test file 1GB"];
     
     TrackDownload *track6 = [[TrackDownload alloc] initFromURLString:@"https://download.microsoft.com/download/8/7/D/87D36A01-1266-4FD3-924C-1F1F958E2233/Office2010DevRefs.exe"
                                                            trackName:@"Test file 50MB microsoft"];
@@ -147,6 +147,8 @@
             if (error) {
                 if (error.code == NSURLErrorCancelled) {
                     currentTrackDownload.status = ZASessionTaskStatusCancelled;
+                } else if (error.code == ZANetworkErrorAppEnterBackground) {
+                    currentTrackDownload.status = ZASessionTaskStatusPaused;
                 } else {
                     currentTrackDownload.status = ZASessionTaskStatusFailed;
                 }

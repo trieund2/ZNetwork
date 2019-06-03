@@ -6,6 +6,7 @@
 //  Copyright © 2019 com.trieund. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "ZALocalTaskInfo.h"
 
