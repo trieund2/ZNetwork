@@ -34,6 +34,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)containsTaskInfo:(NSString *)urlString;
 
 /**
+ * @abstract Return number of task info are being saved on mem.
+ * @discussion The number is only total of task info on mem, there might be some other in local storage.
+ */
+- (NSUInteger)countOfTaskInfo;
+
+/**
  * @abstract Commit a local task info to temporary storage (still on mem).
  * @discussion If there isn't a need to save task info to local storage right away, use this to save on mem first.
  * @param taskInfo The task info to save.
