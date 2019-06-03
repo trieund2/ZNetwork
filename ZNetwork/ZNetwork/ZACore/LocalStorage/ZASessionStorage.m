@@ -33,24 +33,20 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     if (self = [super init]) {
         self.taskInfoKeyedByURLString = [NSMutableDictionary dictionary];
         self.taskInfoLock = dispatch_semaphore_create(1);
+        [self loadAllTaskInfo:^(NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"error: %@", error);
+            }
+        }];
         [NSNotificationCenter.defaultCenter addObserver:self
-                                               selector:@selector(applicationDidEnterBackgroundHandler:)
-                                                   name:NotificationApplicationDidEnterBackground
-                                                 object:nil];
-        [NSNotificationCenter.defaultCenter addObserver:self
-                                               selector:@selector(applicationWillTerminateHandler:)
-                                                   name:NotificationApplicationWillTerminate
+                                               selector:@selector(applicationWillResignActiveHandler:)
+                                                   name:NotificationApplicationWillResignActive
                                                  object:nil];
     }
     return self;
 }
 
-- (void)applicationDidEnterBackgroundHandler:(NSNotification *)notification {
-    [self pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {
-    }];
-}
-
-- (void)applicationWillTerminateHandler:(NSNotification *)notification {
+- (void)applicationWillResignActiveHandler:(NSNotification *)notification {
     [self pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {
     }];
 }
