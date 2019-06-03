@@ -38,17 +38,8 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
                 NSLog(@"error: %@", error);
             }
         }];
-        [NSNotificationCenter.defaultCenter addObserver:self
-                                               selector:@selector(applicationWillResignActiveHandler:)
-                                                   name:NotificationApplicationWillResignActive
-                                                 object:nil];
     }
     return self;
-}
-
-- (void)applicationWillResignActiveHandler:(NSNotification *)notification {
-    [self pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {
-    }];
 }
 
 - (ZALocalTaskInfo * _Nullable)getTaskInfoByURLString:(NSString *)urlString {

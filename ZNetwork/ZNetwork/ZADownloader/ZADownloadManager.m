@@ -19,6 +19,7 @@
 @property (nonatomic, readonly) dispatch_queue_t root_queue;
 @property (nonatomic, readonly) ZAQueueModel *queueModel;
 @property (nonatomic, readonly) NSMutableDictionary<NSURL *, ZADownloadOperationModel *> *urlToDownloadOperation;
+@property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskId;
 
 @end
 
@@ -45,13 +46,26 @@
         _queueModel = [[ZAQueueModel alloc] init];
         _urlToDownloadOperation = [[NSMutableDictionary alloc] init];
         [ZASessionStorage.sharedStorage loadAllTaskInfo:^(NSError * _Nullable error) {}];
+        _continueDownloadInBackground = YES;
+        _backgroundTaskId = UIBackgroundTaskInvalid;
         
         [NSNotificationCenter.defaultCenter addObserver:self
                                                selector:@selector(_triggerStartRequest)
                                                    name:NetworkStatusDidChangeNotification
                                                  object:nil];
+        
+        UIApplication *app = [UIApplication sharedApplication];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(applicationWillTerminate:)
+                                                     name:UIApplicationWillTerminateNotification
+                                                   object:app];
     }
     return self;
+}
+
+- (void)applicationWillTerminate:(NSNotification *)notification {
+    [self pauseAllRequests];
+    [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
 }
 
 #pragma mark - Interface methods
@@ -202,11 +216,27 @@
     }
 }
 
+- (void)_endBackgroundTask {
+    [self pauseAllRequests];
+    [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
+    UIApplication *app = [UIApplication sharedApplication];
+    [app endBackgroundTask:self.backgroundTaskId];
+    _backgroundTaskId = UIBackgroundTaskInvalid;
+}
+
 - (void)_triggerStartRequest {
     if (ZANetworkManager.sharedInstance.isConnectionAvailable == NO) { return; }
     
     ZADownloadOperationModel *downloadOperationModel = (ZADownloadOperationModel *)[self.queueModel dequeueOperationModel];
     if (nil == downloadOperationModel) { return; }
+    
+    if (self.continueDownloadInBackground) {
+        __weak __typeof__ (self) wself = self;
+        UIApplication *app = [UIApplication sharedApplication];
+        self.backgroundTaskId = [app beginBackgroundTaskWithExpirationHandler:^{
+            [wself _endBackgroundTask];
+        }];
+    }
     
     self.urlToDownloadOperation[downloadOperationModel.url] = downloadOperationModel;
     downloadOperationModel.status = ZASessionTaskStatusRunning;

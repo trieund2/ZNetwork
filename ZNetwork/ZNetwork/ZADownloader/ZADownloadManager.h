@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "ZADownloadOperationCallback.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZADownloadManager : NSObject <NSURLSessionDataDelegate>
+
+@property (nonatomic) BOOL continueDownloadInBackground;
 
 + (instancetype)sharedManager;
 
