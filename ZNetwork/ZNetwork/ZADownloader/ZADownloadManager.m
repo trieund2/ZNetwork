@@ -57,7 +57,7 @@
 #pragma mark - Interface methods
 
 - (NSUInteger)numberOfTaskRunning {
-    return self.urlToDownloadOperation.count;
+    return self.queueModel.numberOfTaskRunning;
 }
 
 - (NSUInteger)numberOfTaskInQueue {
@@ -147,10 +147,15 @@
         [downloadOperationModel addOperationCallback:downloadCallback];
         downloadCallback.canResume = downloadOperationModel.canResume;
     } else {
-        downloadOperationModel = [[ZADownloadOperationModel alloc] initByURL:downloadCallback.url
-                                                               requestPolicy:downloadCallback.requestPolicy
-                                                                    priority:downloadCallback.priority
-                                                           operationCallback:downloadCallback];
+        if (nil == downloadOperationModel) {
+            downloadOperationModel = [[ZADownloadOperationModel alloc] initByURL:downloadCallback.url
+                                                                   requestPolicy:downloadCallback.requestPolicy
+                                                                        priority:downloadCallback.priority
+                                                               operationCallback:downloadCallback];
+        } else {
+            [downloadOperationModel addOperationCallback:downloadCallback];
+        }
+        
         [self.queueModel enqueueOperation:downloadOperationModel];
         [self _triggerStartRequest];
     }
@@ -259,12 +264,12 @@ didReceiveResponse:(NSURLResponse *)response
             NSString *acceptRange = (NSString *)[HTTPResponse.allHeaderFields objectForKey:@"Accept-Ranges"];
             if ([acceptRange isEqualToString:ZARequestAcceptRangeBytes]) {
                 downloadOperationModel.canResume = YES;
-                if ([ZASessionStorage.sharedStorage containsTaskInfo:url.absoluteString]) {
+                if ([ZASessionStorage.sharedStorage containsTaskInfo:url.absoluteString] == NO) {
                     ZALocalTaskInfo *taskInfo = [[ZALocalTaskInfo alloc] initWithURLString:downloadOperationModel.url.absoluteString
                                                                                   filePath:downloadOperationModel.filePath
-                                                                                  fileName:url.absoluteString.MD5String];
+                                                                                  fileName:url.absoluteString.MD5String
+                                                                         countOfTotalBytes:contentLength];
                     [ZASessionStorage.sharedStorage commitTaskInfo:taskInfo];
-                    [ZASessionStorage.sharedStorage updateCountOfTotalBytes:contentLength byURLString:url.absoluteString];
                 }
             } else {
                 downloadOperationModel.canResume = NO;
