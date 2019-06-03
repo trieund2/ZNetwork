@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) BOOL canResume;
 @property (nonatomic) NSUInteger countOfTotalBytes;
-@property (nonatomic) NSUInteger completedUnitCount;
+@property (nonatomic) NSUInteger countOfBytesReceived;
 @property (nonatomic) NSOutputStream *outputStream;
 @property (nonatomic) NSString *filePath;
 
@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)forwardProgress;
 - (void)forwardCompletion;
 - (void)forwardError:(NSError *)error;
-- (void)forwarFileFromLocation:(NSURL *)url;
+- (void)forwarFileFromLocation;
 - (void)updateResumeStatusForAllCallbacks;
 
 @end
