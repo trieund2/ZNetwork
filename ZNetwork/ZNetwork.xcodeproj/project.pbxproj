@@ -524,7 +524,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DAA47P5N57;
+				DEVELOPMENT_TEAM = A4B27XWSTD;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/ZNetwork/Supports/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -532,7 +532,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.trieund.ZNetwork;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hanguyen.ZNetwork;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -543,7 +543,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DAA47P5N57;
+				DEVELOPMENT_TEAM = A4B27XWSTD;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/ZNetwork/Supports/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -551,7 +551,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.trieund.ZNetwork;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hanguyen.ZNetwork;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
