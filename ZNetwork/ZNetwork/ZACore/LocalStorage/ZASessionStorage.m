@@ -64,6 +64,10 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     }
 }
 
+- (BOOL)containsTaskInfo:(NSString *)urlString {
+    return (nil != [self _getTaskInfoByURLString:urlString]);
+}
+
 - (ZALocalTaskInfo * _Nullable)_getTaskInfoByURLString:(NSString *)urlString {
     ZA_LOCK(self.taskInfoLock);
     ZALocalTaskInfo *taskInfo = [self.taskInfoKeyedByURLString objectForKey:urlString];

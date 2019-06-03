@@ -27,6 +27,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (ZALocalTaskInfo * _Nullable)getTaskInfoByURLString:(NSString *)urlString;
 
 /**
+ * @abstract Check whether a task info is already existed by its url string.
+ * @param urlString The url string to search for.
+ * @return A boolean indicates existence of the task info.
+ */
+- (BOOL)containsTaskInfo:(NSString *)urlString;
+
+/**
  * @abstract Commit a local task info to temporary storage (still on mem).
  * @discussion If there isn't a need to save task info to local storage right away, use this to save on mem first.
  * @param taskInfo The task info to save.
