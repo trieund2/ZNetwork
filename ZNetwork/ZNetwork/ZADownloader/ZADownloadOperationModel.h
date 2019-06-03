@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSUInteger countOfTotalBytes;
 @property (nonatomic) NSUInteger completedUnitCount;
 @property (nonatomic) NSOutputStream *outputStream;
+@property (nonatomic) NSString *filePath;
 
 - (void)addCurrentDownloadLenght:(NSUInteger)lenght;
 - (void)forwardProgress;

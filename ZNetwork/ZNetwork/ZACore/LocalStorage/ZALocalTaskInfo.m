@@ -54,7 +54,9 @@ NSString * const KeyForState = @"state";
 }
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    ZALocalTaskInfo *copyTaskInfo = [[ZALocalTaskInfo alloc] initWithURLString:[self.urlString copyWithZone:zone] filePath:[self.fileName copyWithZone:zone] fileName:[self.fileName copyWithZone:zone]];
+    ZALocalTaskInfo *copyTaskInfo = [[ZALocalTaskInfo alloc] initWithURLString:[self.urlString copyWithZone:zone]
+                                                                      filePath:[self.filePath copyWithZone:zone]
+                                                                      fileName:[self.fileName copyWithZone:zone]];
     copyTaskInfo.lastTimeModified = [self.lastTimeModified copyWithZone:zone];
     copyTaskInfo.countOfTotalBytes = self.countOfTotalBytes;
     copyTaskInfo.countOfBytesReceived = self.countOfBytesReceived;

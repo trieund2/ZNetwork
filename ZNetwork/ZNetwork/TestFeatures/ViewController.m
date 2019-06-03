@@ -38,7 +38,11 @@
 
 - (IBAction)tapAllCancellAllRequest:(id)sender {
     [ZADownloadManager.sharedManager cancelAllRequests];
+    for (TrackDownload *trackDownload in self.currentDownload) {
+        trackDownload.status = ZASessionTaskStatusCancelled;
+    }
     [self.currentDownload removeAllObjects];
+    [self.downloadTableView reloadData];
 }
 
 - (void)initDataSource {
