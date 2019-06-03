@@ -71,6 +71,10 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     return taskInfo;
 }
 
+- (NSUInteger)countOfTaskInfo {
+    return self.taskInfoKeyedByURLString.count;
+}
+
 - (void)commitTaskInfo:(ZALocalTaskInfo *)taskInfo {
 #if DEBUG
     NSAssert(taskInfo && taskInfo.urlString, @"ZASessionStorage commitTaskInfo: TaskInfo urlString must not be nil");
