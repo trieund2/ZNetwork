@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)cancelOperationByCallback:(ZAOperationCallback *)callback;
 - (void)operationDidFinish;
 - (void)removeAllOperations;
+- (void)resetNumberOfRunningOperations;
 
 @end
 

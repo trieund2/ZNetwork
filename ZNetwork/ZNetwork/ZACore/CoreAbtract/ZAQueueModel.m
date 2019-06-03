@@ -10,7 +10,7 @@
 
 @interface ZAQueueModel()
 
-@property (nonatomic, readonly) NSUInteger currentOperationRunning;
+@property (nonatomic, readonly) NSUInteger currentRunningOperations;
 @property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *veryHighQueue;
 @property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *highQueue;
 @property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *mediumQueue;
@@ -34,7 +34,7 @@
     self = [super init];
     
     if (self) {
-        _currentOperationRunning = 0;
+        _currentRunningOperations = 0;
         _queueType = operationType;
         _isMultiCallback = isMultiCallback;
         _performType = performType;
@@ -58,11 +58,15 @@
 }
 
 - (NSUInteger)numberOfTaskRunning {
-    return self.currentOperationRunning;
+    return self.currentRunningOperations;
 }
 
 - (NSUInteger)numberOfTaskInQueue {
     return self.urlToOperationModel.count;
+}
+
+- (void)resetNumberOfRunningOperations {
+    _currentRunningOperations = 0;
 }
 
 - (void)enqueueOperation:(ZAOperationModel *)operationModel {
@@ -106,7 +110,7 @@
 }
 
 - (BOOL)canDequeueOperationModel {
-    return (self.currentOperationRunning < self.maxOperationPerform);
+    return (self.currentRunningOperations < self.maxOperationPerform);
 }
 
 - (nullable ZAOperationModel *)dequeueOperationModel {
@@ -167,7 +171,7 @@
         }
         
         if (nil != operationModel && nil != operationModel.url) {
-            _currentOperationRunning += 1;
+            _currentRunningOperations += 1;
             [self.urlToOperationModel removeObjectForKey:operationModel.url];
         }
         
@@ -205,12 +209,13 @@
 }
 
 - (void)operationDidFinish {
-    if (_currentOperationRunning > 0) {
-        _currentOperationRunning -= 1;
+    if (_currentRunningOperations > 0) {
+        _currentRunningOperations -= 1;
     }
 }
 
 - (void)removeAllOperations {
+    _currentRunningOperations = 0;
     [self.urlToOperationModel removeAllObjects];
     [self.highQueue removeAllObjects];
     [self.mediumQueue removeAllObjects];

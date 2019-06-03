@@ -89,14 +89,21 @@
 }
 
 - (void)cancelAllOperations {
-    [self.task cancel];
     [runningOperationCallbacks removeAllObjects];
     [pausedOperationCallbacks removeAllObjects];
+    self.status = ZASessionTaskStatusCancelled;
+    [self.task cancel];
+}
+
+- (void)pauseAllOperations {
+    [pausedOperationCallbacks addEntriesFromDictionary:runningOperationCallbacks];
+    [runningOperationCallbacks removeAllObjects];
+    self.status = ZASessionTaskStatusPaused;
+    [self.task cancel];
 }
 
 - (void)removePausedOperationCallbackById:(NSString *)identifier {
     if (nil == identifier) { return; }
-    
     [pausedOperationCallbacks removeObjectForKey:identifier];
 }
 
@@ -117,6 +124,11 @@
 
 - (void)removeAllRunningOperations {
     [runningOperationCallbacks removeAllObjects];
+}
+
+- (void)pauseAllRunningOperations {
+    [pausedOperationCallbacks addEntriesFromDictionary:runningOperationCallbacks];
+    [self removeAllRunningOperations];
 }
 
 @end
