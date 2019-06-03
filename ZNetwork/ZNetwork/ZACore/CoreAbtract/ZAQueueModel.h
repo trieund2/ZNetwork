@@ -25,12 +25,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSUInteger)numberOfTaskRunning;
 - (NSUInteger)numberOfTaskInQueue;
 - (void)enqueueOperation:(ZAOperationModel *)operationModel;
-- (BOOL)canDequeueOperationModel;
 - (nullable ZAOperationModel *)dequeueOperationModel;
+- (BOOL)canDequeueOperationModel;
 - (void)pauseOperationByCallback:(ZAOperationCallback *)callback;
 - (void)cancelOperationByCallback:(ZAOperationCallback *)callback;
 - (void)operationDidFinish;
 - (void)removeAllOperations;
+- (void)resetNumberOfRunningOperations;
 
 @end
 
