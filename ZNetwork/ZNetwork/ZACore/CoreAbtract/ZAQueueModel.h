@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
                            isMultiCallback:(BOOL)isMultiCallback
                                performType:(ZAOperationPerformType)performType;
 
+- (NSUInteger)numberOfTaskInQueue;
 - (void)enqueueOperation:(ZAOperationModel *)operationModel;
 - (BOOL)canDequeueOperationModel;
 - (nullable ZAOperationModel *)dequeueOperationModel;

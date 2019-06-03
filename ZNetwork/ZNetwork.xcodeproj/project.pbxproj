@@ -23,7 +23,6 @@
 		A1AFF51E229FD37F0040B283 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1AFF51C229FD37F0040B283 /* Main.storyboard */; };
 		A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E0229E28840085FB3D /* AppDelegate.m */; };
 		A1B7C7E9229E28850085FB3D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7E8229E28850085FB3D /* Assets.xcassets */; };
-		A1B7C7EC229E28850085FB3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7EA229E28850085FB3D /* LaunchScreen.storyboard */; };
 		A1B7C7EF229E28850085FB3D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7EE229E28850085FB3D /* main.m */; };
 		A1B7C7F9229E28850085FB3D /* ZNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */; };
 		C572577F229EE065009C3E66 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C572577E229EE065009C3E66 /* NSString+Extension.m */; };
@@ -74,7 +73,6 @@
 		A1B7C7DF229E28840085FB3D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A1B7C7E0229E28840085FB3D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A1B7C7E8229E28850085FB3D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A1B7C7EB229E28850085FB3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A1B7C7ED229E28850085FB3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1B7C7EE229E28850085FB3D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A1B7C7F4229E28850085FB3D /* ZNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -211,7 +209,6 @@
 			children = (
 				A1B7C806229E28B20085FB3D /* AppDelegate */,
 				A1B7C7E8229E28850085FB3D /* Assets.xcassets */,
-				A1B7C7EA229E28850085FB3D /* LaunchScreen.storyboard */,
 				A1B7C7ED229E28850085FB3D /* Info.plist */,
 				A1B7C7EE229E28850085FB3D /* main.m */,
 			);
@@ -232,13 +229,13 @@
 			children = (
 				A1AFF51B229FD37F0040B283 /* LaunchScreen.storyboard */,
 				A1AFF51C229FD37F0040B283 /* Main.storyboard */,
-				A1AFF513229FD2EA0040B283 /* DownloadTableViewCell.h */,
-				A1AFF510229FD2EA0040B283 /* DownloadTableViewCell.m */,
-				A1AFF515229FD2EA0040B283 /* DownloadTableViewCell.xib */,
 				A1AFF50F229FD2EA0040B283 /* TrackDownload.h */,
 				A1AFF512229FD2EA0040B283 /* TrackDownload.m */,
 				A1AFF511229FD2EA0040B283 /* ViewController.h */,
 				A1AFF514229FD2EA0040B283 /* ViewController.m */,
+				A1AFF513229FD2EA0040B283 /* DownloadTableViewCell.h */,
+				A1AFF510229FD2EA0040B283 /* DownloadTableViewCell.m */,
+				A1AFF515229FD2EA0040B283 /* DownloadTableViewCell.xib */,
 			);
 			path = TestFeatures;
 			sourceTree = "<group>";
@@ -350,7 +347,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1B7C7EC229E28850085FB3D /* LaunchScreen.storyboard in Resources */,
 				A1AFF51E229FD37F0040B283 /* Main.storyboard in Resources */,
 				A1AFF51D229FD37F0040B283 /* LaunchScreen.storyboard in Resources */,
 				A1B7C7E9229E28850085FB3D /* Assets.xcassets in Resources */,
@@ -409,17 +405,6 @@
 			targetProxy = A1B7C7F5229E28850085FB3D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		A1B7C7EA229E28850085FB3D /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A1B7C7EB229E28850085FB3D /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		A1B7C7FB229E28850085FB3D /* Debug */ = {
@@ -542,6 +527,7 @@
 				DEVELOPMENT_TEAM = DAA47P5N57;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/ZNetwork/Supports/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -560,6 +546,7 @@
 				DEVELOPMENT_TEAM = DAA47P5N57;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/ZNetwork/Supports/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

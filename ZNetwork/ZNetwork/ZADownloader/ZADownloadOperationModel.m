@@ -63,11 +63,11 @@
 }
 
 - (void)updateResumeStatusForAllCallbacks {
-    for (ZADownloadOperationCallback *downloadOperationCallback in runningOperationCallbacks) {
+    for (ZADownloadOperationCallback *downloadOperationCallback in runningOperationCallbacks.allValues) {
         downloadOperationCallback.canResume = self.canResume;
     }
-    
-    for (ZADownloadOperationCallback *downloadOperationCallback in pausedOperationCallbacks) {
+
+    for (ZADownloadOperationCallback *downloadOperationCallback in pausedOperationCallbacks.allValues) {
         downloadOperationCallback.canResume = self.canResume;
     }
 }

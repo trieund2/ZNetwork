@@ -20,9 +20,9 @@ NSString * const KeyForState = @"state";
 @implementation ZALocalTaskInfo
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:self.urlString forKey:KeyForUrlString];
-    [aCoder encodeObject:self.filePath forKey:KeyForFilePath];
-    [aCoder encodeObject:self.fileName forKey:KeyForFileName];
+    [aCoder encodeObject:[NSString stringWithString:self.urlString] forKey:KeyForUrlString];
+    [aCoder encodeObject:[NSString stringWithString:self.filePath] forKey:KeyForFilePath];
+    [aCoder encodeObject:[NSString stringWithString:self.fileName] forKey:KeyForFileName];
     [aCoder encodeObject:self.lastTimeModified forKey:KeyForLastTimeModified];
     [aCoder encodeObject:[NSNumber numberWithInteger:self.acceptRangesType] forKey:KeyForAcceptRangesType];
     [aCoder encodeObject:[NSNumber numberWithUnsignedLongLong:self.countOfBytesReceived] forKey:KeyForCountOfBytesReceived];
@@ -51,6 +51,15 @@ NSString * const KeyForState = @"state";
         _fileName = fileName;
     }
     return self;
+}
+
+- (id)copyWithZone:(nullable NSZone *)zone {
+    ZALocalTaskInfo *copyTaskInfo = [[ZALocalTaskInfo alloc] initWithURLString:[self.urlString copyWithZone:zone] filePath:[self.fileName copyWithZone:zone] fileName:[self.fileName copyWithZone:zone]];
+    copyTaskInfo.lastTimeModified = [self.lastTimeModified copyWithZone:zone];
+    copyTaskInfo.countOfTotalBytes = self.countOfTotalBytes;
+    copyTaskInfo.countOfBytesReceived = self.countOfBytesReceived;
+    copyTaskInfo.state = self.state;
+    return copyTaskInfo;
 }
 
 + (BOOL)supportsSecureCoding {
