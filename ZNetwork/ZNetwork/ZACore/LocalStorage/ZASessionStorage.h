@@ -27,6 +27,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (ZALocalTaskInfo * _Nullable)getTaskInfoByURLString:(NSString *)urlString;
 
 /**
+ * @abstract Check whether a task info is already existed by its url string.
+ * @param urlString The url string to search for.
+ * @return A boolean indicates existence of the task info.
+ */
+- (BOOL)containsTaskInfo:(NSString *)urlString;
+
+/**
  * @abstract Commit a local task info to temporary storage (still on mem).
  * @discussion If there isn't a need to save task info to local storage right away, use this to save on mem first.
  * @param taskInfo The task info to save.
@@ -56,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)pushAllTaskInfoWithCompletion:(void (^)(NSError * _Nullable error))completion;
 
 /**
- * @abstract Commit a task info and push all task info commited previously to local storage.
+ * @abstract Commit a task info and push all task info commite  d previously to local storage.
  * @discussion This might take a while list of task info is large.
  * @param taskInfo The task info to save.
  * @param completion Completion callback that receives error if there is one while saving data to local storage, nil if successful.
@@ -70,6 +77,13 @@ NS_ASSUME_NONNULL_BEGIN
  * @param completion Completion callback that receives error if there is one while removing file from disk.
  */
 - (void)removeTaskInfoByURLString:(NSString *)urlString completion:(nullable void (^)(NSError * _Nullable))completion;
+
+/**
+ * @abstract Load all task info from local storage to mem.
+ * @discussion This might take a while if task info list in local storage is large.
+ * @param completion Completion callback that receives error if there is one while loading.
+ */
+- (void)loadAllTaskInfo:(void (^)(NSError * _Nullable))completion;
 
 @end
 

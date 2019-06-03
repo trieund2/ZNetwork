@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
+#define NotificationApplicationWillResignActive @"NotificationApplicationWillResignActive"
 #define NotificationApplicationDidEnterBackground @"NotificationApplicationDidEnterBackground"
 #define NotificationApplicationWillTerminate @"NotificationApplicationWillTerminate"
 #define ZASessionStorageErrorDomain @"com.trieund.ZNetwork.sessionStorageError"
