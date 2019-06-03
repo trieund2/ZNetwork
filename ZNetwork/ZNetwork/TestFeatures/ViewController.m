@@ -48,7 +48,7 @@
 - (void)initDataSource {
     _trackDownloads = [[NSMutableArray alloc] init];
     
-    TrackDownload *track1 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/100MB.bin" trackName:@"Test file 100MB" priority:(ZAOperationPriorityMedium)];
+    TrackDownload *track1 = [[TrackDownload alloc] initFromURLString:@"http://i.imgur.com/z4d4kWk.jpg" trackName:@"developer.mozilla.org" priority:(ZAOperationPriorityMedium)];
     TrackDownload *track2 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/100MB.bin" trackName:@"Test file 100MB" priority:(ZAOperationPriorityHigh)];
     TrackDownload *track3 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/100MB.bin" trackName:@"Test file 100MB" priority:(ZAOperationPriorityMedium)];
     TrackDownload *track4 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/100MB.bin" trackName:@"Test file 100MB" priority:(ZAOperationPriorityHigh)];

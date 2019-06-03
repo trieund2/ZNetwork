@@ -12,7 +12,7 @@
 
 #pragma mark - Interface methods
 
-- (void)addCurrentDownloadLenght:(NSUInteger)lenght {
+- (void)updateCountOfBytesReceived:(NSUInteger)lenght {
     _completedUnitCount += lenght;
 }
 

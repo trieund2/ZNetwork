@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSOutputStream *outputStream;
 @property (nonatomic) NSString *filePath;
 
-- (void)addCurrentDownloadLenght:(NSUInteger)lenght;
+- (void)updateCountOfBytesReceived:(NSUInteger)lenght;
 - (void)forwardProgress;
 - (void)forwardCompletion;
 - (void)forwardError:(NSError *)error;
