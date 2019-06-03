@@ -50,6 +50,7 @@ NSString * const KeyForState = @"state";
         _filePath = filePath;
         _fileName = fileName;
         _countOfTotalBytes = countOfTotalBytes;
+        _lastTimeModified = [NSDate date];
     }
     return self;
 }
@@ -59,10 +60,14 @@ NSString * const KeyForState = @"state";
                                                                       filePath:[self.filePath copyWithZone:zone]
                                                                       fileName:[self.fileName copyWithZone:zone]
                                                              countOfTotalBytes:self.countOfTotalBytes];
-    copyTaskInfo.lastTimeModified = [self.lastTimeModified copyWithZone:zone];
     copyTaskInfo.countOfBytesReceived = self.countOfBytesReceived;
     copyTaskInfo.state = self.state;
     return copyTaskInfo;
+}
+
+- (void)setCountOfBytesReceived:(int64_t)countOfBytesReceived {
+    _countOfBytesReceived = countOfBytesReceived;
+    _lastTimeModified = [NSDate date];
 }
 
 + (BOOL)supportsSecureCoding {
