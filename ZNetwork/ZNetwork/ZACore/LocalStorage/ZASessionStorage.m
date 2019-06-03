@@ -33,9 +33,6 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     if (self = [super init]) {
         self.taskInfoKeyedByURLString = [NSMutableDictionary dictionary];
         self.taskInfoLock = dispatch_semaphore_create(1);
-        [self _loadAllTaskInfo:^(NSError * _Nullable error) {
-            
-        }];
         [NSNotificationCenter.defaultCenter addObserver:self
                                                selector:@selector(applicationDidEnterBackgroundHandler:)
                                                    name:NotificationApplicationDidEnterBackground
@@ -142,7 +139,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     [self pushAllTaskInfoWithCompletion:completion];
 }
 
-- (void)_loadAllTaskInfo:(void (^)(NSError * _Nullable))completion {
+- (void)loadAllTaskInfo:(void (^)(NSError * _Nullable))completion {
     [ZAUserDefaultsManager.sharedManager loadObjectOfClass:[NSDictionary class] withKey:KeyForTaskInfoDictionary completion:^(id  _Nullable object, NSError * _Nullable error) {
         /* If there is an error loading task info dictionary, return it */
         if (error) {

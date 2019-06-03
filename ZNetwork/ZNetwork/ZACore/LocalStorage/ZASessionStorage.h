@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)pushAllTaskInfoWithCompletion:(void (^)(NSError * _Nullable error))completion;
 
 /**
- * @abstract Commit a task info and push all task info commited previously to local storage.
+ * @abstract Commit a task info and push all task info commite  d previously to local storage.
  * @discussion This might take a while list of task info is large.
  * @param taskInfo The task info to save.
  * @param completion Completion callback that receives error if there is one while saving data to local storage, nil if successful.
@@ -70,6 +70,13 @@ NS_ASSUME_NONNULL_BEGIN
  * @param completion Completion callback that receives error if there is one while removing file from disk.
  */
 - (void)removeTaskInfoByURLString:(NSString *)urlString completion:(nullable void (^)(NSError * _Nullable))completion;
+
+/**
+ * @abstract Load all task info from local storage to mem.
+ * @discussion This might take a while if task info list in local storage is large.
+ * @param completion Completion callback that receives error if there is one while loading.
+ */
+- (void)loadAllTaskInfo:(void (^)(NSError * _Nullable))completion;
 
 @end
 
