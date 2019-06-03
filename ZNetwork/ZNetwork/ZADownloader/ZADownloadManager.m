@@ -259,7 +259,7 @@ didReceiveResponse:(NSURLResponse *)response
             NSString *acceptRange = (NSString *)[HTTPResponse.allHeaderFields objectForKey:@"Accept-Ranges"];
             if ([acceptRange isEqualToString:ZARequestAcceptRangeBytes]) {
                 downloadOperationModel.canResume = YES;
-                if ([ZASessionStorage.sharedStorage getTaskInfoByURLString:url.absoluteString] == nil) {
+                if ([ZASessionStorage.sharedStorage containsTaskInfo:url.absoluteString]) {
                     ZALocalTaskInfo *taskInfo = [[ZALocalTaskInfo alloc] initWithURLString:downloadOperationModel.url.absoluteString
                                                                                   filePath:downloadOperationModel.filePath
                                                                                   fileName:url.absoluteString.MD5String];
