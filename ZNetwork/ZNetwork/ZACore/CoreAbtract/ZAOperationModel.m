@@ -57,11 +57,7 @@
         _priority = callback.priority;
     }
     
-    if (self.task && self.task.state == NSURLSessionTaskStateRunning) {
-        runningOperationCallbacks[callback.identifier] = callback;
-    } else if (nil == self.task || self.task.state == NSURLSessionTaskStateCanceling) {
-        pausedOperationCallbacks[callback.identifier] = callback;
-    }
+    runningOperationCallbacks[callback.identifier] = callback;
 }
 
 - (void)pauseOperationCallbackById:(NSString *)identifier {

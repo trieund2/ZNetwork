@@ -44,11 +44,12 @@ NSString * const KeyForState = @"state";
     return self;
 }
 
-- (instancetype)initWithURLString:(NSString *)urlString filePath:(NSString *)filePath fileName:(NSString *)fileName {
+- (instancetype)initWithURLString:(NSString *)urlString filePath:(NSString *)filePath fileName:(NSString *)fileName countOfTotalBytes:(int64_t)countOfTotalBytes {
     if (self = [super init]) {
         _urlString = urlString;
         _filePath = filePath;
         _fileName = fileName;
+        _countOfTotalBytes = countOfTotalBytes;
     }
     return self;
 }
@@ -56,9 +57,9 @@ NSString * const KeyForState = @"state";
 - (id)copyWithZone:(nullable NSZone *)zone {
     ZALocalTaskInfo *copyTaskInfo = [[ZALocalTaskInfo alloc] initWithURLString:[self.urlString copyWithZone:zone]
                                                                       filePath:[self.filePath copyWithZone:zone]
-                                                                      fileName:[self.fileName copyWithZone:zone]];
+                                                                      fileName:[self.fileName copyWithZone:zone]
+                                                             countOfTotalBytes:self.countOfTotalBytes];
     copyTaskInfo.lastTimeModified = [self.lastTimeModified copyWithZone:zone];
-    copyTaskInfo.countOfTotalBytes = self.countOfTotalBytes;
     copyTaskInfo.countOfBytesReceived = self.countOfBytesReceived;
     copyTaskInfo.state = self.state;
     return copyTaskInfo;

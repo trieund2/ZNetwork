@@ -57,6 +57,10 @@
     return self;
 }
 
+- (NSUInteger)numberOfTaskRunning {
+    return self.currentOperationRunning;
+}
+
 - (NSUInteger)numberOfTaskInQueue {
     return self.urlToOperationModel.count;
 }
