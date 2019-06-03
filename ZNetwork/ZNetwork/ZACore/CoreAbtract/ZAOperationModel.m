@@ -30,6 +30,7 @@
         _requestPolicy = requestPolicy;
         _priority = priority;
         _task = nil;
+        _status = ZASessionTaskStatusInitialized;
         runningOperationCallbacks = [[NSMutableDictionary alloc] init];
         pausedOperationCallbacks = [[NSMutableDictionary alloc] init];
         
@@ -67,6 +68,10 @@
     if (pauseOperationCallback == nil) { return; }
     [runningOperationCallbacks removeObjectForKey:identifier];
     pausedOperationCallbacks[identifier] = pauseOperationCallback;
+    
+    if (self.numberOfRunningOperation == 0) {
+        self.status = ZASessionTaskStatusPaused;
+    }
 }
 
 - (void)cancelOperationCallbackById:(NSString *)identifier {
@@ -77,6 +82,10 @@
     } else if ([pausedOperationCallbacks objectForKey:identifier]) {
         [pausedOperationCallbacks removeObjectForKey:identifier];
     }
+    
+    if (self.numberOfRunningOperation == 0) {
+        self.status = ZASessionTaskStatusCancelled;
+    }
 }
 
 - (void)cancelAllOperations {
@@ -85,12 +94,10 @@
     [pausedOperationCallbacks removeAllObjects];
 }
 
-- (void)resumeOperationCallbackById:(NSString *)identifier {
+- (void)removePausedOperationCallbackById:(NSString *)identifier {
     if (nil == identifier) { return; }
     
-    ZAOperationCallback *resumeOperationCallback = [pausedOperationCallbacks objectForKey:identifier];
-    if (nil == resumeOperationCallback) { return; }
-    runningOperationCallbacks[identifier] = resumeOperationCallback;
+    [pausedOperationCallbacks removeObjectForKey:identifier];
 }
 
 - (NSArray<ZAOperationCallback *> *)allRunningOperationCallback {
@@ -106,6 +113,10 @@
     } else if ([pausedOperationCallbacks objectForKey:callback.identifier]) {
         [pausedOperationCallbacks removeObjectForKey:callback.identifier];
     }
+}
+
+- (void)removeAllRunningOperations {
+    [runningOperationCallbacks removeAllObjects];
 }
 
 @end
