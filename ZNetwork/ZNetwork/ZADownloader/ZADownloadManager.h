@@ -44,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)pauseAllRequests;
 - (NSUInteger)numberOfTaskRunning;
 - (NSUInteger)numberOfTaskInQueue;
+- (NSUInteger)maxTaskPerform;
 
 @end
 
