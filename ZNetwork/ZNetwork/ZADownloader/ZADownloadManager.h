@@ -10,13 +10,24 @@
 #import <UIKit/UIKit.h>
 #import "ZADownloadOperationCallback.h"
 
+
 NS_ASSUME_NONNULL_BEGIN
+
+@interface ZADownloadConfiguration : NSObject
+
+@property (nonatomic) BOOL isMultiCallback;
+@property (nonatomic) BOOL continueDownloadInBackground;
+@property (nonatomic) ZAOperationQueueType queueType;
+@property (nonatomic) ZAOperationPerformType performType;
+
+@end
+
+#pragma mark -
 
 @interface ZADownloadManager : NSObject <NSURLSessionDataDelegate>
 
-@property (nonatomic) BOOL continueDownloadInBackground;
-
 + (instancetype)sharedManager;
++ (instancetype)shareManagerWithConfiguration:(ZADownloadConfiguration *)configuration;
 
 - (nullable ZADownloadOperationCallback *)downloadTaskFromURLString:(NSString *)urlString
                                                       requestPolicy:(NSURLRequestCachePolicy)requestPolicy

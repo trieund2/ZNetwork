@@ -13,6 +13,24 @@
 #import "ZANetworkManager.h"
 #import "ZASessionStorage.h"
 
+@implementation ZADownloadConfiguration
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _isMultiCallback = YES;
+        _continueDownloadInBackground = YES;
+        _queueType = ZAOperationQueueTypeFIFO;
+        _performType = ZAOperationPerformTypeConcurrency;
+    }
+    return self;
+}
+
+@end
+
+#pragma mark -
+
 @interface ZADownloadManager ()
 
 @property (nonatomic, readonly) NSURLSession *session;
@@ -20,6 +38,8 @@
 @property (nonatomic, readonly) ZAQueueModel *queueModel;
 @property (nonatomic, readonly) NSMutableDictionary<NSURL *, ZADownloadOperationModel *> *urlToDownloadOperation;
 @property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskId;
+@property (nonatomic) BOOL continueDownloadInBackground;
+@property (nonatomic) BOOL isPaused;
 
 @end
 
@@ -31,23 +51,33 @@
     static ZADownloadManager *sessionManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        sessionManager = [[ZADownloadManager alloc] initWithConfiguration:[[ZADownloadConfiguration alloc] init]];
+    });
+    return sessionManager;
+}
+
++ (instancetype)shareManagerWithConfiguration:(ZADownloadConfiguration *)configuration {
+    static ZADownloadManager *sessionManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         sessionManager = [[ZADownloadManager alloc] init];
     });
     return sessionManager;
 }
 
-- (instancetype)init
-{
+- (instancetype)initWithConfiguration:(ZADownloadConfiguration *)configuration {
     self = [super init];
     if (self) {
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+        _session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
         _root_queue = dispatch_queue_create("com.za.znetwork.sessionmanager.rootqueue", DISPATCH_QUEUE_SERIAL);
-        _queueModel = [[ZAQueueModel alloc] init];
         _urlToDownloadOperation = [[NSMutableDictionary alloc] init];
         [ZASessionStorage.sharedStorage loadAllTaskInfo:^(NSError * _Nullable error) {}];
-        _continueDownloadInBackground = YES;
+        _continueDownloadInBackground = configuration.continueDownloadInBackground;
         _backgroundTaskId = UIBackgroundTaskInvalid;
+        _isPaused = false;
+        _queueModel = [[ZAQueueModel alloc] initByOperationQueueType:configuration.queueType
+                                                     isMultiCallback:configuration.isMultiCallback
+                                                         performType:configuration.performType];
         
         [NSNotificationCenter.defaultCenter addObserver:self
                                                selector:@selector(_triggerStartRequest)
@@ -64,6 +94,7 @@
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification {
+    self.isPaused = YES;
     [self pauseAllRequests];
     [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
 }
@@ -364,6 +395,7 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
+    if (self.isPaused) { return; }
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(self.root_queue, ^{
@@ -409,11 +441,19 @@ didReceiveResponse:(NSURLResponse *)response
                 downloadOperationModel.status = ZASessionTaskStatusFailed;
                 NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorFileError userInfo:nil];
                 [downloadOperationModel forwardError:error];
+                [ZASessionStorage.sharedStorage removeTaskInfoByURLString:url.absoluteString completion:nil];
+                [weakSelf.urlToDownloadOperation removeObjectForKey:url];
+                [downloadOperationModel.outputStream close];
             }
             
             [downloadOperationModel removeAllRunningOperations];
         } else if (error && downloadOperationModel.status != ZASessionTaskStatusFailed) {
             [downloadOperationModel forwardError:error];
+            
+            if (error.code == NSURLErrorTimedOut || error.code == NSURLErrorNetworkConnectionLost || error.code == NSURLErrorCannotConnectToHost
+                || error.code == NSURLErrorNotConnectedToInternet) {
+                [downloadOperationModel pauseAllOperations];
+            }
         }
         
         if ([downloadOperationModel numberOfPausedOperation] == 0) {

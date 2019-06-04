@@ -80,10 +80,8 @@
     TrackDownload *track23 = [[TrackDownload alloc] initFromURLString:@"http://mirror.filearena.net/pub/speed/SpeedTest_1024MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009" trackName:@"Adam Blank Test Files 1Gb" priority:(ZAOperationPriorityHigh)];
     TrackDownload *track24 = [[TrackDownload alloc] initFromURLString:@"http://mirror.filearena.net/pub/speed/SpeedTest_2048MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009" trackName:@"Adam Blank Test Files 2Gb" priority:(ZAOperationPriorityHigh)];
     
-    TrackDownload *track25 = [[TrackDownload alloc] initFromURLString:@"https://firebasestorage.googleapis.com/v0/b/bustracking-1524793108793.appspot.com/o/30%20Minute%20Deep%20Sleep%20Music%20Calming%20Music%20Relaxing%20Music%20Soothing%20Music%20Calming%20Music%20%E2%98%AF426B.mp3?alt=media&token=6ffe629d-f6b3-42a6-830a-116cb6224e17" trackName:@"Dung yeu nua em met roi" priority:(ZAOperationPriorityHigh)];
-    
     [self.trackDownloads addObjectsFromArray:@[track1, track2, track3, track4, track5, track6, track7, track8, track9, track10, track11, track12, track13, track14, track15, track16, 
-                                               track17, track18, track19, track20, track21, track22, track23, track24, track25]];
+                                               track17, track18, track19, track20, track21, track22, track23, track24]];
     
     [self.downloadTableView reloadData];
 }
