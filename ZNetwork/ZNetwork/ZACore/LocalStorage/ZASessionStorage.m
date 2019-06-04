@@ -86,33 +86,28 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     NSMutableDictionary<NSString *, NSData *> *encodedDict = [NSMutableDictionary dictionary];
     dispatch_semaphore_t encodedDictLock = dispatch_semaphore_create(1);
     __block NSError *err = nil;
-    dispatch_group_t group = dispatch_group_create();
     for (ZALocalTaskInfo *taskInfo in allTaskInfo) {
         [ZAUserDefaultsManager.sharedManager encodeObjectToData:taskInfo completion:^(NSData * _Nullable data, NSError * _Nullable error) {
-            dispatch_group_async(group, dispatch_get_main_queue(), ^{
-                if (error) {
-                    err = error;
-                } else {
-                    ZA_LOCK(encodedDictLock);
-                    [encodedDict setObject:[NSData dataWithData:data] forKey:taskInfo.urlString];
-                    ZA_UNLOCK(encodedDictLock);
-                }
-            });
+            if (error) {
+                err = error;
+            } else {
+                ZA_LOCK(encodedDictLock);
+                [encodedDict setObject:[NSData dataWithData:data] forKey:taskInfo.urlString];
+                ZA_UNLOCK(encodedDictLock);
+            }
         }];
     }
     /* If there is an error while encoding, return it.
      * If all are successfully encoded to data, push encoded dictionary to local storage
      */
-    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        if (err) {
-            NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:kErrorWhileEncodingTaskInfo userInfo:nil];
+    if (err) {
+        NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:kErrorWhileEncodingTaskInfo userInfo:nil];
+        completion(error);
+    } else {
+        [[ZAUserDefaultsManager sharedManager] saveObject:encodedDict withKey:KeyForTaskInfoDictionary completion:^(NSError * _Nonnull error) {
             completion(error);
-        } else {
-            [[ZAUserDefaultsManager sharedManager] saveObject:encodedDict withKey:KeyForTaskInfoDictionary completion:^(NSError * _Nonnull error) {
-                completion(error);
-            }];
-        }
-    });
+        }];
+    }
 }
 
 - (void)updateCountOfBytesReceived:(int64_t)amount byURLString:(NSString *)urlString {
