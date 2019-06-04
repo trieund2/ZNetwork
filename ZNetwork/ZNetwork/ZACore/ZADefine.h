@@ -26,9 +26,9 @@ typedef NS_ENUM(NSUInteger, ZANetworkError) {
     ZANetworkErrorAppEnterBackground    = 9983
 };
 
-typedef NS_ENUM(NSInteger, ZAPerformOperationType) {
-    ZAPerformOperationTypeFIFO,
-    ZAPerformOperationTypeLIFO
+typedef NS_ENUM(NSInteger, ZAOperationQueueType) {
+    ZAOperationQueueTypeFIFO,
+    ZAOperationQueueTypeLIFO
 };
 
 typedef NS_ENUM(NSInteger, ZAOperationPriority) {

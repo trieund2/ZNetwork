@@ -13,6 +13,24 @@
 #import "ZANetworkManager.h"
 #import "ZASessionStorage.h"
 
+@implementation ZADownloadConfiguration
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _isMultiCallback = YES;
+        _continueDownloadInBackground = YES;
+        _queueType = ZAOperationQueueTypeFIFO;
+        _performType = ZAOperationPerformTypeConcurrency;
+    }
+    return self;
+}
+
+@end
+
+#pragma mark -
+
 @interface ZADownloadManager ()
 
 @property (nonatomic, readonly) NSURLSession *session;
@@ -20,6 +38,7 @@
 @property (nonatomic, readonly) ZAQueueModel *queueModel;
 @property (nonatomic, readonly) NSMutableDictionary<NSURL *, ZADownloadOperationModel *> *urlToDownloadOperation;
 @property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskId;
+@property (nonatomic) BOOL continueDownloadInBackground;
 
 @end
 
@@ -31,23 +50,32 @@
     static ZADownloadManager *sessionManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        sessionManager = [[ZADownloadManager alloc] initWithConfiguration:[[ZADownloadConfiguration alloc] init]];
+    });
+    return sessionManager;
+}
+
++ (instancetype)shareManagerWithConfiguration:(ZADownloadConfiguration *)configuration {
+    static ZADownloadManager *sessionManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         sessionManager = [[ZADownloadManager alloc] init];
     });
     return sessionManager;
 }
 
-- (instancetype)init
-{
+- (instancetype)initWithConfiguration:(ZADownloadConfiguration *)configuration {
     self = [super init];
     if (self) {
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+        _session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
         _root_queue = dispatch_queue_create("com.za.znetwork.sessionmanager.rootqueue", DISPATCH_QUEUE_SERIAL);
-        _queueModel = [[ZAQueueModel alloc] init];
         _urlToDownloadOperation = [[NSMutableDictionary alloc] init];
         [ZASessionStorage.sharedStorage loadAllTaskInfo:^(NSError * _Nullable error) {}];
-        _continueDownloadInBackground = YES;
+        _continueDownloadInBackground = configuration.continueDownloadInBackground;
         _backgroundTaskId = UIBackgroundTaskInvalid;
+        _queueModel = [[ZAQueueModel alloc] initByOperationQueueType:configuration.queueType
+                                                     isMultiCallback:configuration.isMultiCallback
+                                                         performType:configuration.performType];
         
         [NSNotificationCenter.defaultCenter addObserver:self
                                                selector:@selector(_triggerStartRequest)
