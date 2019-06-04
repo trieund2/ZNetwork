@@ -86,7 +86,6 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     NSMutableDictionary<NSString *, NSData *> *encodedDict = [NSMutableDictionary dictionary];
     dispatch_semaphore_t encodedDictLock = dispatch_semaphore_create(1);
     __block NSError *err = nil;
-    dispatch_group_t group = dispatch_group_create();
     for (ZALocalTaskInfo *taskInfo in allTaskInfo) {
         [ZAUserDefaultsManager.sharedManager encodeObjectToData:taskInfo completion:^(NSData * _Nullable data, NSError * _Nullable error) {
             if (error) {
