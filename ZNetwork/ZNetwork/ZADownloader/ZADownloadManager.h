@@ -17,8 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) BOOL isMultiCallback;
 @property (nonatomic) BOOL continueDownloadInBackground;
-@property (nonatomic) ZAOperationQueueType queueType;
+@property (nonatomic) ZAOperationExecutionOrder queueType;
 @property (nonatomic) ZAOperationPerformType performType;
+@property (nonatomic) NSURLSessionConfiguration *sessionConfiguration;
 
 @end
 

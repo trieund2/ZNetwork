@@ -15,12 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL isMultiCallback;
 @property (nonatomic, readonly) NSUInteger maxOperationPerform;
-@property (nonatomic, readonly) ZAOperationQueueType queueType;
+@property (nonatomic, readonly) ZAOperationExecutionOrder executionOrder;
 @property (nonatomic, readonly) ZAOperationPerformType performType;
 
-- (instancetype)initByOperationQueueType:(ZAOperationQueueType) operationType
-                           isMultiCallback:(BOOL)isMultiCallback
-                               performType:(ZAOperationPerformType)performType;
+- (instancetype)initByOperationExecutionOrder:(ZAOperationExecutionOrder) operationType
+                              isMultiCallback:(BOOL)isMultiCallback
+                                  performType:(ZAOperationPerformType)performType;
 
 - (NSUInteger)numberOfTaskRunning;
 - (NSUInteger)numberOfTaskInQueue;
