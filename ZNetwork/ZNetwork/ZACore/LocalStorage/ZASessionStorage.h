@@ -83,14 +83,14 @@ NS_ASSUME_NONNULL_BEGIN
  * @param urlString The url string of task info to remove.
  * @param completion Completion callback that receives error if there is one while removing file from disk.
  */
-- (void)removeTaskInfoByURLString:(NSString *)urlString completion:(nullable void (^)(NSError * _Nullable))completion;
+- (void)removeTaskInfoByURLString:(NSString *)urlString completion:(nullable void (^)(NSError * _Nullable error))completion;
 
 /**
  * @abstract Load all task info from local storage to mem.
  * @discussion This might take a while if task info list in local storage is large.
  * @param completion Completion callback that receives error if there is one while loading.
  */
-- (void)loadAllTaskInfo:(void (^)(NSError * _Nullable))completion;
+- (void)loadAllTaskInfo:(void (^)(NSError * _Nullable error))completion;
 
 @end
 

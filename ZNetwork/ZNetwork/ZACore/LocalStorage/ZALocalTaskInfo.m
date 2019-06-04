@@ -23,7 +23,7 @@ NSString * const KeyForState = @"state";
     [aCoder encodeObject:[NSString stringWithString:self.urlString] forKey:KeyForUrlString];
     [aCoder encodeObject:[NSString stringWithString:self.filePath] forKey:KeyForFilePath];
     [aCoder encodeObject:[NSString stringWithString:self.fileName] forKey:KeyForFileName];
-    [aCoder encodeObject:self.lastTimeModified forKey:KeyForLastTimeModified];
+    [aCoder encodeObject:[NSNumber numberWithDouble:self.lastTimeModified] forKey:KeyForLastTimeModified];
     [aCoder encodeObject:[NSNumber numberWithInteger:self.acceptRangesType] forKey:KeyForAcceptRangesType];
     [aCoder encodeObject:[NSNumber numberWithUnsignedLongLong:self.countOfBytesReceived] forKey:KeyForCountOfBytesReceived];
     [aCoder encodeObject:[NSNumber numberWithUnsignedLongLong:self.countOfTotalBytes] forKey:KeyForCountOfTotalBytes];
@@ -35,7 +35,7 @@ NSString * const KeyForState = @"state";
         _urlString = [aDecoder decodeObjectForKey:KeyForUrlString];
         _filePath = [aDecoder decodeObjectForKey:KeyForFilePath];
         _fileName = [aDecoder decodeObjectForKey:KeyForFileName];
-        _lastTimeModified = [aDecoder decodeObjectForKey:KeyForLastTimeModified];
+        _lastTimeModified = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForLastTimeModified]).doubleValue;
         _acceptRangesType = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForAcceptRangesType]).integerValue;
         _countOfBytesReceived = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForCountOfBytesReceived]).unsignedLongLongValue;
         _countOfTotalBytes = ((NSNumber *)[aDecoder decodeObjectForKey:KeyForCountOfTotalBytes]).unsignedLongLongValue;
@@ -50,7 +50,7 @@ NSString * const KeyForState = @"state";
         _filePath = filePath;
         _fileName = fileName;
         _countOfTotalBytes = countOfTotalBytes;
-        _lastTimeModified = [NSDate date];
+        _lastTimeModified = [[NSDate date] timeIntervalSince1970];
     }
     return self;
 }
@@ -67,7 +67,7 @@ NSString * const KeyForState = @"state";
 
 - (void)setCountOfBytesReceived:(int64_t)countOfBytesReceived {
     _countOfBytesReceived = countOfBytesReceived;
-    _lastTimeModified = [NSDate date];
+    _lastTimeModified = [[NSDate date] timeIntervalSince1970];
 }
 
 + (BOOL)supportsSecureCoding {
