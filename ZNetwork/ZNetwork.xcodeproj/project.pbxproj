@@ -7,13 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998093229E70D700FA5F38 /* ZAQueueModel.m */; };
+		A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998096229E736200FA5F38 /* ZAOperationModel.m */; };
+		A199809A229E771600FA5F38 /* ZAOperationCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998099229E771600FA5F38 /* ZAOperationCallback.m */; };
+		A199809E229E8BB900FA5F38 /* ZADownloadOperationCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A199809D229E8BB800FA5F38 /* ZADownloadOperationCallback.m */; };
+		A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */; };
+		A1AFF49F229F77630040B283 /* ZADownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF49E229F77630040B283 /* ZADownloadManager.m */; };
+		A1AFF4AD229FBB8F0040B283 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF4AB229FBB8F0040B283 /* Reachability.m */; };
+		A1AFF4B0229FBBAE0040B283 /* ZANetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF4AE229FBBAE0040B283 /* ZANetworkManager.m */; };
+		A1AFF516229FD2EA0040B283 /* DownloadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF510229FD2EA0040B283 /* DownloadTableViewCell.m */; };
+		A1AFF517229FD2EA0040B283 /* TrackDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF512229FD2EA0040B283 /* TrackDownload.m */; };
+		A1AFF518229FD2EA0040B283 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFF514229FD2EA0040B283 /* ViewController.m */; };
+		A1AFF519229FD2EA0040B283 /* DownloadTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AFF515229FD2EA0040B283 /* DownloadTableViewCell.xib */; };
+		A1AFF51D229FD37F0040B283 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1AFF51B229FD37F0040B283 /* LaunchScreen.storyboard */; };
+		A1AFF51E229FD37F0040B283 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1AFF51C229FD37F0040B283 /* Main.storyboard */; };
 		A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E0229E28840085FB3D /* AppDelegate.m */; };
-		A1B7C7E4229E28840085FB3D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7E3229E28840085FB3D /* ViewController.m */; };
-		A1B7C7E7229E28840085FB3D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7E5229E28840085FB3D /* Main.storyboard */; };
 		A1B7C7E9229E28850085FB3D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7E8229E28850085FB3D /* Assets.xcassets */; };
-		A1B7C7EC229E28850085FB3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7EA229E28850085FB3D /* LaunchScreen.storyboard */; };
 		A1B7C7EF229E28850085FB3D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7EE229E28850085FB3D /* main.m */; };
 		A1B7C7F9229E28850085FB3D /* ZNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */; };
+		C572577F229EE065009C3E66 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C572577E229EE065009C3E66 /* NSString+Extension.m */; };
+		D73696C9229FB4F200933863 /* ZASessionStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D73696C8229FB4F200933863 /* ZASessionStorage.m */; };
+		D7BBAF18229EAB170029E63B /* ZAUserDefaultsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */; };
+		D7BBAF1B229EB1E00029E63B /* ZALocalTaskInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D7BBAF1A229EB1E00029E63B /* ZALocalTaskInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,19 +42,51 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1998090229E6F3D00FA5F38 /* ZADefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADefine.h; sourceTree = "<group>"; };
+		A1998092229E70D700FA5F38 /* ZAQueueModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAQueueModel.h; sourceTree = "<group>"; };
+		A1998093229E70D700FA5F38 /* ZAQueueModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAQueueModel.m; sourceTree = "<group>"; };
+		A1998095229E736200FA5F38 /* ZAOperationModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAOperationModel.h; sourceTree = "<group>"; };
+		A1998096229E736200FA5F38 /* ZAOperationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAOperationModel.m; sourceTree = "<group>"; };
+		A1998098229E771600FA5F38 /* ZAOperationCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAOperationCallback.h; sourceTree = "<group>"; };
+		A1998099229E771600FA5F38 /* ZAOperationCallback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAOperationCallback.m; sourceTree = "<group>"; };
+		A199809C229E8BB800FA5F38 /* ZADownloadOperationCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADownloadOperationCallback.h; sourceTree = "<group>"; };
+		A199809D229E8BB800FA5F38 /* ZADownloadOperationCallback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZADownloadOperationCallback.m; sourceTree = "<group>"; };
+		A19980A3229EA76F00FA5F38 /* ZADownloadOperationModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADownloadOperationModel.h; sourceTree = "<group>"; };
+		A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZADownloadOperationModel.m; sourceTree = "<group>"; };
+		A19980A9229EB47000FA5F38 /* ZADownloadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADownloadManager.h; sourceTree = "<group>"; };
+		A1AFF49E229F77630040B283 /* ZADownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZADownloadManager.m; sourceTree = "<group>"; };
+		A1AFF4AB229FBB8F0040B283 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		A1AFF4AC229FBB8F0040B283 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		A1AFF4AE229FBBAE0040B283 /* ZANetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZANetworkManager.m; sourceTree = "<group>"; };
+		A1AFF4AF229FBBAE0040B283 /* ZANetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZANetworkManager.h; sourceTree = "<group>"; };
+		A1AFF50F229FD2EA0040B283 /* TrackDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackDownload.h; sourceTree = "<group>"; };
+		A1AFF510229FD2EA0040B283 /* DownloadTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadTableViewCell.m; sourceTree = "<group>"; };
+		A1AFF511229FD2EA0040B283 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		A1AFF512229FD2EA0040B283 /* TrackDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackDownload.m; sourceTree = "<group>"; };
+		A1AFF513229FD2EA0040B283 /* DownloadTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadTableViewCell.h; sourceTree = "<group>"; };
+		A1AFF514229FD2EA0040B283 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A1AFF515229FD2EA0040B283 /* DownloadTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadTableViewCell.xib; sourceTree = "<group>"; };
+		A1AFF51A229FD30F0040B283 /* ZNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZNetwork.h; sourceTree = "<group>"; };
+		A1AFF51B229FD37F0040B283 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A1AFF51C229FD37F0040B283 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A1B7C7DC229E28840085FB3D /* ZNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B7C7DF229E28840085FB3D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A1B7C7E0229E28840085FB3D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		A1B7C7E2229E28840085FB3D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		A1B7C7E3229E28840085FB3D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		A1B7C7E6229E28840085FB3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A1B7C7E8229E28850085FB3D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A1B7C7EB229E28850085FB3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A1B7C7ED229E28850085FB3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1B7C7EE229E28850085FB3D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A1B7C7F4229E28850085FB3D /* ZNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZNetworkTests.m; sourceTree = "<group>"; };
 		A1B7C7FA229E28850085FB3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C572577D229EE065009C3E66 /* NSString+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
+		C572577E229EE065009C3E66 /* NSString+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
+		D73696C7229FB4F200933863 /* ZASessionStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZASessionStorage.h; sourceTree = "<group>"; };
+		D73696C8229FB4F200933863 /* ZASessionStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZASessionStorage.m; sourceTree = "<group>"; };
+		D73696CA22A14DDE00933863 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		D7BBAF16229EAB170029E63B /* ZAUserDefaultsManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAUserDefaultsManager.h; sourceTree = "<group>"; };
+		D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAUserDefaultsManager.m; sourceTree = "<group>"; };
+		D7BBAF19229EB1E00029E63B /* ZALocalTaskInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZALocalTaskInfo.h; sourceTree = "<group>"; };
+		D7BBAF1A229EB1E00029E63B /* ZALocalTaskInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZALocalTaskInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +107,49 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1998091229E70AF00FA5F38 /* CoreAbtract */ = {
+			isa = PBXGroup;
+			children = (
+				A1998092229E70D700FA5F38 /* ZAQueueModel.h */,
+				A1998093229E70D700FA5F38 /* ZAQueueModel.m */,
+				A1998095229E736200FA5F38 /* ZAOperationModel.h */,
+				A1998096229E736200FA5F38 /* ZAOperationModel.m */,
+				A1998098229E771600FA5F38 /* ZAOperationCallback.h */,
+				A1998099229E771600FA5F38 /* ZAOperationCallback.m */,
+			);
+			path = CoreAbtract;
+			sourceTree = "<group>";
+		};
+		A199809B229E8B1600FA5F38 /* ZADownloader */ = {
+			isa = PBXGroup;
+			children = (
+				A19980A9229EB47000FA5F38 /* ZADownloadManager.h */,
+				A1AFF49E229F77630040B283 /* ZADownloadManager.m */,
+				A19980A3229EA76F00FA5F38 /* ZADownloadOperationModel.h */,
+				A19980A4229EA76F00FA5F38 /* ZADownloadOperationModel.m */,
+				A199809C229E8BB800FA5F38 /* ZADownloadOperationCallback.h */,
+				A199809D229E8BB800FA5F38 /* ZADownloadOperationCallback.m */,
+			);
+			path = ZADownloader;
+			sourceTree = "<group>";
+		};
+		A1AFF4A9229FBB8F0040B283 /* ThirdParties */ = {
+			isa = PBXGroup;
+			children = (
+				A1AFF4AA229FBB8F0040B283 /* Reachability */,
+			);
+			path = ThirdParties;
+			sourceTree = "<group>";
+		};
+		A1AFF4AA229FBB8F0040B283 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				A1AFF4AB229FBB8F0040B283 /* Reachability.m */,
+				A1AFF4AC229FBB8F0040B283 /* Reachability.h */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
 		A1B7C7D3229E28830085FB3D = {
 			isa = PBXGroup;
 			children = (
@@ -81,10 +171,13 @@
 		A1B7C7DE229E28840085FB3D /* ZNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				D73696CA22A14DDE00933863 /* PrefixHeader.pch */,
+				A1AFF51A229FD30F0040B283 /* ZNetwork.h */,
 				A1B7C805229E28A40085FB3D /* Supports */,
-				A1B7C804229E289B0085FB3D /* ZAHTTP */,
+				A1AFF4A9229FBB8F0040B283 /* ThirdParties */,
+				A199809B229E8B1600FA5F38 /* ZADownloader */,
 				A1B7C803229E288F0085FB3D /* ZACore */,
-				A1B7C807229E28C40085FB3D /* Features */,
+				A1B7C807229E28C40085FB3D /* TestFeatures */,
 			);
 			path = ZNetwork;
 			sourceTree = "<group>";
@@ -101,15 +194,14 @@
 		A1B7C803229E288F0085FB3D /* ZACore */ = {
 			isa = PBXGroup;
 			children = (
+				C5725779229EE038009C3E66 /* Extensions */,
+				D7BBAF15229EAAD30029E63B /* LocalStorage */,
+				A1998091229E70AF00FA5F38 /* CoreAbtract */,
+				A1998090229E6F3D00FA5F38 /* ZADefine.h */,
+				A1AFF4AF229FBBAE0040B283 /* ZANetworkManager.h */,
+				A1AFF4AE229FBBAE0040B283 /* ZANetworkManager.m */,
 			);
 			path = ZACore;
-			sourceTree = "<group>";
-		};
-		A1B7C804229E289B0085FB3D /* ZAHTTP */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ZAHTTP;
 			sourceTree = "<group>";
 		};
 		A1B7C805229E28A40085FB3D /* Supports */ = {
@@ -117,7 +209,6 @@
 			children = (
 				A1B7C806229E28B20085FB3D /* AppDelegate */,
 				A1B7C7E8229E28850085FB3D /* Assets.xcassets */,
-				A1B7C7EA229E28850085FB3D /* LaunchScreen.storyboard */,
 				A1B7C7ED229E28850085FB3D /* Info.plist */,
 				A1B7C7EE229E28850085FB3D /* main.m */,
 			);
@@ -133,14 +224,42 @@
 			path = AppDelegate;
 			sourceTree = "<group>";
 		};
-		A1B7C807229E28C40085FB3D /* Features */ = {
+		A1B7C807229E28C40085FB3D /* TestFeatures */ = {
 			isa = PBXGroup;
 			children = (
-				A1B7C7E5229E28840085FB3D /* Main.storyboard */,
-				A1B7C7E2229E28840085FB3D /* ViewController.h */,
-				A1B7C7E3229E28840085FB3D /* ViewController.m */,
+				A1AFF51B229FD37F0040B283 /* LaunchScreen.storyboard */,
+				A1AFF51C229FD37F0040B283 /* Main.storyboard */,
+				A1AFF50F229FD2EA0040B283 /* TrackDownload.h */,
+				A1AFF512229FD2EA0040B283 /* TrackDownload.m */,
+				A1AFF511229FD2EA0040B283 /* ViewController.h */,
+				A1AFF514229FD2EA0040B283 /* ViewController.m */,
+				A1AFF513229FD2EA0040B283 /* DownloadTableViewCell.h */,
+				A1AFF510229FD2EA0040B283 /* DownloadTableViewCell.m */,
+				A1AFF515229FD2EA0040B283 /* DownloadTableViewCell.xib */,
 			);
-			path = Features;
+			path = TestFeatures;
+			sourceTree = "<group>";
+		};
+		C5725779229EE038009C3E66 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C572577D229EE065009C3E66 /* NSString+Extension.h */,
+				C572577E229EE065009C3E66 /* NSString+Extension.m */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		D7BBAF15229EAAD30029E63B /* LocalStorage */ = {
+			isa = PBXGroup;
+			children = (
+				D7BBAF16229EAB170029E63B /* ZAUserDefaultsManager.h */,
+				D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */,
+				D7BBAF19229EB1E00029E63B /* ZALocalTaskInfo.h */,
+				D7BBAF1A229EB1E00029E63B /* ZALocalTaskInfo.m */,
+				D73696C7229FB4F200933863 /* ZASessionStorage.h */,
+				D73696C8229FB4F200933863 /* ZASessionStorage.m */,
+			);
+			path = LocalStorage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,6 +311,11 @@
 				TargetAttributes = {
 					A1B7C7DB229E28840085FB3D = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					A1B7C7F3229E28850085FB3D = {
 						CreatedOnToolsVersion = 10.1;
@@ -223,9 +347,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1B7C7EC229E28850085FB3D /* LaunchScreen.storyboard in Resources */,
+				A1AFF51E229FD37F0040B283 /* Main.storyboard in Resources */,
+				A1AFF51D229FD37F0040B283 /* LaunchScreen.storyboard in Resources */,
 				A1B7C7E9229E28850085FB3D /* Assets.xcassets in Resources */,
-				A1B7C7E7229E28840085FB3D /* Main.storyboard in Resources */,
+				A1AFF519229FD2EA0040B283 /* DownloadTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,8 +368,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1B7C7E4229E28840085FB3D /* ViewController.m in Sources */,
+				A1AFF518229FD2EA0040B283 /* ViewController.m in Sources */,
+				A199809A229E771600FA5F38 /* ZAOperationCallback.m in Sources */,
+				A1AFF49F229F77630040B283 /* ZADownloadManager.m in Sources */,
+				A1AFF4B0229FBBAE0040B283 /* ZANetworkManager.m in Sources */,
+				A199809E229E8BB900FA5F38 /* ZADownloadOperationCallback.m in Sources */,
+				D73696C9229FB4F200933863 /* ZASessionStorage.m in Sources */,
+				D7BBAF1B229EB1E00029E63B /* ZALocalTaskInfo.m in Sources */,
+				D7BBAF18229EAB170029E63B /* ZAUserDefaultsManager.m in Sources */,
+				A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */,
+				A1AFF516229FD2EA0040B283 /* DownloadTableViewCell.m in Sources */,
+				A19980A5229EA76F00FA5F38 /* ZADownloadOperationModel.m in Sources */,
+				C572577F229EE065009C3E66 /* NSString+Extension.m in Sources */,
 				A1B7C7EF229E28850085FB3D /* main.m in Sources */,
+				A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */,
+				A1AFF517229FD2EA0040B283 /* TrackDownload.m in Sources */,
+				A1AFF4AD229FBB8F0040B283 /* Reachability.m in Sources */,
 				A1B7C7E1229E28840085FB3D /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -266,25 +405,6 @@
 			targetProxy = A1B7C7F5229E28850085FB3D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		A1B7C7E5229E28840085FB3D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A1B7C7E6229E28840085FB3D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		A1B7C7EA229E28850085FB3D /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A1B7C7EB229E28850085FB3D /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		A1B7C7FB229E28850085FB3D /* Debug */ = {
@@ -405,12 +525,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DAA47P5N57;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/ZNetwork/Supports/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.trieund.ZNetwork;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trieund2.ZNetwork;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -422,12 +544,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DAA47P5N57;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/ZNetwork/Supports/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.trieund.ZNetwork;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trieund2.ZNetwork;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -438,6 +562,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = ZNetworkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -456,6 +581,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = ZNetworkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
