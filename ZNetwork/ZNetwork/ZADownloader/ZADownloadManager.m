@@ -110,6 +110,10 @@
     return self.queueModel.numberOfTaskInQueue;
 }
 
+- (NSUInteger)maxTaskPerform {
+    return self.queueModel.maxOperationPerform;
+}
+
 - (nullable ZADownloadOperationCallback *)downloadTaskFromURLString:(NSString *)urlString
                                                       requestPolicy:(NSURLRequestCachePolicy)requestPolicy
                                                            priority:(ZAOperationPriority)priority
@@ -218,7 +222,7 @@
     } else if (downloadOperationModel
                && downloadOperationModel.status == ZASessionTaskStatusSuccessed) {
         [downloadOperationModel cancelOperationCallbackById:downloadCallback.identifier];
-        downloadCallback.completionBlock(downloadOperationModel.task.response, downloadOperationModel.task.error, downloadCallback.identifier);
+        downloadCallback.completionBlock(downloadOperationModel.task, downloadOperationModel.task.error, downloadCallback.identifier);
         return;
         
     } else {
@@ -306,8 +310,7 @@
 }
 
 - (nullable NSString *)_getFilePathFromURL:(NSURL *)url {
-    NSArray<NSString *> *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *path = paths.firstObject;
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
     if (path) {
         NSString *fileName = [url.absoluteString MD5String];
         return [path stringByAppendingPathComponent:fileName];
@@ -419,7 +422,7 @@ didReceiveResponse:(NSURLResponse *)response
             unsigned long long fileSize = [[NSFileManager.defaultManager attributesOfItemAtPath:downloadOperationModel.filePath error:nil] fileSize];
             if (fileSize == downloadOperationModel.countOfTotalBytes) {
                 downloadOperationModel.status = ZASessionTaskStatusSuccessed;
-                [downloadOperationModel forwarFileFromLocation];
+                [downloadOperationModel forwardFileFromLocation];
                 [downloadOperationModel forwardCompletion];
             } else {
                 downloadOperationModel.status = ZASessionTaskStatusFailed;

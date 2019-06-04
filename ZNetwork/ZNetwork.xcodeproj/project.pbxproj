@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A14C680322A65B3B00B74E1C /* ZDownloaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A14C680222A65B3B00B74E1C /* ZDownloaderTests.m */; };
+		A14C680522A65F5F00B74E1C /* ZAQueueModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A14C680422A65F5F00B74E1C /* ZAQueueModelTests.m */; };
 		A1998094229E70D700FA5F38 /* ZAQueueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998093229E70D700FA5F38 /* ZAQueueModel.m */; };
 		A1998097229E736200FA5F38 /* ZAOperationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998096229E736200FA5F38 /* ZAOperationModel.m */; };
 		A199809A229E771600FA5F38 /* ZAOperationCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A1998099229E771600FA5F38 /* ZAOperationCallback.m */; };
@@ -42,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A14C680222A65B3B00B74E1C /* ZDownloaderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZDownloaderTests.m; sourceTree = "<group>"; };
+		A14C680422A65F5F00B74E1C /* ZAQueueModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAQueueModelTests.m; sourceTree = "<group>"; };
 		A1998090229E6F3D00FA5F38 /* ZADefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZADefine.h; sourceTree = "<group>"; };
 		A1998092229E70D700FA5F38 /* ZAQueueModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZAQueueModel.h; sourceTree = "<group>"; };
 		A1998093229E70D700FA5F38 /* ZAQueueModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAQueueModel.m; sourceTree = "<group>"; };
@@ -186,6 +190,8 @@
 			isa = PBXGroup;
 			children = (
 				A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */,
+				A14C680222A65B3B00B74E1C /* ZDownloaderTests.m */,
+				A14C680422A65F5F00B74E1C /* ZAQueueModelTests.m */,
 				A1B7C7FA229E28850085FB3D /* Info.plist */,
 			);
 			path = ZNetworkTests;
@@ -393,6 +399,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1B7C7F9229E28850085FB3D /* ZNetworkTests.m in Sources */,
+				A14C680322A65B3B00B74E1C /* ZDownloaderTests.m in Sources */,
+				A14C680522A65F5F00B74E1C /* ZAQueueModelTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -562,6 +570,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DAA47P5N57;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = ZNetworkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -581,6 +590,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DAA47P5N57;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/ZNetwork/PrefixHeader.pch";
 				INFOPLIST_FILE = ZNetworkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

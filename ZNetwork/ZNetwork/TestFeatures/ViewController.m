@@ -88,9 +88,9 @@
 
 #pragma mark - Helper
 
-- (NSURL *)localFilePathForURL:(NSURL *)url {
-    NSURL *documentsPath = [NSFileManager.defaultManager URLsForDirectory:(NSDocumentationDirectory) inDomains:(NSUserDomainMask)].firstObject;
-    return [documentsPath URLByAppendingPathComponent:url.lastPathComponent];
+- (NSString *)localFilePathForURLString:(NSString *)urlString {
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    return [path stringByAppendingString:urlString.lastPathComponent];
 }
 
 #pragma mark - UITableViewDelegate
@@ -133,10 +133,10 @@
             }
         });
         
-    } destinationBlock:^NSURL *(NSURL * _Nonnull location, NSString * _Nonnull callBackIdentifier) {
-        return [self localFilePathForURL:[NSURL URLWithString:trackDownload.urlString]];
+    } destinationBlock:^NSString *(NSString * _Nonnull location, NSString * _Nonnull callBackIdentifier) {
+        return [weakSelf localFilePathForURLString:trackDownload.urlString];
         
-    } completionBlock:^(NSURLResponse * _Nonnull response, NSError * _Nonnull error, NSString * _Nonnull callBackIdentifier) {
+    } completionBlock:^(NSURLSessionTask * _Nonnull response, NSError * _Nonnull error, NSString * _Nonnull callBackIdentifier) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             

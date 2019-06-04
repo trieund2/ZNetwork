@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) NSURLRequestCachePolicy requestPolicy;
 @property (nonatomic) ZAOperationPriority priority;
-@property (nonatomic) NSURLSessionTask *task;
+@property (nonatomic, nullable) NSURLSessionTask *task;
 @property (nonatomic) ZASessionTaskStatus status;
 
 - (id)init NS_UNAVAILABLE;
