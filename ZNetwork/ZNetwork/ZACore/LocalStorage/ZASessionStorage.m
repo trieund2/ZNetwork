@@ -89,7 +89,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     dispatch_group_t group = dispatch_group_create();
     for (ZALocalTaskInfo *taskInfo in allTaskInfo) {
         [ZAUserDefaultsManager.sharedManager encodeObjectToData:taskInfo completion:^(NSData * _Nullable data, NSError * _Nullable error) {
-            dispatch_group_async(group, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+            dispatch_group_async(group, dispatch_get_main_queue(), ^{
                 if (error) {
                     err = error;
                 } else {
@@ -103,7 +103,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     /* If there is an error while encoding, return it.
      * If all are successfully encoded to data, push encoded dictionary to local storage
      */
-    dispatch_group_notify(group, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
         if (err) {
             NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:kErrorWhileEncodingTaskInfo userInfo:nil];
             completion(error);

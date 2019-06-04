@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 /* Name of the task's file */
 @property (strong, nonatomic, readonly) NSString *fileName;
 /* Last time the task was modified, ex: newly created, progress updated. This field is for management purpose, ex: delete file after a specific time */
-@property (strong, nonatomic, readonly) NSDate *lastTimeModified;
+@property (assign, nonatomic, readonly) NSTimeInterval lastTimeModified;
 /* Accept-Ranges type of the task, see `ZAHTTPResponseAcceptRangesType` */
 @property (assign, nonatomic) ZAHTTPResponseAcceptRangesType acceptRangesType;
 /* Count of bytes received by the task */
