@@ -23,12 +23,12 @@
 
 - (instancetype)init
 {
-    return [self initByOperationQueueType:(ZAOperationQueueTypeFIFO)
+    return [self initByOperationExecutionOrder:(ZAOperationExecutionOrderFIFO)
                             isMultiCallback:YES
                                 performType:(ZAOperationPerformTypeConcurrency)];
 }
 
-- (instancetype)initByOperationQueueType:(ZAOperationQueueType)operationType
+- (instancetype)initByOperationExecutionOrder:(ZAOperationExecutionOrder)operationType
                            isMultiCallback:(BOOL)isMultiCallback
                                performType:(ZAOperationPerformType)performType {
     self = [super init];
@@ -119,11 +119,11 @@
         
         if (self.veryHighQueue.count > 0) {
             switch (self.queueType) {
-                case ZAOperationQueueTypeFIFO:
+                case ZAOperationExecutionOrderFIFO:
                     operationModel = self.veryHighQueue.firstObject;
                     [self.veryHighQueue removeObjectAtIndex:0];
                     break;
-                case ZAOperationQueueTypeLIFO:
+                case ZAOperationExecutionOrderLIFO:
                     operationModel = self.veryHighQueue.lastObject;
                     [self.veryHighQueue removeLastObject];
                     break;
@@ -132,11 +132,11 @@
         
         if (self.highQueue.count > 0) {
             switch (self.queueType) {
-                case ZAOperationQueueTypeFIFO:
+                case ZAOperationExecutionOrderFIFO:
                     operationModel = self.highQueue.firstObject;
                     [self.highQueue removeObjectAtIndex:0];
                     break;
-                case ZAOperationQueueTypeLIFO:
+                case ZAOperationExecutionOrderLIFO:
                     operationModel = self.highQueue.lastObject;
                     [self.highQueue removeLastObject];
                     break;
@@ -145,11 +145,11 @@
         
         if (self.mediumQueue.count > 0) {
             switch (self.queueType) {
-                case ZAOperationQueueTypeFIFO:
+                case ZAOperationExecutionOrderFIFO:
                     operationModel = self.mediumQueue.firstObject;
                     [self.mediumQueue removeObjectAtIndex:0];
                     break;
-                case ZAOperationQueueTypeLIFO:
+                case ZAOperationExecutionOrderLIFO:
                     operationModel = self.mediumQueue.lastObject;
                     [self.mediumQueue removeLastObject];
                     break;
@@ -158,11 +158,11 @@
         
         if (self.lowQueue.count > 0) {
             switch (self.queueType) {
-                case ZAOperationQueueTypeFIFO:
+                case ZAOperationExecutionOrderFIFO:
                     operationModel = self.lowQueue.firstObject;
                     [self.lowQueue removeObjectAtIndex:0];
                     break;
-                case ZAOperationQueueTypeLIFO:
+                case ZAOperationExecutionOrderLIFO:
                     operationModel = self.lowQueue.lastObject;
                     [self.lowQueue removeLastObject];
                     break;
@@ -249,7 +249,6 @@
 }
 
 - (void)removeAllOperations {
-    _currentRunningOperations = 0;
     [self.urlToOperationModel removeAllObjects];
     [self.highQueue removeAllObjects];
     [self.mediumQueue removeAllObjects];
