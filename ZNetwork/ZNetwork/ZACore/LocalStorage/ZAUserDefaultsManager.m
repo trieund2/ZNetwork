@@ -65,6 +65,7 @@
     
     if (nil == object) {
         completion(nil, nil);
+        return;
     }
     NSData *encodedObject = nil;
     if (@available(iOS 11.0, *)) {
@@ -104,6 +105,7 @@
     
     if (nil == data) {
         completion(nil, nil);
+        return;
     }
     id object = nil;
     if (@available(iOS 11.0, *)) {

@@ -92,6 +92,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)loadAllTaskInfo:(void (^)(NSError * _Nullable error))completion;
 
+- (NSUInteger)numberOfTaskInfo;
+
 @end
 
 NS_ASSUME_NONNULL_END

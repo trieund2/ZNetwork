@@ -42,6 +42,13 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     return self;
 }
 
+- (NSUInteger)numberOfTaskInfo {
+    ZA_LOCK(self.taskInfoLock);
+    NSUInteger count = self.taskInfoKeyedByURLString.count;
+    ZA_UNLOCK(self.taskInfoLock);
+    return count;
+}
+
 - (ZALocalTaskInfo * _Nullable)getTaskInfoByURLString:(NSString *)urlString {
     ZALocalTaskInfo *taskInfo = [self _getTaskInfoByURLString:urlString];
     if (taskInfo) {
@@ -188,10 +195,12 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
                 if (completion) { completion(error); }
             } else {
                 [self.taskInfoKeyedByURLString removeObjectForKey:urlString];
+                if (completion) { completion(nil); }
             }
         }];
     } else {
         [self.taskInfoKeyedByURLString removeObjectForKey:urlString];
+        if (completion) { completion(nil); }
     }
 }
 

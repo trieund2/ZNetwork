@@ -11,8 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^ZAProgressBlock)(NSProgress *progress, NSString *callBackIdentifier);
-typedef NSURL * (^ZADestinationBlock)(NSURL *location, NSString *callBackIdentifier);
-typedef void (^ZACompletionBlock)(NSURLResponse *response, NSError *error, NSString *callBackIdentifier);
+typedef NSString * (^ZADestinationBlock)(NSString *location, NSString *callBackIdentifier);
+typedef void (^ZACompletionBlock)(NSURLSessionTask *response, NSError *error, NSString *callBackIdentifier);
 
 @interface ZADownloadOperationCallback : ZAOperationCallback
 

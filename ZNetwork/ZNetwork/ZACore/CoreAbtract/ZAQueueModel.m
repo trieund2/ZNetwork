@@ -24,13 +24,13 @@
 - (instancetype)init
 {
     return [self initByOperationExecutionOrder:(ZAOperationExecutionOrderFIFO)
-                            isMultiCallback:YES
-                                performType:(ZAOperationPerformTypeConcurrency)];
+                               isMultiCallback:YES
+                                   performType:(ZAOperationPerformTypeConcurrency)];
 }
 
 - (instancetype)initByOperationExecutionOrder:(ZAOperationExecutionOrder)operationType
-                           isMultiCallback:(BOOL)isMultiCallback
-                               performType:(ZAOperationPerformType)performType {
+                              isMultiCallback:(BOOL)isMultiCallback
+                                  performType:(ZAOperationPerformType)performType {
     self = [super init];
     
     if (self) {
@@ -128,9 +128,8 @@
                     [self.veryHighQueue removeLastObject];
                     break;
             }
-        }
-        
-        if (self.highQueue.count > 0) {
+            
+        } else if (self.highQueue.count > 0) {
             switch (self.executionOrder) {
                 case ZAOperationExecutionOrderFIFO:
                     operationModel = self.highQueue.firstObject;
@@ -141,9 +140,8 @@
                     [self.highQueue removeLastObject];
                     break;
             }
-        }
-        
-        if (self.mediumQueue.count > 0) {
+            
+        } else if (self.mediumQueue.count > 0) {
             switch (self.executionOrder) {
                 case ZAOperationExecutionOrderFIFO:
                     operationModel = self.mediumQueue.firstObject;
@@ -154,9 +152,8 @@
                     [self.mediumQueue removeLastObject];
                     break;
             }
-        }
-        
-        if (self.lowQueue.count > 0) {
+            
+        } else if (self.lowQueue.count > 0) {
             switch (self.executionOrder) {
                 case ZAOperationExecutionOrderFIFO:
                     operationModel = self.lowQueue.firstObject;
@@ -173,12 +170,11 @@
         if (nil != operationModel && nil != operationModel.url) {
             _currentRunningOperations += 1;
             [self.urlToOperationModel removeObjectForKey:operationModel.url];
+            return operationModel;
         }
-        
-        return operationModel;
-    } else {
-        return NULL;
     }
+    
+    return nil;
 }
 
 - (void)pauseOperationByCallback:(ZAOperationCallback *)callback {
