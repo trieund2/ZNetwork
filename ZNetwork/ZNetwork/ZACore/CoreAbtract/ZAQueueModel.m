@@ -35,7 +35,7 @@
     
     if (self) {
         _currentRunningOperations = 0;
-        _queueType = operationType;
+        _executionOrder = operationType;
         _isMultiCallback = isMultiCallback;
         _performType = performType;
         _veryHighQueue = [[NSMutableArray alloc] init];
@@ -118,7 +118,7 @@
         ZAOperationModel *operationModel = NULL;
         
         if (self.veryHighQueue.count > 0) {
-            switch (self.queueType) {
+            switch (self.executionOrder) {
                 case ZAOperationExecutionOrderFIFO:
                     operationModel = self.veryHighQueue.firstObject;
                     [self.veryHighQueue removeObjectAtIndex:0];
@@ -131,7 +131,7 @@
         }
         
         if (self.highQueue.count > 0) {
-            switch (self.queueType) {
+            switch (self.executionOrder) {
                 case ZAOperationExecutionOrderFIFO:
                     operationModel = self.highQueue.firstObject;
                     [self.highQueue removeObjectAtIndex:0];
@@ -144,7 +144,7 @@
         }
         
         if (self.mediumQueue.count > 0) {
-            switch (self.queueType) {
+            switch (self.executionOrder) {
                 case ZAOperationExecutionOrderFIFO:
                     operationModel = self.mediumQueue.firstObject;
                     [self.mediumQueue removeObjectAtIndex:0];
@@ -157,7 +157,7 @@
         }
         
         if (self.lowQueue.count > 0) {
-            switch (self.queueType) {
+            switch (self.executionOrder) {
                 case ZAOperationExecutionOrderFIFO:
                     operationModel = self.lowQueue.firstObject;
                     [self.lowQueue removeObjectAtIndex:0];
