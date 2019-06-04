@@ -39,6 +39,7 @@
 @property (nonatomic, readonly) NSMutableDictionary<NSURL *, ZADownloadOperationModel *> *urlToDownloadOperation;
 @property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskId;
 @property (nonatomic) BOOL continueDownloadInBackground;
+@property (nonatomic) BOOL isPaused;
 
 @end
 
@@ -73,6 +74,7 @@
         [ZASessionStorage.sharedStorage loadAllTaskInfo:^(NSError * _Nullable error) {}];
         _continueDownloadInBackground = configuration.continueDownloadInBackground;
         _backgroundTaskId = UIBackgroundTaskInvalid;
+        _isPaused = false;
         _queueModel = [[ZAQueueModel alloc] initByOperationQueueType:configuration.queueType
                                                      isMultiCallback:configuration.isMultiCallback
                                                          performType:configuration.performType];
@@ -92,6 +94,7 @@
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification {
+    self.isPaused = YES;
     [self pauseAllRequests];
     [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
 }
@@ -392,6 +395,7 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
+    if (self.isPaused) { return; }
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(self.root_queue, ^{
@@ -437,11 +441,19 @@ didReceiveResponse:(NSURLResponse *)response
                 downloadOperationModel.status = ZASessionTaskStatusFailed;
                 NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorFileError userInfo:nil];
                 [downloadOperationModel forwardError:error];
+                [ZASessionStorage.sharedStorage removeTaskInfoByURLString:url.absoluteString completion:nil];
+                [weakSelf.urlToDownloadOperation removeObjectForKey:url];
+                [downloadOperationModel.outputStream close];
             }
             
             [downloadOperationModel removeAllRunningOperations];
         } else if (error && downloadOperationModel.status != ZASessionTaskStatusFailed) {
             [downloadOperationModel forwardError:error];
+            
+            if (error.code == NSURLErrorTimedOut || error.code == NSURLErrorNetworkConnectionLost || error.code == NSURLErrorCannotConnectToHost
+                || error.code == NSURLErrorNotConnectedToInternet) {
+                [downloadOperationModel pauseAllOperations];
+            }
         }
         
         if ([downloadOperationModel numberOfPausedOperation] == 0) {

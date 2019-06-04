@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZADownloadManager : NSObject <NSURLSessionDataDelegate>
 
 + (instancetype)sharedManager;
++ (instancetype)shareManagerWithConfiguration:(ZADownloadConfiguration *)configuration;
 
 - (nullable ZADownloadOperationCallback *)downloadTaskFromURLString:(NSString *)urlString
                                                       requestPolicy:(NSURLRequestCachePolicy)requestPolicy
