@@ -40,15 +40,13 @@
     }
 }
 - (void)forwardFileFromLocation {
-    NSError *error;
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
         ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
         if ([callback isKindOfClass:ZADownloadOperationCallback.class]) {
             ZADownloadOperationCallback *downloadOperationCallback = (ZADownloadOperationCallback *)callback;
             NSString *destinationURLString = downloadOperationCallback.destinationBlock(self.filePath, callbackId);
             if (destinationURLString) {
-                [NSFileManager.defaultManager copyItemAtPath:self.filePath toPath:destinationURLString error:&error];
-                NSLog(@"error");
+                [NSFileManager.defaultManager copyItemAtPath:self.filePath toPath:destinationURLString error:nil];
             }
         }
     }

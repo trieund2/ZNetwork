@@ -59,7 +59,8 @@
 
 - (NSString *)localFilePathForURLString:(NSString *)urlString {
     NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    return [path stringByAppendingString:urlString.lastPathComponent];
+    NSString *fileName = [NSString stringWithFormat:@"%@%f", urlString.MD5String, [[NSDate date] timeIntervalSince1970]];
+    return [path stringByAppendingPathComponent:fileName];
 }
 
 
@@ -112,27 +113,29 @@
     XCTAssertEqual(ZADownloadManager.sharedManager.numberOfTaskInQueue, 0);
 }
 
-- (void)testDownloadFile {
-    int64_t randomBytes = 1 * 1024 * 1024;
-    NSString *urlString = [NSString stringWithFormat:@"https://httpbin.org/bytes/%lli", randomBytes];
+- (void)testDownloadRequest {
+    NSString *urlString = @"http://speedtest.ftp.otenet.gr/files/test100k.db";
     NSString *filePath = [self localFilePathForURLString:urlString];
     __block NSURLSessionTask *urlResponse;
+    __block NSString *sourceFileLocation = nil;
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Download correct bytes"];
     
-    [ZADownloadManager.sharedManager downloadTaskFromURLString:urlString requestPolicy:(NSURLRequestUseProtocolCachePolicy) priority:(ZAOperationPriorityVeryHigh) progressBlock:^(NSProgress * _Nonnull progress, NSString * _Nonnull callBackIdentifier) {
+    ZADownloadOperationCallback *downloadCallback = [ZADownloadManager.sharedManager downloadTaskFromURLString:urlString requestPolicy:(NSURLRequestUseProtocolCachePolicy) priority:(ZAOperationPriorityVeryHigh) progressBlock:^(NSProgress * _Nonnull progress, NSString * _Nonnull callBackIdentifier) {
         
     } destinationBlock:^NSString *(NSString * _Nonnull location, NSString * _Nonnull callBackIdentifier) {
+        sourceFileLocation = location;
         return filePath;
     } completionBlock:^(NSURLSessionTask * _Nonnull response, NSError * _Nonnull error, NSString * _Nonnull callBackIdentifier) {
         urlResponse = response;
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:10.0 handler:nil];
+    [self waitForExpectationsWithTimeout:60.0 handler:nil];
     
     unsigned long long fileSize = [[NSFileManager.defaultManager attributesOfItemAtPath:filePath error:nil] fileSize];
     
+    XCTAssertNotNil(downloadCallback);
     XCTAssertTrue([NSFileManager.defaultManager fileExistsAtPath:filePath]);
     XCTAssertEqual(fileSize, urlResponse.countOfBytesExpectedToReceive);
     XCTAssertNotNil(urlResponse);
@@ -140,6 +143,42 @@
     XCTAssertNotNil(urlResponse.currentRequest);
     XCTAssertTrue([urlResponse.originalRequest.URL.absoluteString isEqualToString:urlString]);
     XCTAssertNil(urlResponse.error);
+    XCTAssertNotNil(sourceFileLocation);
+    XCTAssertFalse([NSFileManager.defaultManager fileExistsAtPath:sourceFileLocation]);
 }
+
+- (void)testCancelDownloadRequest {
+    NSString *urlString = @"https://speed.hetzner.de/1GB.bin";
+    NSString *filePath = [self localFilePathForURLString:urlString];
+    __block NSURLSessionTask *urlResponse = nil;
+    __block NSError *downloadError = nil;
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Canceled download request shold cancel correct task"];
+    
+    ZADownloadOperationCallback *downloadCallback = [ZADownloadManager.sharedManager downloadTaskFromURLString:urlString requestPolicy:(NSURLRequestUseProtocolCachePolicy) priority:(ZAOperationPriorityVeryHigh) progressBlock:^(NSProgress * _Nonnull progress, NSString * _Nonnull callBackIdentifier) {
+        
+    } destinationBlock:^NSString *(NSString * _Nonnull location, NSString * _Nonnull callBackIdentifier) {
+        return filePath;
+    } completionBlock:^(NSURLSessionTask * _Nonnull response, NSError * _Nonnull error, NSString * _Nonnull callBackIdentifier) {
+        downloadError = error;
+        urlResponse = response;
+        [expectation fulfill];
+    }];
+    
+    [ZADownloadManager.sharedManager cancelDownloadTaskByDownloadCallback:downloadCallback];
+    
+    [self waitForExpectationsWithTimeout:60.0 handler:nil];
+    
+    XCTAssertNotNil(downloadCallback);
+    XCTAssertNotNil(urlResponse);
+    XCTAssertNotNil(urlResponse.originalRequest);
+    XCTAssertNotNil(urlResponse.currentRequest);
+    XCTAssertTrue([urlResponse.originalRequest.URL.absoluteString isEqualToString:urlString]);
+    XCTAssertNotNil(downloadError);
+    XCTAssertEqual(downloadError.code, NSURLErrorCancelled);
+    XCTAssertEqual(ZADownloadManager.sharedManager.numberOfTaskRunning, 0);
+    XCTAssertEqual(ZADownloadManager.sharedManager.numberOfTaskInQueue, 0);
+}
+
 
 @end

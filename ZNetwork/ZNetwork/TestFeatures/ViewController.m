@@ -90,7 +90,8 @@
 
 - (NSString *)localFilePathForURLString:(NSString *)urlString {
     NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    return [path stringByAppendingString:urlString.lastPathComponent];
+    NSString *fileName = [NSString stringWithFormat:@"%@%f", urlString.MD5String, [[NSDate date] timeIntervalSince1970]];
+    return [path stringByAppendingPathComponent:fileName];
 }
 
 #pragma mark - UITableViewDelegate
