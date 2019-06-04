@@ -13,13 +13,13 @@
 #pragma mark - Interface methods
 
 - (void)updateCountOfBytesReceived:(NSUInteger)lenght {
-    _completedUnitCount += lenght;
+    _countOfBytesReceived += lenght;
 }
 
 - (void)forwardProgress {
     NSProgress *progress = [[NSProgress alloc] init];
     progress.totalUnitCount = self.countOfTotalBytes;
-    progress.completedUnitCount = self.completedUnitCount;
+    progress.completedUnitCount = self.countOfBytesReceived;
     
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
         ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
@@ -39,7 +39,9 @@
         }
     }
 }
-- (void)forwarFileFromLocation:(NSURL *)url {
+- (void)forwarFileFromLocation {
+    NSURL *url = [NSURL fileURLWithPath:self.filePath];
+    
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
         ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
         if ([callback isKindOfClass:ZADownloadOperationCallback.class]) {

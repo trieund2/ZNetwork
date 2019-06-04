@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "ZADownloadOperationCallback.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZADownloadManager : NSObject <NSURLSessionDataDelegate>
+
+@property (nonatomic) BOOL continueDownloadInBackground;
 
 + (instancetype)sharedManager;
 
@@ -26,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)pauseDownloadTaskByDownloadCallback:(ZADownloadOperationCallback *)downloadCallback;
 - (void)cancelDownloadTaskByDownloadCallback:(ZADownloadOperationCallback *)downloadCallback;
 - (void)cancelAllRequests;
+- (void)pauseAllRequests;
 - (NSUInteger)numberOfTaskRunning;
 - (NSUInteger)numberOfTaskInQueue;
 

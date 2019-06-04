@@ -38,7 +38,7 @@
 
 - (IBAction)tapAllCancellAllRequest:(id)sender {
     [ZADownloadManager.sharedManager cancelAllRequests];
-    for (TrackDownload *trackDownload in self.currentDownload) {
+    for (TrackDownload *trackDownload in self.currentDownload.allValues) {
         trackDownload.status = ZASessionTaskStatusCancelled;
     }
     [self.currentDownload removeAllObjects];
@@ -48,10 +48,10 @@
 - (void)initDataSource {
     _trackDownloads = [[NSMutableArray alloc] init];
     
-    TrackDownload *track1 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/100MB.bin" trackName:@"Test file 100MB" priority:(ZAOperationPriorityMedium)];
-    TrackDownload *track2 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/100MB.bin" trackName:@"Test file 100MB" priority:(ZAOperationPriorityHigh)];
-    TrackDownload *track3 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/100MB.bin" trackName:@"Test file 100MB" priority:(ZAOperationPriorityMedium)];
-    TrackDownload *track4 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/100MB.bin" trackName:@"Test file 100MB" priority:(ZAOperationPriorityHigh)];
+    TrackDownload *track1 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/5MB.zip" trackName:@"Thinkbroadband 5MB" priority:(ZAOperationPriorityMedium)];
+    TrackDownload *track2 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/5MB.zip" trackName:@"Thinkbroadband 5MB" priority:(ZAOperationPriorityHigh)];
+    TrackDownload *track3 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/5MB.zip" trackName:@"Thinkbroadband 5MB" priority:(ZAOperationPriorityMedium)];
+    TrackDownload *track4 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/5MB.zip" trackName:@"Thinkbroadband 5MB" priority:(ZAOperationPriorityHigh)];
     TrackDownload *track5 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/1GB.bin" trackName:@"Test file 1GB"];
     
     TrackDownload *track6 = [[TrackDownload alloc] initFromURLString:@"https://download.microsoft.com/download/8/7/D/87D36A01-1266-4FD3-924C-1F1F958E2233/Office2010DevRefs.exe"
@@ -61,7 +61,7 @@
     TrackDownload *track8 = [[TrackDownload alloc] initFromURLString:@"https://download.microsoft.com/download/8/b/2/8b2347d9-9f9f-410b-8436-616f89c81902/WindowsServer2003.WindowsXP-KB914961-SP2-x64-ENU.exe"
                                                            trackName:@"Test file 350MB microsoft"];
     
-    TrackDownload *track9 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/5MB.zip" trackName:@"Thinkbroadband 5Mb" priority:(ZAOperationPriorityHigh)];
+    TrackDownload *track9 = [[TrackDownload alloc] initFromURLString:@"https://speed.hetzner.de/100MB.bin" trackName:@"speed.hetzner.de 100MB" priority:(ZAOperationPriorityHigh)];
     TrackDownload *track10 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/10MB.zip" trackName:@"Thinkbroadband 10Mb" priority:(ZAOperationPriorityHigh)];
     TrackDownload *track11 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/20MB.zip" trackName:@"Thinkbroadband 20Mb" priority:(ZAOperationPriorityHigh)];
     TrackDownload *track12 = [[TrackDownload alloc] initFromURLString:@"http://ipv4.download.thinkbroadband.com/50MB.zip" trackName:@"Thinkbroadband 50Mb" priority:(ZAOperationPriorityHigh)];
@@ -147,6 +147,8 @@
             if (error) {
                 if (error.code == NSURLErrorCancelled) {
                     currentTrackDownload.status = ZASessionTaskStatusCancelled;
+                } else if (error.code == ZANetworkErrorAppEnterBackground) {
+                    currentTrackDownload.status = ZASessionTaskStatusPaused;
                 } else {
                     currentTrackDownload.status = ZASessionTaskStatusFailed;
                 }
