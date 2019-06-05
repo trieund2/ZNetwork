@@ -170,6 +170,7 @@
         if (nil != operationModel && nil != operationModel.url) {
             _currentRunningOperations += 1;
             [self.urlToOperationModel removeObjectForKey:operationModel.url];
+            NSLog(@"---- NUMBER TASK RUNNING: %li ------", self.currentRunningOperations);
             return operationModel;
         }
     }
@@ -180,7 +181,7 @@
 - (void)pauseOperationByCallback:(ZAOperationCallback *)callback {
     if (nil == callback || nil == callback.url) { return; }
     ZAOperationModel *operationModel = [self.urlToOperationModel objectForKey:callback.url];
-    [operationModel removeOperationCallback:callback];
+    [operationModel cancelOperationCallbackById:callback.identifier];
     
     if ([operationModel numberOfRunningOperation] == 0) {
         [self.urlToOperationModel removeObjectForKey:callback.url];
@@ -239,9 +240,10 @@
 }
 
 - (void)operationDidFinish {
-    if (_currentRunningOperations > 0) {
+    if (self.currentRunningOperations > 0) {
         _currentRunningOperations -= 1;
     }
+    NSLog(@"---- FINISH NUMBER TASK RUNNING: %li ------", self.currentRunningOperations);
 }
 
 - (void)removeAllOperations {
