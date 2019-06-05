@@ -23,19 +23,19 @@
 
 - (instancetype)init
 {
-    return [self initByPerformOperationType:(ZAPerformOperationTypeFIFO)
-                            isMultiCallback:YES
-                                performType:(ZAOperationPerformTypeConcurrency)];
+    return [self initByOperationExecutionOrder:(ZAOperationExecutionOrderFIFO)
+                               isMultiCallback:YES
+                                   performType:(ZAOperationPerformTypeConcurrency)];
 }
 
-- (instancetype)initByPerformOperationType:(ZAPerformOperationType)operationType
-                           isMultiCallback:(BOOL)isMultiCallback
-                               performType:(ZAOperationPerformType)performType {
+- (instancetype)initByOperationExecutionOrder:(ZAOperationExecutionOrder)operationType
+                              isMultiCallback:(BOOL)isMultiCallback
+                                  performType:(ZAOperationPerformType)performType {
     self = [super init];
     
     if (self) {
         _currentRunningOperations = 0;
-        _queueType = operationType;
+        _executionOrder = operationType;
         _isMultiCallback = isMultiCallback;
         _performType = performType;
         _veryHighQueue = [[NSMutableArray alloc] init];
@@ -118,51 +118,48 @@
         ZAOperationModel *operationModel = NULL;
         
         if (self.veryHighQueue.count > 0) {
-            switch (self.queueType) {
-                case ZAPerformOperationTypeFIFO:
+            switch (self.executionOrder) {
+                case ZAOperationExecutionOrderFIFO:
                     operationModel = self.veryHighQueue.firstObject;
                     [self.veryHighQueue removeObjectAtIndex:0];
                     break;
-                case ZAPerformOperationTypeLIFO:
+                case ZAOperationExecutionOrderLIFO:
                     operationModel = self.veryHighQueue.lastObject;
                     [self.veryHighQueue removeLastObject];
                     break;
             }
-        }
-        
-        if (self.highQueue.count > 0) {
-            switch (self.queueType) {
-                case ZAPerformOperationTypeFIFO:
+            
+        } else if (self.highQueue.count > 0) {
+            switch (self.executionOrder) {
+                case ZAOperationExecutionOrderFIFO:
                     operationModel = self.highQueue.firstObject;
                     [self.highQueue removeObjectAtIndex:0];
                     break;
-                case ZAPerformOperationTypeLIFO:
+                case ZAOperationExecutionOrderLIFO:
                     operationModel = self.highQueue.lastObject;
                     [self.highQueue removeLastObject];
                     break;
             }
-        }
-        
-        if (self.mediumQueue.count > 0) {
-            switch (self.queueType) {
-                case ZAPerformOperationTypeFIFO:
+            
+        } else if (self.mediumQueue.count > 0) {
+            switch (self.executionOrder) {
+                case ZAOperationExecutionOrderFIFO:
                     operationModel = self.mediumQueue.firstObject;
                     [self.mediumQueue removeObjectAtIndex:0];
                     break;
-                case ZAPerformOperationTypeLIFO:
+                case ZAOperationExecutionOrderLIFO:
                     operationModel = self.mediumQueue.lastObject;
                     [self.mediumQueue removeLastObject];
                     break;
             }
-        }
-        
-        if (self.lowQueue.count > 0) {
-            switch (self.queueType) {
-                case ZAPerformOperationTypeFIFO:
+            
+        } else if (self.lowQueue.count > 0) {
+            switch (self.executionOrder) {
+                case ZAOperationExecutionOrderFIFO:
                     operationModel = self.lowQueue.firstObject;
                     [self.lowQueue removeObjectAtIndex:0];
                     break;
-                case ZAPerformOperationTypeLIFO:
+                case ZAOperationExecutionOrderLIFO:
                     operationModel = self.lowQueue.lastObject;
                     [self.lowQueue removeLastObject];
                     break;
@@ -173,18 +170,17 @@
         if (nil != operationModel && nil != operationModel.url) {
             _currentRunningOperations += 1;
             [self.urlToOperationModel removeObjectForKey:operationModel.url];
+            return operationModel;
         }
-        
-        return operationModel;
-    } else {
-        return NULL;
     }
+    
+    return nil;
 }
 
 - (void)pauseOperationByCallback:(ZAOperationCallback *)callback {
     if (nil == callback || nil == callback.url) { return; }
     ZAOperationModel *operationModel = [self.urlToOperationModel objectForKey:callback.url];
-    [operationModel removeOperationCallback:callback];
+    [operationModel cancelOperationCallbackById:callback.identifier];
     
     if ([operationModel numberOfRunningOperation] == 0) {
         [self.urlToOperationModel removeObjectForKey:callback.url];
@@ -249,7 +245,6 @@
 }
 
 - (void)removeAllOperations {
-    _currentRunningOperations = 0;
     [self.urlToOperationModel removeAllObjects];
     [self.highQueue removeAllObjects];
     [self.mediumQueue removeAllObjects];

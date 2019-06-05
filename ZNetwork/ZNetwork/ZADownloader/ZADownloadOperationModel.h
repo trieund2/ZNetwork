@@ -14,8 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZADownloadOperationModel : ZAOperationModel
 
 @property (nonatomic) BOOL canResume;
-@property (nonatomic) NSUInteger countOfTotalBytes;
-@property (nonatomic) NSUInteger countOfBytesReceived;
+@property (nonatomic) int64_t countOfTotalBytes;
+@property (nonatomic) int64_t countOfBytesReceived;
 @property (nonatomic) NSOutputStream *outputStream;
 @property (nonatomic) NSString *filePath;
 
@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)forwardProgress;
 - (void)forwardCompletion;
 - (void)forwardError:(NSError *)error;
-- (void)forwarFileFromLocation;
+- (void)forwardFileFromLocation;
 - (void)updateResumeStatusForAllCallbacks;
 
 @end

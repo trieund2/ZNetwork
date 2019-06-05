@@ -26,16 +26,16 @@ typedef NS_ENUM(NSUInteger, ZANetworkError) {
     ZANetworkErrorAppEnterBackground    = 9983
 };
 
-typedef NS_ENUM(NSInteger, ZAPerformOperationType) {
-    ZAPerformOperationTypeFIFO,
-    ZAPerformOperationTypeLIFO
+typedef NS_ENUM(NSInteger, ZAOperationExecutionOrder) {
+    ZAOperationExecutionOrderFIFO,
+    ZAOperationExecutionOrderLIFO
 };
 
 typedef NS_ENUM(NSInteger, ZAOperationPriority) {
-    ZAOperationPriorityVeryHigh     = 4,
-    ZAOperationPriorityHigh         = 3,
-    ZAOperationPriorityMedium       = 2,
-    ZAOperationPriorityLow          = 1
+    ZAOperationPriorityVeryHigh     = 3,
+    ZAOperationPriorityHigh         = 2,
+    ZAOperationPriorityMedium       = 1,
+    ZAOperationPriorityLow          = 0
 };
 
 typedef NS_ENUM(NSUInteger, ZAOperationPerformType) {
