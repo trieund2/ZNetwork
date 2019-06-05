@@ -35,90 +35,94 @@
     return self;
 }
 
-- (void)saveObject:(nullable id)object withKey:(NSString *)key completion:(void (^)(NSError *))completion {
+- (void)saveObject:(nullable id)object withKey:(NSString *)key error:(NSError **)error {
 #if DEBUG
     NSParameterAssert(key);
-    NSParameterAssert(completion);
 #endif
-    if (nil == key || nil == completion) { return; }
+    if (nil == key) { return; }
     
-    __block NSData *encodedObject = nil;
-    [self encodeObjectToData:object completion:^(NSData * _Nullable data, NSError * _Nullable error) {
-        if (error) {
-            completion(error);
-            return;
-        }
-        encodedObject = data;
-        ZA_LOCK(self.userDefaultsLock);
-        [self.defaults setObject:encodedObject forKey:key];
-        [self.defaults synchronize];
-        ZA_UNLOCK(self.userDefaultsLock);
-        completion(nil);
-    }];
+    NSError *err = nil;
+    NSData *encodedObject = [self encodeObjectToData:object error:&err];
+    if (err) {
+        *error = err;
+        return;
+    }
+    ZA_LOCK(self.userDefaultsLock);
+    [self.defaults setObject:encodedObject forKey:key];
+    [self.defaults synchronize];
+    ZA_UNLOCK(self.userDefaultsLock);
+    error = nil;
 }
 
-- (void)encodeObjectToData:(nullable id)object completion:(void (^)(NSData * _Nullable, NSError * _Nullable))completion {
-#if DEBUG
-    NSParameterAssert(completion);
-#endif
-    if (nil == completion) { return; }
-    
+- (NSData * _Nullable)encodeObjectToData:(nullable id)object error:(NSError **)error {
     if (nil == object) {
-        completion(nil, nil);
-        return;
+        *error = nil;
+        return nil;
     }
     NSData *encodedObject = nil;
     if (@available(iOS 11.0, *)) {
-        NSError *error = nil;
-        encodedObject = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:YES error:&error];
-        if (error) {
-            completion(nil, error);
+        NSError *err = nil;
+        encodedObject = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:YES error:&err];
+        if (err) {
+            *error = err;
+            return nil;
         } else {
-            completion(encodedObject, nil);
+            *error = nil;
+            return encodedObject;
         }
     } else {
         encodedObject = [NSKeyedArchiver archivedDataWithRootObject:object];
-        completion(encodedObject, nil);
+        *error = nil;
+        return encodedObject;
     }
 }
 
-- (void)loadObjectOfClass:(Class)cls withKey:(NSString *)key completion:(void (^)(id _Nullable, NSError * _Nullable))completion {
+- (id _Nullable)loadObjectOfClass:(Class)cls withKey:(NSString *)key error:(NSError **)error {
 #if DEBUG
     NSParameterAssert(cls);
     NSParameterAssert(key);
-    NSParameterAssert(completion);
 #endif
-    if (nil == cls || nil == key || nil == completion) { return; }
+    if (nil == cls || nil == key) { *error = nil; return nil; }
     
     ZA_LOCK(self.userDefaultsLock);
     NSData *encodedObject = [self.defaults objectForKey:key];
     ZA_UNLOCK(self.userDefaultsLock);
-    [self decodeObjectOfClass:cls fromData:encodedObject completion:completion];
+    NSError *err = nil;
+    id decodedObject = [self decodeObjectOfClass:cls fromData:encodedObject error:&err];
+    if (err) {
+        *error = err;
+        return nil;
+    } else {
+        *error = nil;
+        return decodedObject;
+    }
 }
 
-- (void)decodeObjectOfClass:(Class)cls fromData:(NSData *)data completion:(void (^)(id _Nullable, NSError * _Nullable))completion {
+- (id _Nullable)decodeObjectOfClass:(Class)cls fromData:(NSData *)data error:(NSError **)error {
 #if DEBUG
     NSParameterAssert(cls);
-    NSParameterAssert(completion);
 #endif
-    if (nil == cls || nil == completion) { return; }
+    if (nil == cls) { *error = nil; return nil; }
     
     if (nil == data) {
-        completion(nil, nil);
-        return;
+        *error = nil;
+        return nil;
     }
     id object = nil;
     if (@available(iOS 11.0, *)) {
-        NSError *error = nil;
-        object = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:&error];
-        if (error) {
-            completion(nil, error);
+        NSError *err = nil;
+        object = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:&err];
+        if (err) {
+            *error = err;
+            return nil;
         } else {
-            completion(object, nil);
+            *error = nil;
+            return object;
         }
     } else {
         object = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        completion(object, nil);
+        *error = nil;
+        return object;
     }
 }
 
