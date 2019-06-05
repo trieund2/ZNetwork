@@ -239,7 +239,7 @@
 }
 
 - (void)operationDidFinish {
-    if (_currentRunningOperations > 0) {
+    if (self.currentRunningOperations > 0) {
         _currentRunningOperations -= 1;
     }
 }

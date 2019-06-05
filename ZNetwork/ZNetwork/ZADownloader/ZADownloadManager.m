@@ -208,6 +208,7 @@
                     ZA_UNLOCK(self.urlToDownloadOperationLock);
                 }];
                 [weakSelf.queueModel operationDidFinish];
+                [weakSelf _triggerStartRequest];
             }
             
             NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorCancelled userInfo:nil];
@@ -522,8 +523,10 @@ didReceiveResponse:(NSURLResponse *)response
         }
         
         [downloadOperation removeAllRunningOperations];
-        [weakSelf.queueModel operationDidFinish];
-        [weakSelf _triggerStartRequest];
+        dispatch_async(weakSelf.root_queue, ^{
+            [weakSelf.queueModel operationDidFinish];
+            [weakSelf _triggerStartRequest];
+        });
     });
 }
 
