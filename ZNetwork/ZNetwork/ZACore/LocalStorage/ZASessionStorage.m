@@ -92,7 +92,6 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     /* Create semaphore to wait for all ZALocalTaskInfo in dictionary to be encoded to data */
     NSMutableDictionary<NSString *, NSData *> *encodedDict = [NSMutableDictionary dictionary];
     dispatch_semaphore_t encodedDictLock = dispatch_semaphore_create(1);
-    dispatch_semaphore_t encodeOperationLock = dispatch_semaphore_create(1 - (int)allTaskInfo.count);
     __block NSError *err = nil;
     for (ZALocalTaskInfo *taskInfo in allTaskInfo) {
         [ZAUserDefaultsManager.sharedManager encodeObjectToData:taskInfo completion:^(NSData * _Nullable data, NSError * _Nullable error) {
@@ -103,13 +102,11 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
                 [encodedDict setObject:[NSData dataWithData:data] forKey:taskInfo.urlString];
                 ZA_UNLOCK(encodedDictLock);
             }
-            dispatch_semaphore_signal(encodeOperationLock);
         }];
     }
     /* If there is an error while encoding, return it.
      * If all are successfully encoded to data, push encoded dictionary to local storage
      */
-    dispatch_semaphore_wait(encodeOperationLock, DISPATCH_TIME_FOREVER);
     if (err) {
         NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:kErrorWhileEncodingTaskInfo userInfo:nil];
         completion(error);
