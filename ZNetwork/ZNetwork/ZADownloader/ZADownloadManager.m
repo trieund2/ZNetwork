@@ -15,6 +15,15 @@
 
 @implementation ZADownloadConfiguration
 
++ (instancetype)defaultConfiguration {
+    static ZADownloadConfiguration *defaultConfiguration;
+    static dispatch_once_t onceToken;
+    _dispatch_once(&onceToken, ^{
+        defaultConfiguration = [ZADownloadConfiguration new];
+    });
+    return defaultConfiguration;
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -54,7 +63,7 @@
     static ZADownloadManager *sessionManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sessionManager = [[ZADownloadManager alloc] initWithConfiguration:[[ZADownloadConfiguration alloc] init]];
+        sessionManager = [[ZADownloadManager alloc] initWithConfiguration:ZADownloadConfiguration.defaultConfiguration];
     });
     return sessionManager;
 }
@@ -63,7 +72,7 @@
     static ZADownloadManager *sessionManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sessionManager = [[ZADownloadManager alloc] init];
+        sessionManager = [[ZADownloadManager alloc] initWithConfiguration:configuration];
     });
     return sessionManager;
 }
@@ -96,12 +105,6 @@
                                                    object:app];
     }
     return self;
-}
-
-- (void)_applicationWillTerminate:(NSNotification *)notification {
-    self.isPaused = YES;
-    [self pauseAllRequests];
-    [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
 }
 
 #pragma mark - Interface methods
@@ -356,6 +359,12 @@
     if ([NSFileManager.defaultManager fileExistsAtPath:filePath]) {
         [NSFileManager.defaultManager removeItemAtPath:filePath error:NULL];
     }
+}
+
+- (void)_applicationWillTerminate:(NSNotification *)notification {
+    self.isPaused = YES;
+    [self pauseAllRequests];
+    [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
 }
 
 - (void)_endBackgroundTask {

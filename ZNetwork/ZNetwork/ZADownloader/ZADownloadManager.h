@@ -21,12 +21,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) ZAOperationPerformType performType;
 @property (nonatomic) NSURLSessionConfiguration *sessionConfiguration;
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)defaultConfiguration;
+
 @end
 
 #pragma mark -
 
 @interface ZADownloadManager : NSObject <NSURLSessionDataDelegate>
 
+- (instancetype)init NS_UNAVAILABLE;
 + (instancetype)sharedManager;
 + (instancetype)shareManagerWithConfiguration:(ZADownloadConfiguration *)configuration;
 
