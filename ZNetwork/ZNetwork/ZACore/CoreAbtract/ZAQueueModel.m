@@ -180,7 +180,7 @@
 - (void)pauseOperationByCallback:(ZAOperationCallback *)callback {
     if (nil == callback || nil == callback.url) { return; }
     ZAOperationModel *operationModel = [self.urlToOperationModel objectForKey:callback.url];
-    [operationModel removeOperationCallback:callback];
+    [operationModel cancelOperationCallbackById:callback.identifier];
     
     if ([operationModel numberOfRunningOperation] == 0) {
         [self.urlToOperationModel removeObjectForKey:callback.url];
