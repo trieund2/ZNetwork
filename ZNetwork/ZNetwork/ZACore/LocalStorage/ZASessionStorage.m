@@ -92,7 +92,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     /* Create semaphore to wait for all ZALocalTaskInfo in dictionary to be encoded to data */
     NSMutableDictionary<NSString *, NSData *> *encodedDict = [NSMutableDictionary dictionary];
     dispatch_semaphore_t encodedDictLock = dispatch_semaphore_create(1);
-    dispatch_semaphore_t encodeOperationLock = dispatch_semaphore_create(-allTaskInfo.count + 1);
+    dispatch_semaphore_t encodeOperationLock = dispatch_semaphore_create(1 - (int)allTaskInfo.count);
     __block NSError *err = nil;
     for (ZALocalTaskInfo *taskInfo in allTaskInfo) {
         [ZAUserDefaultsManager.sharedManager encodeObjectToData:taskInfo completion:^(NSData * _Nullable data, NSError * _Nullable error) {
