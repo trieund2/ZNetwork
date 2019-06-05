@@ -21,6 +21,7 @@
     progress.totalUnitCount = self.countOfTotalBytes;
     progress.completedUnitCount = self.countOfBytesReceived;
     
+    ZA_LOCK(runningOperationCallbacksLock);
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
         ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
         if ([callback isKindOfClass:ZADownloadOperationCallback.class]) {
@@ -28,9 +29,11 @@
             downloadOperationCallback.progressBlock(progress, callbackId);
         }
     }
+    ZA_UNLOCK(runningOperationCallbacksLock);
 }
 
 - (void)forwardCompletion {
+    ZA_LOCK(runningOperationCallbacksLock);
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
         ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
         if ([callback isKindOfClass:ZADownloadOperationCallback.class]) {
@@ -38,8 +41,10 @@
             downloadOperationCallback.completionBlock(self.task, self.task.error, callbackId);
         }
     }
+    ZA_UNLOCK(runningOperationCallbacksLock);
 }
 - (void)forwardFileFromLocation {
+    ZA_UNLOCK(runningOperationCallbacksLock);
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
         ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
         if ([callback isKindOfClass:ZADownloadOperationCallback.class]) {
@@ -50,9 +55,11 @@
             }
         }
     }
+    ZA_UNLOCK(runningOperationCallbacksLock);
 }
 
 - (void)forwardError:(NSError *)error {
+    ZA_UNLOCK(runningOperationCallbacksLock);
     for (NSString *callbackId in runningOperationCallbacks.allKeys) {
         ZAOperationCallback *callback = [runningOperationCallbacks objectForKey:callbackId];
         if ([callback isKindOfClass:ZADownloadOperationCallback.class]) {
@@ -60,16 +67,21 @@
             downloadOperationCallback.completionBlock(self.task, error, callbackId);
         }
     }
+    ZA_UNLOCK(runningOperationCallbacksLock);
 }
 
 - (void)updateResumeStatusForAllCallbacks {
+    ZA_UNLOCK(runningOperationCallbacksLock);
     for (ZADownloadOperationCallback *downloadOperationCallback in runningOperationCallbacks.allValues) {
         downloadOperationCallback.canResume = self.canResume;
     }
+    ZA_UNLOCK(runningOperationCallbacksLock);
 
+    ZA_LOCK(pausedOperationCallbacksLock);
     for (ZADownloadOperationCallback *downloadOperationCallback in pausedOperationCallbacks.allValues) {
         downloadOperationCallback.canResume = self.canResume;
     }
+    ZA_UNLOCK(pausedOperationCallbacksLock);
 }
 
 #pragma mark - Override methods
