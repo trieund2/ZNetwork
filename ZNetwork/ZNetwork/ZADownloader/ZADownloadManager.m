@@ -194,23 +194,6 @@
         
         if (downloadOperation) {
             [downloadOperation cancelOperationCallbackById:downloadCallback.identifier];
-            if ([downloadOperation numberOfRunningOperation] == 0 && [downloadOperation numberOfPausedOperation] == 0) {
-                [ZASessionStorage.sharedStorage removeTaskInfoByURLString:downloadOperation.url.absoluteString completion:^(NSError * _Nullable removeTaskInfoError) {
-                    if (removeTaskInfoError) {
-                        [downloadOperation forwardError:removeTaskInfoError];
-                        return;
-                    }
-                    
-                    [downloadOperation.outputStream close];
-                    
-                    ZA_LOCK(self.urlToDownloadOperationLock);
-                    [weakSelf.urlToDownloadOperation removeObjectForKey:downloadOperation.url];
-                    ZA_UNLOCK(self.urlToDownloadOperationLock);
-                }];
-                [weakSelf.queueModel operationDidFinish];
-                [weakSelf _triggerStartRequest];
-            }
-            
             NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorCancelled userInfo:nil];
             downloadCallback.completionBlock(downloadOperation.task, error, downloadCallback.identifier);
         } else {

@@ -170,6 +170,7 @@
         if (nil != operationModel && nil != operationModel.url) {
             _currentRunningOperations += 1;
             [self.urlToOperationModel removeObjectForKey:operationModel.url];
+            NSLog(@"---- NUMBER TASK RUNNING: %li ------", self.currentRunningOperations);
             return operationModel;
         }
     }
@@ -242,6 +243,7 @@
     if (self.currentRunningOperations > 0) {
         _currentRunningOperations -= 1;
     }
+    NSLog(@"---- FINISH NUMBER TASK RUNNING: %li ------", self.currentRunningOperations);
 }
 
 - (void)removeAllOperations {

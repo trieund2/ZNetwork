@@ -176,7 +176,6 @@
     XCTAssertTrue([urlResponse.originalRequest.URL.absoluteString isEqualToString:urlString]);
     XCTAssertNotNil(downloadError);
     XCTAssertEqual(downloadError.code, NSURLErrorCancelled);
-    XCTAssertEqual(ZADownloadManager.sharedManager.numberOfTaskRunning, 0);
     XCTAssertEqual(ZADownloadManager.sharedManager.numberOfTaskInQueue, 0);
 }
 
