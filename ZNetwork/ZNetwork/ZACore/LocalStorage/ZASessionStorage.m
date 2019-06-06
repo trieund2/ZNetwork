@@ -109,7 +109,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
      * If all are successfully encoded to data, push encoded dictionary to local storage
      */
     if (error) {
-        NSError *uxError = [NSError errorWithDomain:ZASessionStorageErrorDomain code:kErrorWhileEncodingTaskInfo userInfo:nil];
+        NSError *uxError = [NSError errorWithDomain:ZANetworkErrorDomain code:kErrorWhileEncodingTaskInfo userInfo:nil];
         completion(uxError);
     } else {
         NSError *err = nil;
@@ -164,7 +164,7 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
      * If all are successfully decoded to ZALocalTaskInfo, add them to current task info on mem
      */
     if (error) {
-        NSError *uxError = [NSError errorWithDomain:ZASessionStorageErrorDomain code:kErrorWhileDecodingTaskInfo userInfo:nil];
+        NSError *uxError = [NSError errorWithDomain:ZANetworkErrorDomain code:kErrorWhileDecodingTaskInfo userInfo:nil];
         completion(uxError);
     } else {
         ZA_LOCK(self.taskInfoLock);

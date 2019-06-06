@@ -16,8 +16,10 @@
     return [self initByURL:url requestPolicy:NSURLRequestUseProtocolCachePolicy priority:(ZAOperationPriorityMedium)];
 }
 
-- (instancetype)initByURL:(NSURL *)url requestPolicy:(NSURLRequestCachePolicy)requestPolicy priority:(ZAOperationPriority)priority {
-    return [self initByURL:url requestPolicy:requestPolicy priority:priority operationCallback:NULL];
+- (instancetype)initByURL:(NSURL *)url
+            requestPolicy:(NSURLRequestCachePolicy)requestPolicy
+                 priority:(ZAOperationPriority)priority {
+    return [self initByURL:url requestPolicy:requestPolicy priority:priority operationCallback:nil];
 }
 
 - (instancetype)initByURL:(NSURL *)url
@@ -66,7 +68,7 @@
         _priority = callback.priority;
     }
     
-    ZA_UNLOCK(runningOperationCallbacksLock);
+    ZA_LOCK(runningOperationCallbacksLock);
     runningOperationCallbacks[callback.identifier] = callback;
     ZA_UNLOCK(runningOperationCallbacksLock);
 }
@@ -74,7 +76,7 @@
 - (void)pauseOperationCallbackById:(NSString *)identifier {
     if (nil == identifier) { return; }
     
-    ZA_UNLOCK(runningOperationCallbacksLock);
+    ZA_LOCK(runningOperationCallbacksLock);
     ZAOperationCallback *pauseOperationCallback = [runningOperationCallbacks objectForKey:identifier];
     if (pauseOperationCallback == nil) {
         ZA_UNLOCK(runningOperationCallbacksLock);
@@ -96,7 +98,7 @@
 - (void)cancelOperationCallbackById:(NSString *)identifier {
     if (nil == identifier) { return; }
     
-    ZA_UNLOCK(runningOperationCallbacksLock);
+    ZA_LOCK(runningOperationCallbacksLock);
     ZA_LOCK(pausedOperationCallbacksLock);
     
     if ([runningOperationCallbacks objectForKey:identifier]) {
@@ -114,7 +116,7 @@
 }
 
 - (void)cancelAllOperations {
-    ZA_UNLOCK(runningOperationCallbacksLock);
+    ZA_LOCK(runningOperationCallbacksLock);
     [runningOperationCallbacks removeAllObjects];
     ZA_UNLOCK(runningOperationCallbacksLock);
     
@@ -127,13 +129,14 @@
 }
 
 - (void)pauseAllOperations {
+    ZA_LOCK(runningOperationCallbacksLock);
     ZA_LOCK(pausedOperationCallbacksLock);
+    
     [pausedOperationCallbacks addEntriesFromDictionary:runningOperationCallbacks];
-    ZA_UNLOCK(pausedOperationCallbacksLock);
+    [runningOperationCallbacks removeAllObjects];
     
     ZA_UNLOCK(runningOperationCallbacksLock);
-    [runningOperationCallbacks removeAllObjects];
-    ZA_UNLOCK(runningOperationCallbacksLock);
+    ZA_UNLOCK(pausedOperationCallbacksLock);
     
     self.status = ZASessionTaskStatusPaused;
     [self.task cancel];
@@ -147,8 +150,8 @@
     ZA_UNLOCK(pausedOperationCallbacksLock);
 }
 
-- (NSArray<ZAOperationCallback *> *)allRunningOperationCallback {
-    ZA_UNLOCK(runningOperationCallbacksLock);
+- (NSArray<ZAOperationCallback *> *)allRunningOperationCallbacks {
+    ZA_LOCK(runningOperationCallbacksLock);
     NSArray<ZAOperationCallback *> *returnValue = runningOperationCallbacks.allValues.copy;
     ZA_UNLOCK(runningOperationCallbacksLock);
     
@@ -156,15 +159,16 @@
 }
 
 - (void)removeAllRunningOperations {
-    ZA_UNLOCK(runningOperationCallbacksLock);
+    ZA_LOCK(runningOperationCallbacksLock);
     [runningOperationCallbacks removeAllObjects];
     ZA_UNLOCK(runningOperationCallbacksLock);
 }
 
 - (void)pauseAllRunningOperations {
-    ZA_UNLOCK(pausedOperationCallbacksLock);
+    ZA_LOCK(pausedOperationCallbacksLock);
     [pausedOperationCallbacks addEntriesFromDictionary:runningOperationCallbacks];
     ZA_UNLOCK(pausedOperationCallbacksLock);
+    
     [self removeAllRunningOperations];
 }
 
