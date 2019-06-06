@@ -22,9 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) NSURLRequestCachePolicy requestPolicy;
-@property (nonatomic) ZAOperationPriority priority;
 @property (nonatomic, nullable) NSURLSessionTask *task;
 @property (nonatomic) ZASessionTaskStatus status;
+@property (nonatomic) ZAOperationPriority priority;
 
 - (id)init NS_UNAVAILABLE;
 
@@ -46,10 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removePausedOperationCallbackById:(NSString *)identifier;
 - (void)cancelOperationCallbackById:(NSString *)identifier;
 - (void)pauseAllOperations;
+- (void)cancelAllOperations;
 - (void)removeAllRunningOperations;
 - (void)pauseAllRunningOperations;
-- (void)cancelAllOperations;
-- (NSArray<ZAOperationCallback *> *)allRunningOperationCallback;
+- (NSArray<ZAOperationCallback *> *)allRunningOperationCallbacks;
 
 @end
 

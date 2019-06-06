@@ -15,6 +15,15 @@
 
 @implementation ZADownloadConfiguration
 
++ (instancetype)defaultConfiguration {
+    static ZADownloadConfiguration *defaultConfiguration;
+    static dispatch_once_t onceToken;
+    _dispatch_once(&onceToken, ^{
+        defaultConfiguration = [ZADownloadConfiguration new];
+    });
+    return defaultConfiguration;
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -54,7 +63,7 @@
     static ZADownloadManager *sessionManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sessionManager = [[ZADownloadManager alloc] initWithConfiguration:[[ZADownloadConfiguration alloc] init]];
+        sessionManager = [[ZADownloadManager alloc] initWithConfiguration:ZADownloadConfiguration.defaultConfiguration];
     });
     return sessionManager;
 }
@@ -63,7 +72,7 @@
     static ZADownloadManager *sessionManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sessionManager = [[ZADownloadManager alloc] init];
+        sessionManager = [[ZADownloadManager alloc] initWithConfiguration:configuration];
     });
     return sessionManager;
 }
@@ -96,12 +105,6 @@
                                                    object:app];
     }
     return self;
-}
-
-- (void)_applicationWillTerminate:(NSNotification *)notification {
-    self.isPaused = YES;
-    [self pauseAllRequests];
-    [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
 }
 
 #pragma mark - Interface methods
@@ -154,6 +157,10 @@
         
         if (downloadOperation) {
             [downloadOperation pauseOperationCallbackById:downloadCallback.identifier];
+            if ([downloadOperation numberOfRunningOperation] == 0) {
+                NSError *error = [NSError errorWithDomain:ZANetworkErrorDomain code:ZANetworkErrorPauseTask userInfo:nil];
+                downloadCallback.completionBlock(downloadOperation.task, error, downloadCallback.identifier);
+            }
         } else {
             [weakSelf.queueModel pauseOperationByCallback:downloadCallback];
         }
@@ -223,7 +230,7 @@
     dispatch_async(self.root_queue, ^{
         ZA_LOCK(self.urlToDownloadOperationLock);
         for (ZADownloadOperationModel *downloadOperationModel in weakSelf.urlToDownloadOperation.allValues) {
-            NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorAppEnterBackground userInfo:nil];
+            NSError *error = [NSError errorWithDomain:ZANetworkErrorDomain code:ZANetworkErrorAppEnterBackground userInfo:nil];
             [downloadOperationModel forwardError:error];
             [downloadOperationModel pauseAllOperations];
         }
@@ -358,6 +365,12 @@
     }
 }
 
+- (void)_applicationWillTerminate:(NSNotification *)notification {
+    self.isPaused = YES;
+    [self pauseAllRequests];
+    [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
+}
+
 - (void)_endBackgroundTask {
     [self pauseAllRequests];
     [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {}];
@@ -387,7 +400,7 @@ didReceiveResponse:(NSURLResponse *)response
             
             long long freeDiskSize = [[[NSFileManager.defaultManager attributesOfFileSystemForPath:NSHomeDirectory() error:nil] objectForKey:NSFileSystemSize] longLongValue];
             if (contentLength > freeDiskSize) {
-                NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorFullDisk userInfo:nil];
+                NSError *error = [NSError errorWithDomain:ZANetworkErrorDomain code:ZANetworkErrorFullDisk userInfo:nil];
                 [downloadOperationModel forwardError:error];
                 downloadOperationModel.status = ZASessionTaskStatusFailed;
                 [downloadOperationModel.task cancel];
@@ -438,7 +451,7 @@ didReceiveResponse:(NSURLResponse *)response
         if (downloadOperationModel.countOfBytesReceived > downloadOperationModel.countOfTotalBytes) {
             downloadOperationModel.status = ZASessionTaskStatusFailed;
             [downloadOperationModel.task cancel];
-            NSError *error = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorFileError userInfo:nil];
+            NSError *error = [NSError errorWithDomain:ZANetworkErrorDomain code:ZANetworkErrorFileError userInfo:nil];
             [downloadOperationModel forwardError:error];
         } else {
             [weakSelf _writeDataToFileByURL:url data:data];
@@ -469,7 +482,7 @@ didReceiveResponse:(NSURLResponse *)response
                 [downloadOperation forwardFileFromLocation];
             } else {
                 downloadOperation.status = ZASessionTaskStatusFailed;
-                NSError *storageError = [NSError errorWithDomain:ZASessionStorageErrorDomain code:ZANetworkErrorFileError userInfo:nil];
+                NSError *storageError = [NSError errorWithDomain:ZANetworkErrorDomain code:ZANetworkErrorFileError userInfo:nil];
                 errorToForward = storageError;
             }
             
