@@ -52,10 +52,13 @@
     
     _trackDownloads = [NSArray arrayWithObjects:track1, track2, track3, track4, track5, track6, track7, track8, track9, track10, track11, track12, track13, track14, track15, track16,
                        track17, track18, track19, track20, track21, track22, track23, track24, nil];
+    
+    [ZASessionStorage.sharedStorage removeAllTaskInfos];
 }
 
 - (void)tearDown {
     [ZADownloadManager.sharedManager cancelAllRequests];
+    [ZASessionStorage.sharedStorage removeAllTaskInfos];
 }
 
 - (NSString *)localFilePathForURLString:(NSString *)urlString {
@@ -212,7 +215,7 @@
 }
 
 - (void)testPauseAndResumeDownloadRequest {
-    NSString *urlString2GB = @"http://mirror.filearena.net/pub/speed/SpeedTest_2048MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009";
+    NSString *urlString2GB = @"http://mirror.filearena.net/pub/speed/SpeedTest_256MB.dat?_ga=2.58545706.1674869205.1559302009-2103913929.1559302009";
     NSString *filePath = [self localFilePathForURLString:urlString2GB];
     __block NSURLResponse *urlResponse = nil;
     __block NSURLSessionTask *task = nil;
@@ -234,11 +237,11 @@
         [expectation fulfill];
     };
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [ZADownloadManager.sharedManager pauseDownloadTaskByDownloadCallback:downloadCallback];
     });
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 7 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [ZADownloadManager.sharedManager resumeDownloadTaskByDownloadCallback:downloadCallback];
     });
     
@@ -262,5 +265,56 @@
     
 }
 
+- (void)testResumeDownloadInLocal {
+    NSString *urlString2GB = @"http://mirror.filearena.net/pub/speed/SpeedTest_2048MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009";
+    NSString *filePath = [self localFilePathForURLString:urlString2GB];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Resume download task in local"];
+    __block NSURLResponse *urlResponse = nil;
+    __block NSURLSessionTask *task = nil;
+    
+    ZALocalTaskInfo *taskInfo = [[ZALocalTaskInfo alloc] initWithURLString:urlString2GB filePath:filePath
+                                                                  fileName:[self localFilePathForURLString:urlString2GB]
+                                                         countOfTotalBytes:2147483648];
+    
+    [ZASessionStorage.sharedStorage commitTaskInfo:taskInfo];
+    [ZASessionStorage.sharedStorage updateCountOfBytesReceived:10000 byURLString:urlString2GB];
+    
+    [ZASessionStorage.sharedStorage pushAllTaskInfoWithCompletion:^(NSError * _Nullable error) {
+        
+        ZADownloadOperationCallback *downloadCallback = [ZADownloadManager.sharedManager downloadTaskFromURLString:urlString2GB requestPolicy:(NSURLRequestUseProtocolCachePolicy) priority:(ZAOperationPriorityVeryHigh) progressBlock:^(NSProgress * _Nonnull progress, NSString * _Nonnull callBackIdentifier) {
+            
+        } destinationBlock:^NSString *(NSString * _Nonnull location, NSString * _Nonnull callBackIdentifier) {
+            return filePath;
+        } completionBlock:^(NSURLSessionTask * _Nonnull response, NSError * _Nonnull error, NSString * _Nonnull callBackIdentifier) {
+            
+        }];
+        
+        downloadCallback.reciveURLSessionResponseBlock = ^(NSURLSessionTask * _Nonnull dataTask, NSURLResponse * _Nonnull response) {
+            urlResponse = response;
+            task = dataTask;
+            [expectation fulfill];
+        };
+        
+    }];
+    
+    [self waitForExpectationsWithTimeout:90.0 handler:nil];
+    
+    ZALocalTaskInfo *expectTaskInfo = [ZASessionStorage.sharedStorage getTaskInfoByURLString:urlString2GB];
+    NSString *range = [NSString stringWithFormat:@"bytes %lli-%lli/%lli", expectTaskInfo.countOfBytesReceived, (expectTaskInfo.countOfTotalBytes - 1), expectTaskInfo.countOfTotalBytes];
+    NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)urlResponse;
+    NSString *expectRangeHeader = (NSString *)HTTPResponse.allHeaderFields[@"Content-Range"];
+    
+    XCTAssertNotNil(taskInfo);
+    XCTAssertNotNil(expectRangeHeader);
+    XCTAssertTrue([expectRangeHeader isEqualToString:range]);
+    
+    XCTAssertNotNil(task);
+    XCTAssertNotNil(urlResponse);
+    XCTAssertNotNil(task.originalRequest);
+    XCTAssertNotNil(task.currentRequest);
+    XCTAssertTrue([task.originalRequest.URL.absoluteString isEqual:urlString2GB]);
+    XCTAssertTrue([task.currentRequest.URL.absoluteString isEqual:urlString2GB]);
+    
+}
 
 @end
