@@ -126,4 +126,15 @@
     }
 }
 
+- (void)removeObjectForKey:(NSString *)key {
+    if (nil == key) { return; }
+    
+    ZA_LOCK(self.userDefaultsLock);
+    
+    [self.defaults removeObjectForKey:key];
+    [self.defaults synchronize];
+    
+    ZA_UNLOCK(self.userDefaultsLock);
+}
+
 @end

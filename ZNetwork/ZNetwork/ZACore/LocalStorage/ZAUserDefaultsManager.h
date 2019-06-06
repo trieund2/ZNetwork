@@ -56,6 +56,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (id _Nullable)decodeObjectOfClass:(Class)cls fromData:(NSData *)data error:(NSError **)error;
 
+- (void)removeObjectForKey:(NSString *)key;
+
 NS_ASSUME_NONNULL_END
 
 @end
