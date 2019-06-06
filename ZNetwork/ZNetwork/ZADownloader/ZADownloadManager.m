@@ -395,6 +395,8 @@ didReceiveResponse:(NSURLResponse *)response
             ZADownloadOperationModel *downloadOperationModel = [weakSelf.urlToDownloadOperation objectForKey:url];
             ZA_UNLOCK(self.urlToDownloadOperationLock);
             
+            if (nil == downloadOperationModel) { return; }
+            
             NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
             NSUInteger contentLength = [HTTPResponse.allHeaderFields[@"Content-Length"] integerValue];
             
@@ -428,6 +430,7 @@ didReceiveResponse:(NSURLResponse *)response
             }
             
             [downloadOperationModel updateResumeStatusForAllCallbacks];
+            [downloadOperationModel forwardURLResponse:response];
         }
         
         completionHandler(NSURLSessionResponseAllow);

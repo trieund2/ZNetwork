@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void (^ZAProgressBlock)(NSProgress *progress, NSString *callBackIdentifier);
 typedef NSString * (^ZADestinationBlock)(NSString *location, NSString *callBackIdentifier);
 typedef void (^ZACompletionBlock)(NSURLSessionTask *response, NSError *error, NSString *callBackIdentifier);
+typedef void (^ZADidReciveURLSessionResponseBlock)(NSURLSessionTask *dataTask, NSURLResponse *response);
 
 @interface ZADownloadOperationCallback : ZAOperationCallback
 
@@ -20,6 +21,7 @@ typedef void (^ZACompletionBlock)(NSURLSessionTask *response, NSError *error, NS
 @property (nonatomic, copy, readonly) ZAProgressBlock progressBlock;
 @property (nonatomic, copy, readonly) ZADestinationBlock destinationBlock;
 @property (nonatomic, copy, readonly) ZACompletionBlock completionBlock;
+@property (nonatomic) ZADidReciveURLSessionResponseBlock reciveURLSessionResponseBlock;
 
 - (instancetype)initWithURL:(NSURL *)url
               progressBlock:(ZAProgressBlock)progressBlock
