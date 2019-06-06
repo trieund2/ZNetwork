@@ -27,6 +27,7 @@
 		A1B7C7E9229E28850085FB3D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B7C7E8229E28850085FB3D /* Assets.xcassets */; };
 		A1B7C7EF229E28850085FB3D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7EE229E28850085FB3D /* main.m */; };
 		A1B7C7F9229E28850085FB3D /* ZNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */; };
+		A1DD858C22A8BF3700223841 /* ZAOperationModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1DD858B22A8BF3700223841 /* ZAOperationModelTests.m */; };
 		C572577F229EE065009C3E66 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C572577E229EE065009C3E66 /* NSString+Extension.m */; };
 		D73696C9229FB4F200933863 /* ZASessionStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D73696C8229FB4F200933863 /* ZASessionStorage.m */; };
 		D7BBAF18229EAB170029E63B /* ZAUserDefaultsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */; };
@@ -82,6 +83,7 @@
 		A1B7C7F4229E28850085FB3D /* ZNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZNetworkTests.m; sourceTree = "<group>"; };
 		A1B7C7FA229E28850085FB3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1DD858B22A8BF3700223841 /* ZAOperationModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAOperationModelTests.m; sourceTree = "<group>"; };
 		C572577D229EE065009C3E66 /* NSString+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
 		C572577E229EE065009C3E66 /* NSString+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
 		D73696C7229FB4F200933863 /* ZASessionStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZASessionStorage.h; sourceTree = "<group>"; };
@@ -191,7 +193,7 @@
 			children = (
 				A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */,
 				A14C680222A65B3B00B74E1C /* ZDownloaderTests.m */,
-				A14C680422A65F5F00B74E1C /* ZAQueueModelTests.m */,
+				A1DD858A22A8BF1800223841 /* CoreAbtract */,
 				A1B7C7FA229E28850085FB3D /* Info.plist */,
 			);
 			path = ZNetworkTests;
@@ -244,6 +246,15 @@
 				A1AFF515229FD2EA0040B283 /* DownloadTableViewCell.xib */,
 			);
 			path = TestFeatures;
+			sourceTree = "<group>";
+		};
+		A1DD858A22A8BF1800223841 /* CoreAbtract */ = {
+			isa = PBXGroup;
+			children = (
+				A14C680422A65F5F00B74E1C /* ZAQueueModelTests.m */,
+				A1DD858B22A8BF3700223841 /* ZAOperationModelTests.m */,
+			);
+			path = CoreAbtract;
 			sourceTree = "<group>";
 		};
 		C5725779229EE038009C3E66 /* Extensions */ = {
@@ -400,6 +411,7 @@
 			files = (
 				A1B7C7F9229E28850085FB3D /* ZNetworkTests.m in Sources */,
 				A14C680322A65B3B00B74E1C /* ZDownloaderTests.m in Sources */,
+				A1DD858C22A8BF3700223841 /* ZAOperationModelTests.m in Sources */,
 				A14C680522A65F5F00B74E1C /* ZAQueueModelTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

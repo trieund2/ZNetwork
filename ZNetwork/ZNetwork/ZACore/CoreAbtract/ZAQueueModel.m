@@ -10,7 +10,7 @@
 
 @interface ZAQueueModel()
 
-@property (nonatomic, readonly) NSUInteger currentRunningOperations;
+@property (nonatomic, readonly) NSUInteger numberOfRunningOperations;
 @property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *veryHighQueue;
 @property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *highQueue;
 @property (nonatomic, readonly) NSMutableArray<ZAOperationModel *> *mediumQueue;
@@ -34,7 +34,7 @@
     self = [super init];
     
     if (self) {
-        _currentRunningOperations = 0;
+        _numberOfRunningOperations = 0;
         _executionOrder = operationType;
         _isMultiCallback = isMultiCallback;
         _performType = performType;
@@ -58,7 +58,7 @@
 }
 
 - (NSUInteger)numberOfTaskRunning {
-    return self.currentRunningOperations;
+    return self.numberOfRunningOperations;
 }
 
 - (NSUInteger)numberOfTaskInQueue {
@@ -66,17 +66,17 @@
 }
 
 - (void)resetNumberOfRunningOperations {
-    _currentRunningOperations = 0;
+    _numberOfRunningOperations = 0;
 }
 
 - (void)enqueueOperation:(ZAOperationModel *)operationModel {
-    if (NULL == operationModel && NULL != operationModel.url) { return; }
+    if (nil == operationModel && nil == operationModel.url) { return; }
     
     if (self.isMultiCallback) {
         ZAOperationModel *currentOperationModel = [self.urlToOperationModel objectForKey:operationModel.url];
         
         if (currentOperationModel) {
-            ZAOperationCallback *operationCallback = operationModel.allRunningOperationCallback.firstObject;
+            ZAOperationCallback *operationCallback = operationModel.allRunningOperationCallbacks.firstObject;
             if (nil == operationCallback) { return; }
             [currentOperationModel addOperationCallback:operationCallback];
             
@@ -110,7 +110,7 @@
 }
 
 - (BOOL)canDequeueOperationModel {
-    return (self.currentRunningOperations < self.maxOperationPerform);
+    return (self.numberOfRunningOperations < self.maxOperationPerform);
 }
 
 - (nullable ZAOperationModel *)dequeueOperationModel {
@@ -168,9 +168,9 @@
         }
         
         if (nil != operationModel && nil != operationModel.url) {
-            _currentRunningOperations += 1;
+            _numberOfRunningOperations += 1;
             [self.urlToOperationModel removeObjectForKey:operationModel.url];
-            NSLog(@"---- NUMBER TASK RUNNING: %li ------", self.currentRunningOperations);
+            NSLog(@"---- NUMBER TASK RUNNING: %li ------", self.numberOfRunningOperations);
             return operationModel;
         }
     }
@@ -204,7 +204,7 @@
         [self.urlToOperationModel removeObjectForKey:callback.url];
         
         ZAOperationPriority newPriority = ZAOperationPriorityLow;;
-        for (ZAOperationModel *currentOperationModel in operationModel.allRunningOperationCallback) {
+        for (ZAOperationModel *currentOperationModel in operationModel.allRunningOperationCallbacks) {
             if (currentOperationModel.priority > newPriority) {
                 newPriority = currentOperationModel.priority;
             }
@@ -240,10 +240,10 @@
 }
 
 - (void)operationDidFinish {
-    if (self.currentRunningOperations > 0) {
-        _currentRunningOperations -= 1;
+    if (self.numberOfRunningOperations > 0) {
+        _numberOfRunningOperations -= 1;
     }
-    NSLog(@"---- FINISH NUMBER TASK RUNNING: %li ------", self.currentRunningOperations);
+    NSLog(@"---- FINISH NUMBER TASK RUNNING: %li ------", self.numberOfRunningOperations);
 }
 
 - (void)removeAllOperations {
