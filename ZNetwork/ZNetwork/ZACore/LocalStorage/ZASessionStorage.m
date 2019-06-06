@@ -201,4 +201,8 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     completion(error);
 }
 
+- (void)removeAllTaskInfos {
+    [ZAUserDefaultsManager.sharedManager removeObjectForKey:KeyForTaskInfoDictionary];
+}
+
 @end

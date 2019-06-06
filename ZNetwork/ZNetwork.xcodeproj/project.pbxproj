@@ -29,6 +29,7 @@
 		A1B7C7F9229E28850085FB3D /* ZNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7C7F8229E28850085FB3D /* ZNetworkTests.m */; };
 		A1DD858C22A8BF3700223841 /* ZAOperationModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1DD858B22A8BF3700223841 /* ZAOperationModelTests.m */; };
 		A1DD858F22A8CFAE00223841 /* ZADownloadOperationModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1DD858E22A8CFAE00223841 /* ZADownloadOperationModelTests.m */; };
+		A1DD859222A932F200223841 /* ZNetworkConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = A1DD859122A932F200223841 /* ZNetworkConstant.m */; };
 		C572577F229EE065009C3E66 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C572577E229EE065009C3E66 /* NSString+Extension.m */; };
 		D73696C9229FB4F200933863 /* ZASessionStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D73696C8229FB4F200933863 /* ZASessionStorage.m */; };
 		D7BBAF18229EAB170029E63B /* ZAUserDefaultsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7BBAF17229EAB170029E63B /* ZAUserDefaultsManager.m */; };
@@ -86,6 +87,8 @@
 		A1B7C7FA229E28850085FB3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1DD858B22A8BF3700223841 /* ZAOperationModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZAOperationModelTests.m; sourceTree = "<group>"; };
 		A1DD858E22A8CFAE00223841 /* ZADownloadOperationModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZADownloadOperationModelTests.m; sourceTree = "<group>"; };
+		A1DD859022A932F200223841 /* ZNetworkConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZNetworkConstant.h; sourceTree = "<group>"; };
+		A1DD859122A932F200223841 /* ZNetworkConstant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZNetworkConstant.m; sourceTree = "<group>"; };
 		C572577D229EE065009C3E66 /* NSString+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
 		C572577E229EE065009C3E66 /* NSString+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
 		D73696C7229FB4F200933863 /* ZASessionStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZASessionStorage.h; sourceTree = "<group>"; };
@@ -199,6 +202,8 @@
 				A14C680422A65F5F00B74E1C /* ZAQueueModelTests.m */,
 				A1DD858B22A8BF3700223841 /* ZAOperationModelTests.m */,
 				A1B7C7FA229E28850085FB3D /* Info.plist */,
+				A1DD859022A932F200223841 /* ZNetworkConstant.h */,
+				A1DD859122A932F200223841 /* ZNetworkConstant.m */,
 			);
 			path = ZNetworkTests;
 			sourceTree = "<group>";
@@ -405,6 +410,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1B7C7F9229E28850085FB3D /* ZNetworkTests.m in Sources */,
+				A1DD859222A932F200223841 /* ZNetworkConstant.m in Sources */,
 				A14C680322A65B3B00B74E1C /* ZDownloaderTests.m in Sources */,
 				A1DD858C22A8BF3700223841 /* ZAOperationModelTests.m in Sources */,
 				A14C680522A65F5F00B74E1C /* ZAQueueModelTests.m in Sources */,
