@@ -53,7 +53,7 @@
 }
 
 - (void)testAddOperation_WhenAddOperation_ThenIncreaseNumberRunningOperations {
-    ZAOperationCallback *callback = [[ZAOperationCallback alloc] initWithURL:[NSURL URLWithString:@"http://ipv4.download.thinkbroadband.com/20MB.zip"]];
+    ZAOperationCallback *callback = [[ZAOperationCallback alloc] initWithURL:[NSURL URLWithString:@"http://ipv4.download.thinkbroadband.com/512MB.zip"]];
     [self.sut addOperationCallback:callback];
     
     XCTAssertEqual(self.sut.numberOfRunningOperation, 1);

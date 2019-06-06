@@ -179,5 +179,65 @@
     XCTAssertEqual(ZADownloadManager.sharedManager.numberOfTaskInQueue, 0);
 }
 
+- (void)testPauseDownloadRequest {
+    NSString *urlString = @"http://mirror.filearena.net/pub/speed/SpeedTest_1024MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009";
+    NSString *filePath = [self localFilePathForURLString:urlString];
+    __block NSURLSessionTask *urlResponse = nil;
+    __block NSError *downloadError = nil;
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Paused download request shold pause correct task"];
+    
+    ZADownloadOperationCallback *downloadCallback = [ZADownloadManager.sharedManager downloadTaskFromURLString:urlString requestPolicy:(NSURLRequestUseProtocolCachePolicy) priority:(ZAOperationPriorityVeryHigh) progressBlock:^(NSProgress * _Nonnull progress, NSString * _Nonnull callBackIdentifier) {
+        
+    } destinationBlock:^NSString *(NSString * _Nonnull location, NSString * _Nonnull callBackIdentifier) {
+        return filePath;
+    } completionBlock:^(NSURLSessionTask * _Nonnull response, NSError * _Nonnull error, NSString * _Nonnull callBackIdentifier) {
+        downloadError = error;
+        urlResponse = response;
+        [expectation fulfill];
+    }];
+    
+    [ZADownloadManager.sharedManager pauseDownloadTaskByDownloadCallback:downloadCallback];
+    
+    [self waitForExpectationsWithTimeout:90.0 handler:nil];
+    
+    XCTAssertNotNil(downloadError);
+    XCTAssertEqual(downloadError.code, ZANetworkErrorPauseTask);
+    XCTAssertNotNil(urlResponse.originalRequest);
+    XCTAssertNotNil(urlResponse.currentRequest);
+    XCTAssertNotNil(downloadCallback);
+    XCTAssertNotNil(urlResponse);
+    XCTAssertTrue([urlResponse.originalRequest.URL.absoluteString isEqualToString:urlString]);
+}
+
+- (void)testPauseAndResumeDownloadRequest {
+    NSString *urlString = @"http://mirror.filearena.net/pub/speed/SpeedTest_2048MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009";
+    NSString *filePath = [self localFilePathForURLString:urlString];
+    __block NSURLSessionTask *urlResponse = nil;
+    __block NSError *downloadError = nil;
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Paused download request shold pause correct task"];
+    
+    ZADownloadOperationCallback *downloadCallback = [ZADownloadManager.sharedManager downloadTaskFromURLString:urlString requestPolicy:(NSURLRequestUseProtocolCachePolicy) priority:(ZAOperationPriorityVeryHigh) progressBlock:^(NSProgress * _Nonnull progress, NSString * _Nonnull callBackIdentifier) {
+        
+    } destinationBlock:^NSString *(NSString * _Nonnull location, NSString * _Nonnull callBackIdentifier) {
+        return filePath;
+    } completionBlock:^(NSURLSessionTask * _Nonnull response, NSError * _Nonnull error, NSString * _Nonnull callBackIdentifier) {
+        downloadError = error;
+        urlResponse = response;
+        [expectation fulfill];
+    }];
+    
+    dispatch_after(30, dispatch_get_main_queue(), ^{
+        [ZADownloadManager.sharedManager pauseDownloadTaskByDownloadCallback:downloadCallback];
+    });
+    
+    dispatch_after(40, dispatch_get_main_queue(), ^{
+        [ZADownloadManager.sharedManager resumeDownloadTaskByDownloadCallback:downloadCallback];
+    });
+    
+    [self waitForExpectationsWithTimeout:120.0 handler:nil];
+}
+
 
 @end

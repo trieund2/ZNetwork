@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define ZASessionStorageErrorDomain @"com.trieund.ZNetwork.sessionStorageError"
+#define ZANetworkErrorDomain @"com.trieund.ZNetwork.sessionStorageError"
 #define ZARequestAcceptRangeBytes @"bytes"
 #define ZARequestAcceptRangeNone @"none"
 
@@ -23,7 +23,8 @@ typedef NS_ENUM(NSInteger, ZASessionStorageErrorCode) {
 typedef NS_ENUM(NSUInteger, ZANetworkError) {
     ZANetworkErrorFullDisk              = 9981,
     ZANetworkErrorFileError             = 9982,
-    ZANetworkErrorAppEnterBackground    = 9983
+    ZANetworkErrorAppEnterBackground    = 9983,
+    ZANetworkErrorPauseTask             = 9984
 };
 
 typedef NS_ENUM(NSInteger, ZAOperationExecutionOrder) {
