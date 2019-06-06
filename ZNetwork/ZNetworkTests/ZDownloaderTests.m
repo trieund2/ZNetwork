@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "ZNetwork.h"
 #import "TrackDownload.h"
+#import "ZASessionStorage.h"
 
 @interface ZDownloaderTests : XCTestCase
 @property NSArray *trackDownloads;
@@ -211,32 +212,54 @@
 }
 
 - (void)testPauseAndResumeDownloadRequest {
-    NSString *urlString = @"http://mirror.filearena.net/pub/speed/SpeedTest_2048MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009";
-    NSString *filePath = [self localFilePathForURLString:urlString];
-    __block NSURLSessionTask *urlResponse = nil;
-    __block NSError *downloadError = nil;
+    NSString *urlString2GB = @"http://mirror.filearena.net/pub/speed/SpeedTest_2048MB.dat?_ga=2.71070992.1674869205.1559302009-2103913929.1559302009";
+    NSString *filePath = [self localFilePathForURLString:urlString2GB];
+    __block NSURLResponse *urlResponse = nil;
+    __block NSURLSessionTask *task = nil;
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Paused download request shold pause correct task"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Paused and resume download task"];
+    expectation.expectedFulfillmentCount = 2;
     
-    ZADownloadOperationCallback *downloadCallback = [ZADownloadManager.sharedManager downloadTaskFromURLString:urlString requestPolicy:(NSURLRequestUseProtocolCachePolicy) priority:(ZAOperationPriorityVeryHigh) progressBlock:^(NSProgress * _Nonnull progress, NSString * _Nonnull callBackIdentifier) {
+    ZADownloadOperationCallback *downloadCallback = [ZADownloadManager.sharedManager downloadTaskFromURLString:urlString2GB requestPolicy:(NSURLRequestUseProtocolCachePolicy) priority:(ZAOperationPriorityVeryHigh) progressBlock:^(NSProgress * _Nonnull progress, NSString * _Nonnull callBackIdentifier) {
         
     } destinationBlock:^NSString *(NSString * _Nonnull location, NSString * _Nonnull callBackIdentifier) {
         return filePath;
     } completionBlock:^(NSURLSessionTask * _Nonnull response, NSError * _Nonnull error, NSString * _Nonnull callBackIdentifier) {
-        downloadError = error;
-        urlResponse = response;
-        [expectation fulfill];
+        
     }];
     
-    dispatch_after(30, dispatch_get_main_queue(), ^{
+    downloadCallback.reciveURLSessionResponseBlock = ^(NSURLSessionTask * _Nonnull dataTask, NSURLResponse * _Nonnull response) {
+        urlResponse = response;
+        task = dataTask;
+        [expectation fulfill];
+    };
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [ZADownloadManager.sharedManager pauseDownloadTaskByDownloadCallback:downloadCallback];
     });
     
-    dispatch_after(40, dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 7 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [ZADownloadManager.sharedManager resumeDownloadTaskByDownloadCallback:downloadCallback];
     });
     
-    [self waitForExpectationsWithTimeout:120.0 handler:nil];
+    [self waitForExpectationsWithTimeout:90.0 handler:nil];
+    
+    ZALocalTaskInfo *taskInfo = [ZASessionStorage.sharedStorage getTaskInfoByURLString:urlString2GB];
+    NSString *range = [NSString stringWithFormat:@"bytes %lli-%lli/%lli", taskInfo.countOfBytesReceived, (taskInfo.countOfTotalBytes - 1), taskInfo.countOfTotalBytes];
+    NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)urlResponse;
+    NSString *expectRangeHeader = (NSString *)HTTPResponse.allHeaderFields[@"Content-Range"];
+    
+    XCTAssertNotNil(taskInfo);
+    XCTAssertNotNil(expectRangeHeader);
+    XCTAssertTrue([expectRangeHeader isEqualToString:range]);
+    
+    XCTAssertNotNil(task);
+    XCTAssertNotNil(urlResponse);
+    XCTAssertNotNil(task.originalRequest);
+    XCTAssertNotNil(task.currentRequest);
+    XCTAssertTrue([task.originalRequest.URL.absoluteString isEqual:urlString2GB]);
+    XCTAssertTrue([task.currentRequest.URL.absoluteString isEqual:urlString2GB]);
+    
 }
 
 

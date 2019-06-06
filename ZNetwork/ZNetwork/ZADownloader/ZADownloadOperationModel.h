@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)forwardCompletion;
 - (void)forwardError:(NSError *)error;
 - (void)forwardFileFromLocation;
+- (void)forwardURLResponse:(NSURLResponse *)response;
 - (void)updateResumeStatusForAllCallbacks;
 
 @end
