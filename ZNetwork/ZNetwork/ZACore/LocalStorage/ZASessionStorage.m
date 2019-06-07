@@ -182,10 +182,11 @@ NSString * const KeyForTaskInfoDictionary = @"TaskInfoDictionary";
     }
     if (taskInfo.filePath) {
         [self _removeFileAtPath:taskInfo.filePath completion:^(NSError * _Nullable error) {
+            [self.taskInfoKeyedByURLString removeObjectForKey:urlString];
+            
             if (error) {
                 if (completion) { completion(error); }
             } else {
-                [self.taskInfoKeyedByURLString removeObjectForKey:urlString];
                 if (completion) { completion(nil); }
             }
         }];
